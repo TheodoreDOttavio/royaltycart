@@ -23,8 +23,10 @@ define('ROYALTYCART_SANDBOX_PAYPAL_URL', 'https://www.sandbox.paypal.com/cgi-bin
 add_action('admin_menu', 'royaltycart_administration_actions');
 
 
-function royaltycart_install()
-{
+function royaltycart_install(){
+  //For future upgrades;
+  require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	
     global $wpdb;
     $table = $wpdb->prefix."royaltycart_products";
     $structure = "CREATE TABLE $table (
@@ -34,9 +36,6 @@ function royaltycart_install()
         royaltycart_product_royalty_array VARCHAR(80) NOT NULL,
 	    UNIQUE KEY id (id)
     ) $charset_collate;";
-	
-	//For future upgrades;
-	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 	
     dbDelta( $structure );
 
@@ -48,7 +47,7 @@ function royaltycart_install()
     //    The download encode/decode and a number of attempted downloads will be in an Orders table
     //  The royalty array is an array of ->Paypall account ->recipient's name for display ->percentatage or base amount
     
-    // Populate table
+    // Populate tables
     $wpdb->insert( $table, 
       array( 
         'royaltycart_product_name' => 'Sample', 
@@ -64,13 +63,22 @@ register_activation_hook( __FILE__, 'royaltycart_install' );
 
 
 function royaltycart_administration_actions(){
-  add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
+  add_menu_page (
+    "Royalty Cart",
+    "Royalty Cart",
+    "manage_options",
+    "Royalty-Cart",
+    "royaltycart_menu",
+    plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png'
+  );
+
+  //add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
 }
 
 
 function royaltycart_menu(){
-	//initiates the menue and includes the Admin options
-  global $wpdb;
+  //initiates the menue and includes the Admin options
+  //global $wpdb;
   include 'royaltycart-administration.php';
 }
 ?>

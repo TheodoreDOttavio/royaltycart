@@ -1,14 +1,18 @@
 <?php
   //Security measure, disallows direct access
   defined( 'ABSPATH' ) or die( 'No script!' );
+  
+  global $wpdb;
+  
   //DEBUGING
   $wpdb->show_errors();
 
-  echo '
-    <div id="message" class="updated fade">reserved for error messages';
-  echo '  
-    </div>
+  //echo '
+  //  <div id="message" class="updated fade">reserved for error messages
+  //  </div>
+  //';
 
+  echo '
     <div class="wrap">
     <h2>Royalty Cart Administration</h2>
   ';
@@ -16,8 +20,7 @@
 
   //This array is the location => title for the top tabs
   $royaltycart_plugin_tabs = array(
-    'Royalty-Cart' => 'Product List',
-    'Royalty-Cart&action=edit' => 'Product Edit',
+    'Royalty-Cart&action=products' => 'Products',
     'Royalty-Cart&action=orders' => 'Orders',
     'Royalty-Cart&action=emails' => 'Response Emails',
     'Royalty-Cart&action=usage' => 'About & Usage'
@@ -38,7 +41,7 @@
   
   if(isset($_GET['action'])){    
     switch ($_GET['action']){
-    case 'edit':
+    case 'products':
 	  include_once('royaltycart-administration-products.php');
       show_royaltycart_administration_product_list();
       break;
