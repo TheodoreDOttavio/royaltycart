@@ -15,6 +15,14 @@ Author URI: https://github.com/TheodoreDOttavio
 //Security measure, disallows direct access
 defined( 'ABSPATH' ) or die( 'No script!' );
 
+//Plugin-wide variables
+define('ROYALTYCART_LIVE_PAYPAL_URL', 'https://www.paypal.com/cgi-bin/webscr');
+define('ROYALTYCART_SANDBOX_PAYPAL_URL', 'https://www.sandbox.paypal.com/cgi-bin/webscr');
+
+//Actions here, Functions below...
+add_action('admin_menu', 'royaltycart_administration_actions');
+
+
 function royaltycart_install()
 {
     global $wpdb;
@@ -48,7 +56,6 @@ function royaltycart_install()
         'royaltycart_product_royalty_array' => '[teddottavio@gmail.com,Ted,0.01]',
 	  ) 
     );
-
 }
 
 
@@ -56,17 +63,14 @@ register_activation_hook( __FILE__, 'royaltycart_install' );
 //register_uninstall_hook()
 
 
+function royaltycart_administration_actions(){
+  add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
+}
+
+
 function royaltycart_menu(){
+	//initiates the menue and includes the Admin options
   global $wpdb;
   include 'royaltycart-administration.php';
 }
- 
-function royaltycart_administration_actions(){
-  add_options_page("Royalty Cart", "Royalty Cart", 1,
-    "Royalty-Cart", "royaltycart_menu");
-	
-  $royaltycartinfo = get_plugin_data( __FILE__ );
-}
- 
-add_action('admin_menu', 'royaltycart_administration_actions');
 ?>

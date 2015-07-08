@@ -39,13 +39,12 @@
   if(isset($_GET['action'])){    
     switch ($_GET['action']){
     case 'edit':
+	  include_once('royaltycart-administration-products.php');
       show_royaltycart_administration_product_list();
-      //show_wp_cart_email_settings_page();
       break;
     case 'orders':
-	  show_royaltycart_administration_product_list();
-      //include_once ('wp_shopping_cart_discounts_menu.php');
-      //show_wp_cart_coupon_discount_settings_page();
+	  include_once('royaltycart-administration-orders.php');
+	  show_royaltycart_administration_orders();
       break;
     case 'emails':
 	  show_royaltycart_administration_product_list();
@@ -56,40 +55,9 @@
       break;
     }
   } else {
+  	include_once('royaltycart-administration-products.php');
   	show_royaltycart_administration_product_list();
   }
   echo '</div></div>';
   echo '</div>';
 ?>
-
-
-<?php
-function show_royaltycart_administration_product_list(){
-	echo '
-<div class="postbox" style="padding: 5px 5px 5px 10px">
-  <h3><label for="title">Products Available to Royalty Cart</label></h3>
-  <div class="inside">
-';
-
-    global $wpdb;
-    $results = $wpdb->get_results( 'SELECT * FROM '.$wpdb->prefix.'royaltycart_products' );
-  
-    foreach($results as $result)
-    {
-      echo $result->royaltycart_product_name." : ";
-      echo $result->royaltycart_product_file." - ";
-	  echo $result->royaltycart_product_royalty_array."<br>";
-    }
-
-echo '
-  </div>
-</div>
-';
-
-echo '<a href="?page=';
-$_GET['page'];
-echo '&royaltycart-add-product=test">Add an entry</a>
-</div>
-';
-
-}
