@@ -11,74 +11,75 @@ function show_royaltycart_administration_orders(){
 
   add_action('manage_royaltycart_cart_orders_posts_custom_column', 'royaltycart_populate_order_columns', 10, 2);
   add_filter('manage_edit-royaltycart_cart_orders_columns', 'royaltycart_orders_display_columns' );
+
+  //no and no... can't get the orderslist to show..yet
+  //royaltycart_populate_order_columns();
+  //royaltycart_orders_display_columns();
+  royaltycart_order_review_meta_box();
 }
 
 
-function royaltycart_create_orders_page()
-{
-      register_post_type( 'royaltycart_cart_orders',
-        array(
-            'labels' => array(
-                'name' => "Cart Orders",
-                'singular_name' => "Cart Order",
-                'add_new' => "Add New",
-                'add_new_item' => "Add New Order",
-                'edit' => "Edit",
-                'edit_item' => "Edit Order",
-                'new_item' => "New Order",
-                'view' => "View",
-                'view_item' => "View Order",
-                'search_items' => "Search Order",
-                'not_found' => "No order found",
-                'not_found_in_trash' => "No order found in Trash",
-                'parent' => "Parent Order"
-            ),
-
-            'public' => true,
-            'menu_position' => 80,
-            'supports' => false,
-            'taxonomies' => array( '' ),
-            'menu_icon' => 'dashicons-cart',/*plugin_dir_path( __FILE__ ).'/images/cart-orders-icon.png'*/
-            'has_archive' => true
-        )
-    );
+function royaltycart_create_orders_page(){
+  register_post_type( 'royaltycart_cart_orders',
+    array(
+      'labels' => array(
+      'name' => "Cart Orders",
+      'singular_name' => "Cart Order",
+      'add_new' => "Add New",
+      'add_new_item' => "Add New Order",
+      'edit' => "Edit",
+      'edit_item' => "Edit Order",
+      'new_item' => "New Order",
+      'view' => "View",
+      'view_item' => "View Order",
+      'search_items' => "Search Order",
+      'not_found' => "No order found",
+      'not_found_in_trash' => "No order found in Trash",
+      'parent' => "Parent Order"
+    ),
+      'public' => true,
+      'menu_position' => 80,
+      'supports' => false,
+      'taxonomies' => array( '' ),
+      'menu_icon' => 'dashicons-cart',/*plugin_dir_path( __FILE__ ).'/images/cart-orders-icon.png'*/
+      'has_archive' => true
+    )
+  );
 }
 
 
-function royaltycart_add_meta_boxes()
-{
-    add_meta_box( 'order_review_meta_box',
-        "Order Review",
-        'royaltycart_order_review_meta_box',
-        'royaltycart_cart_orders', 
-        'normal', 
-        'high'
-    );
+function royaltycart_add_meta_boxes(){
+  add_meta_box( 'order_review_meta_box',
+    "Order Review",
+    'royaltycart_order_review_meta_box',
+    'royaltycart_cart_orders', 
+    'normal', 
+    'high'
+  );
 }
 
 
-function royaltycart_order_review_meta_box($royaltycart_cart_orders)
-{
-    $order_id = $royaltycart_cart_orders->ID;
-    $first_name = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_first_name', true );
-    $last_name = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_last_name', true );
-    $email = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_email_address', true );
-    $txn_id = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_txn_id', true );
-    $ip_address = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_ipaddress', true );
-    $total_amount = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_total_amount', true );
-    //$shipping_amount = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_shipping_amount', true );
-    //$address = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_address', true );
-    //$phone = get_post_meta( $wpsc_cart_orders->ID, 'wpspsc_phone', true );
-    $email_sent_value = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_buyer_email_sent', true );
+function royaltycart_order_review_meta_box($royaltycart_cart_orders){
+  $order_id = $royaltycart_cart_orders->ID;
+  $first_name = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_first_name', true );
+  $last_name = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_last_name', true );
+  $email = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_email_address', true );
+  $txn_id = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_txn_id', true );
+  $ip_address = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_ipaddress', true );
+  $total_amount = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_total_amount', true );
+  //$shipping_amount = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_shipping_amount', true );
+  //$address = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_address', true );
+  //$phone = get_post_meta( $wpsc_cart_orders->ID, 'wpspsc_phone', true );
+  $email_sent_value = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_buyer_email_sent', true );
     
-    $email_sent_field_msg = "No";
+  $email_sent_field_msg = "No";
     if(!empty($email_sent_value)){
-        $email_sent_field_msg = "Yes. ".$email_sent_value;
+      $email_sent_field_msg = "Yes. ".$email_sent_value;
     }
     
-    $items_ordered = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_items_ordered', true );
-    //$applied_coupon = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_applied_coupon', true );
-    ?>
+  $items_ordered = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_items_ordered', true );
+  //$applied_coupon = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_applied_coupon', true );
+  ?>
     <table>
         <p>Order ID: #<?php echo $order_id;?></p>
         <?php if($txn_id){?>
@@ -93,6 +94,10 @@ function royaltycart_order_review_meta_box($royaltycart_cart_orders)
             <td><input type="text" size="40" name="royaltycart_last_name" value="<?php echo $last_name; ?>" /></td>
         </tr>
         <tr>
+            <td>Phone</td>
+            <td><input type="text" size="40" name="royaltycart_phone" value="<?php echo $phone; ?>" /></td>
+        </tr>
+        <tr>
             <td>Email Address</td>
             <td><input type="text" size="40" name="royaltycart_email_address" value="<?php echo $email; ?>" /></td>
         </tr>
@@ -101,28 +106,20 @@ function royaltycart_order_review_meta_box($royaltycart_cart_orders)
             <td><input type="text" size="40" name="royaltycart_ipaddress" value="<?php echo $ip_address; ?>" /></td>
         </tr>
         <tr>
+            <td>Address</td>
+            <td><textarea name="royaltycart_address" cols="85" rows="2"><?php echo $address;?></textarea></td>
+        </tr>
+        <tr>
             <td>Total</td>
             <td><input type="text" size="20" name="royaltycart_total_amount" value="<?php echo $total_amount; ?>" /></td>
         </tr>
         <tr>
-            <td>Shipping</td>
-            <td><input type="text" size="20" name="royaltycart_shipping_amount" value="<?php echo $shipping_amount; ?>" /></td>
-        </tr>
-        <tr>
-            <td>Address</td>
-            <td><textarea name="royaltycart_address" cols="83" rows="2"><?php echo $address;?></textarea></td>
-        </tr>
-        <tr>
-            <td>Phone</td>
-            <td><input type="text" size="40" name="royaltycart_phone" value="<?php echo $phone; ?>" /></td>
+            <td>Item(s) Ordered:</td>
+            <td><textarea name="royaltycart_items_ordered" cols="85" rows="5"><?php echo $items_ordered;?></textarea></td>
         </tr>
         <tr>
             <td>Buyer Email Sent?</td>
-            <td><input type="text" size="80" name="royaltycart_buyer_email_sent" value="<?php echo $email_sent_field_msg; ?>" readonly /></td>
-        </tr>  
-        <tr>
-            <td>Item(s) Ordered:</td>
-            <td><textarea name="royaltycart_items_ordered" cols="83" rows="5"><?php echo $items_ordered;?></textarea></td>
+            <td><input type="text" size="20" name="royaltycart_buyer_email_sent" value="<?php echo $email_sent_field_msg; ?>" readonly /></td>
         </tr>
     </table>
     <?php
