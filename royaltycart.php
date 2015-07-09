@@ -59,19 +59,26 @@ function royaltycart_install(){
 
 
 register_activation_hook( __FILE__, 'royaltycart_install' );
-//register_uninstall_hook()
+//register_uninstall_hook() - This does not flush everything. using uninstall.php
 
 
 function royaltycart_administration_actions(){
-  add_menu_page (
-    "Royalty Cart",
-    "Royalty Cart",
-    "manage_options",
-    "Royalty-Cart",
-    "royaltycart_menu",
-    plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png'
-  );
-
+  //One menue item, 
+  //  I'm using the tabs on the admin page 
+  //  to handle the subsections because that's the kind of guy I am. 
+  if ( is_admin() ) {
+    // We are in admin mode
+    add_menu_page (
+      "Royalty Cart",
+      "Royalty Cart",
+      "manage_options",
+      "Royalty-Cart",
+      "royaltycart_menu",
+      plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png'
+    );
+  }  
+  
+  //This adds the menu in the settings panel
   //add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
 }
 
@@ -79,6 +86,6 @@ function royaltycart_administration_actions(){
 function royaltycart_menu(){
   //initiates the menue and includes the Admin options
   //global $wpdb;
-  include 'royaltycart-administration.php';
+  include 'administration/royaltycart-administration.php';
 }
 ?>
