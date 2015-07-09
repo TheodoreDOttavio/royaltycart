@@ -8,14 +8,16 @@ function show_royaltycart_administration_orders(){
   //add_action('admin_init', 'wp_cart_admin_init_handler'); //wpspc_add_meta_boxes()
   add_action('admin_init', 'royaltycart_add_meta_boxes');
   add_action('save_post', 'royaltycart_cart_save_orders', 10, 2 );
-
   add_action('manage_royaltycart_cart_orders_posts_custom_column', 'royaltycart_populate_order_columns', 10, 2);
+
   add_filter('manage_edit-royaltycart_cart_orders_columns', 'royaltycart_orders_display_columns' );
+  add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
 
   //no and no... can't get the orderslist to show..yet
   //royaltycart_populate_order_columns();
   //royaltycart_orders_display_columns();
-  royaltycart_order_review_meta_box();
+  //royaltycart_customize_order_link();
+  //works royaltycart_order_review_meta_box();
 }
 
 
@@ -160,7 +162,6 @@ function royaltycart_cart_save_orders( $order_id, $royaltycart_cart_orders ) {
 }
 
 
-//add_filter( 'manage_edit-royaltycart_cart_orders_columns', 'royaltycart_orders_display_columns' );
 function royaltycart_orders_display_columns( $columns ) 
 {
     unset( $columns['comments'] );
@@ -176,7 +177,6 @@ function royaltycart_orders_display_columns( $columns )
 }
 
 
-//add_action('manage_royaltycart_cart_orders_posts_custom_column', 'royaltycart_populate_order_columns', 10, 2);
 function royaltycart_populate_order_columns($column, $post_id)
 {
     if ( 'royaltycart_first_name' == $column ) {
@@ -203,10 +203,10 @@ function royaltycart_populate_order_columns($column, $post_id)
 
 
 function royaltycart_customize_order_link( $permalink, $post ) {
-    if( $post->post_type == 'royaltycart_cart_orders' ) {
-        $permalink = get_admin_url().'post.php?post='.$post->ID.'&action=edit';
-    }
-    return $permalink;
+  if( $post->post_type == 'royaltycart_cart_orders' ) {
+    $permalink = get_admin_url().'post.php?post='.$post->ID.'&action=edit';
+  }
+  return $permalink;
 }
-add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
+
 ?>

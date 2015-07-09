@@ -26,6 +26,8 @@ add_action('admin_menu', 'royaltycart_administration_actions');
 function royaltycart_install(){
   //For future upgrades;
   require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+  
+  include 'royaltycart-functions.php';
 	
     global $wpdb;
     $table = $wpdb->prefix."royaltycart_products";
@@ -55,6 +57,9 @@ function royaltycart_install(){
         'royaltycart_product_royalty_array' => '[teddottavio@gmail.com,Ted,0.01]',
 	  ) 
     );
+    
+    //add an empty order
+    royaltycart_insert_order();
 }
 
 
