@@ -19,15 +19,14 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 define('ROYALTYCART_LIVE_PAYPAL_URL', 'https://www.paypal.com/cgi-bin/webscr');
 define('ROYALTYCART_SANDBOX_PAYPAL_URL', 'https://www.sandbox.paypal.com/cgi-bin/webscr');
 
-//Actions here, Functions below...
-add_action('admin_menu', 'royaltycart_administration_actions');
+include 'royaltycart-functions.php';
+
+add_action( 'init', 'royaltycart_create_post_type' );
 
 
 function royaltycart_install(){
   //For future upgrades;
   require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-  
-  include 'royaltycart-functions.php';
 	
     global $wpdb;
     $table = $wpdb->prefix."royaltycart_products";
@@ -59,14 +58,15 @@ function royaltycart_install(){
     );
     
     //add an empty order
-    royaltycart_insert_order();
+    //royaltycart_insert_order();
 }
 
 
 register_activation_hook( __FILE__, 'royaltycart_install' );
-//register_uninstall_hook() - This does not flush everything. using uninstall.php
+register_uninstall_hook( __FILE__, 'royaltycart_drop_tables');
 
 
+add_action('admin_menu', 'royaltycart_administration_actions');
 function royaltycart_administration_actions(){
   //One menue item, 
   //  I'm using the tabs on the admin page 

@@ -6,18 +6,34 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 function show_royaltycart_administration_orders(){
   echo 'Show orders here';
   //add_action('admin_init', 'wp_cart_admin_init_handler'); //wpspc_add_meta_boxes()
-  add_action('admin_init', 'royaltycart_add_meta_boxes');
-  add_action('save_post', 'royaltycart_cart_save_orders', 10, 2 );
-  add_action('manage_royaltycart_cart_orders_posts_custom_column', 'royaltycart_populate_order_columns', 10, 2);
+  //add_action('init', 'royaltycart_add_meta_boxes');
+  //add_action('save_post', 'royaltycart_cart_save_orders', 10, 2 );
+  //add_action('manage_royaltycart_cart_orders_posts_custom_column', 'royaltycart_populate_order_columns', 10, 2);
 
-  add_filter('manage_edit-royaltycart_cart_orders_columns', 'royaltycart_orders_display_columns' );
-  add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
+  //add_filter('manage_edit-royaltycart_cart_orders_columns', 'royaltycart_orders_display_columns' );
+  //add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
 
   //no and no... can't get the orderslist to show..yet
+  //royaltycart_create_orders_page();
   //royaltycart_populate_order_columns();
+  //royaltycart_add_meta_boxes();
   //royaltycart_orders_display_columns();
   //royaltycart_customize_order_link();
   //works royaltycart_order_review_meta_box();
+  
+  $query = new WP_Query( 'post_type=royaltycart_products' );
+  if ( $query->have_posts() ) {
+	while ( have_posts() ) {
+		the_post();
+		the_content();
+		//
+		// Post Content here
+		//
+	} // end while
+  }else{
+  	echo"<p>No posts";
+  } // end if
+
 }
 
 
@@ -54,32 +70,32 @@ function royaltycart_add_meta_boxes(){
   add_meta_box( 'order_review_meta_box',
     "Order Review",
     'royaltycart_order_review_meta_box',
-    'royaltycart_cart_orders', 
+    'royaltycart_orders', 
     'normal', 
     'high'
   );
 }
 
 
-function royaltycart_order_review_meta_box($royaltycart_cart_orders){
-  $order_id = $royaltycart_cart_orders->ID;
-  $first_name = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_first_name', true );
-  $last_name = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_last_name', true );
-  $email = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_email_address', true );
-  $txn_id = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_txn_id', true );
-  $ip_address = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_ipaddress', true );
-  $total_amount = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_total_amount', true );
+function royaltycart_order_review_meta_box($royaltycart_orders){
+  $order_id = $royaltycart_orders->ID;
+  $first_name = get_post_meta( $royaltycart_orders->ID, 'royaltycart_first_name', true );
+  $last_name = get_post_meta( $royaltycart_orders->ID, 'royaltycart_last_name', true );
+  $email = get_post_meta( $royaltycart_orders->ID, 'royaltycart_email_address', true );
+  $txn_id = get_post_meta( $royaltycart_orders->ID, 'royaltycart_txn_id', true );
+  $ip_address = get_post_meta( $royaltycart_orders->ID, 'royaltycart_ipaddress', true );
+  $total_amount = get_post_meta( $royaltycart_orders->ID, 'royaltycart_total_amount', true );
   //$shipping_amount = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_shipping_amount', true );
   //$address = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_address', true );
   //$phone = get_post_meta( $wpsc_cart_orders->ID, 'wpspsc_phone', true );
-  $email_sent_value = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_buyer_email_sent', true );
+  $email_sent_value = get_post_meta( $royaltycart_orders->ID, 'royaltycart_buyer_email_sent', true );
     
   $email_sent_field_msg = "No";
     if(!empty($email_sent_value)){
       $email_sent_field_msg = "Yes. ".$email_sent_value;
     }
     
-  $items_ordered = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_items_ordered', true );
+  $items_ordered = get_post_meta( $royaltycart_orders->ID, 'royaltycart_items_ordered', true );
   //$applied_coupon = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_applied_coupon', true );
   ?>
     <table>
@@ -128,8 +144,8 @@ function royaltycart_order_review_meta_box($royaltycart_cart_orders){
 }
 
 
-function royaltycart_cart_save_orders( $order_id, $royaltycart_cart_orders ) {
-    if ( $royaltycart_cart_orders->post_type == 'royaltycart_cart_orders' ) {
+function royaltycart_cart_save_orders( $order_id, $royaltycart_orders ) {
+    if ( $royaltycart_orders->post_type == 'royaltycart_orders' ) {
         // Store data in post meta table if present in post data
         if ( isset( $_POST['royaltycart_first_name'] ) && $_POST['royaltycart_first_name'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_first_name', $_POST['royaltycart_first_name'] );
@@ -203,7 +219,7 @@ function royaltycart_populate_order_columns($column, $post_id)
 
 
 function royaltycart_customize_order_link( $permalink, $post ) {
-  if( $post->post_type == 'royaltycart_cart_orders' ) {
+  if( $post->post_type == 'royaltycart_orders' ) {
     $permalink = get_admin_url().'post.php?post='.$post->ID.'&action=edit';
   }
   return $permalink;

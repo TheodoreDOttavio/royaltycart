@@ -5,10 +5,25 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 global $wpdb;
 
 
+//Registers the Orders post type
+function royaltycart_create_post_type() {
+  register_post_type( 'royaltycart_orders',
+    array(
+      'labels' => array(
+        'name' => __( 'Orders' ),
+        'singular_name' => __( 'Order' )
+        ),
+      'public' => true,
+      'has_archive' => true,
+    )
+  );
+}
+
+	
 function royaltycart_insert_order(){
   $royaltycart_order = array(
     'post_title' => 'Royalty Cart Order',
-    'post_type' => 'royaltycart_cart_orders',
+    'post_type' => 'royaltycart_orders',
     'post_content' => '',
     'post_status' => 'trash',
   );
@@ -31,6 +46,14 @@ function royaltycart_insert_order(){
   }
 }
 
+
+function royaltycart_drop_tables(){
+  global $wpdb;
+  $table = $wpdb->prefix."royaltycart_products";
+  $structure = "DROP TABLE $table;";
+	
+  dbDelta( $structure );
+}
 
 function XXX_wpspc_insert_new_record()
 {
