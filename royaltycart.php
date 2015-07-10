@@ -21,13 +21,12 @@ define('ROYALTYCART_SANDBOX_PAYPAL_URL', 'https://www.sandbox.paypal.com/cgi-bin
 
 include 'royaltycart-functions.php';
 
-add_action( 'init', 'royaltycart_create_post_type' );
-
-
 function royaltycart_install(){
+  add_action( 'init', 'royaltycart_create_post_type', 0 );
+	
   //For future upgrades;
   require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-	
+  
     global $wpdb;
     $table = $wpdb->prefix."royaltycart_products";
     $structure = "CREATE TABLE $table (
@@ -51,7 +50,7 @@ function royaltycart_install(){
     // Populate tables
     $wpdb->insert( $table, 
       array( 
-        'royaltycart_product_name' => 'Sample', 
+        'royaltycart_product_name' => 'Sample after CPT', 
         'royaltycart_product_file' => 'myfile url', 
         'royaltycart_product_royalty_array' => '[teddottavio@gmail.com,Ted,0.01]',
 	  ) 
@@ -64,6 +63,49 @@ function royaltycart_install(){
 
 register_activation_hook( __FILE__, 'royaltycart_install' );
 register_uninstall_hook( __FILE__, 'royaltycart_drop_tables');
+
+
+//Registers the Orders post type
+function royaltycart_create_post_type() {
+  $labels = array(
+	'name' => _x( 'Royaly Cart Orders', 'Post Type General Name' ),
+	'singular_name' => _x( 'Royaly Cart Order', 'Post Type Singular Name' ),
+	'add_new' => __( 'Add New' ),
+	'add_new_item' => __( 'Add New Order' ),
+	'edit' => __( 'Edit' ),
+	'edit_item' => __( 'Edit Order' ),
+	'new_item' => __( 'New Order' ),
+	'view' => __( 'View Order' ),
+	'view_item' => __( 'View Order' ),
+	'search_items' => __( 'Search Orders' ),
+	'not_found' => __( 'No Orders found' ),
+	'not_found_in_trash' => __( 'No Orders found in Trash' ),
+	'parent' => __( 'Parent Order' ),
+  );
+
+  $args = array(
+    'label' => __( 'royaltycart-orders' ),
+    'description' => __( 'Royalty Cart Orders' ),
+    'labels' => $labels,
+    'supports' => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+    'taxonomies' => array( 'genres' ),
+    'hierarchical' => false,
+    'public' => true,
+    'show_ui' => true,
+    'show_in_menu' => true,
+    'show_in_nav_menus' => true,
+    'show_in_admin_bar' => true,
+    'menu_position' => 5,
+    'can_export' => true,
+    'has_archive' => true,
+    'exclude_from_search' => false,
+    'publicly_queryable' => true,
+    'capability_type' => 'page',
+  );
+
+  register_post_type( 'royaltycart-orders', $args );
+}
+add_action( 'init', 'royaltycart_create_post_type', 0 );
 
 
 add_action('admin_menu', 'royaltycart_administration_actions');
