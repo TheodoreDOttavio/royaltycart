@@ -42,23 +42,23 @@
   if(isset($_GET['action'])){    
     switch ($_GET['action']){
     case 'products':
-	  include_once('royaltycart-administration-products.php');
+	  include_once('royaltycart-administration_products.php');
       show_royaltycart_administration_product_list();
       break;
     case 'orders':
-	  include_once('royaltycart-administration-orders.php');
+	  include_once('royaltycart-administration_orders.php');
 	  show_royaltycart_administration_orders();
       break;
     case 'emails':
 	  show_royaltycart_administration_product_list();
       break;
 	case 'usage':
-      include_once('royaltycart-administration-usage.php');
+      include_once('royaltycart-administration_usage.php');
 	  show_royaltycart_administration_usage();
       break;
     }
   } else {
-  	include_once('royaltycart-administration-products.php');
+  	include_once('royaltycart-administration_products.php');
   	show_royaltycart_administration_product_list();
   }
   echo '</div></div>';

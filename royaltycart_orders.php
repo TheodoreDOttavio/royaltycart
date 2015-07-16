@@ -23,10 +23,10 @@ function royaltycart_create_orders_custom_post_type() {
   );
 
   $args = array(
-    'label' => __( 'royaltycart-orders' ),
+    'label' => __( 'royaltycart_orders' ),
     'description' => __( 'Royalty Cart Orders' ),
     'labels' => $labels,
-    'supports' => array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
+    'supports' => false, //array( 'title', 'editor', 'excerpt', 'author', 'thumbnail', 'comments', 'revisions', 'custom-fields', ),
     'taxonomies' => array( 'genres' ),
     'hierarchical' => false,
     'public' => true,
@@ -42,8 +42,20 @@ function royaltycart_create_orders_custom_post_type() {
     'publicly_queryable' => true,
     'capability_type' => 'page',
   );
+  
+  $args = array(
+    'label' => __( 'royaltycart_orders' ),
+    'description' => __( 'Royalty Cart Orders' ),
+    'labels' => $labels,
+    'public' => true,
+    'menu_position' => 86, //80
+    'supports' => false,
+    'taxonomies' => array( '' ),
+    'menu_icon' => plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png',
+    'has_archive' => true
+  );
 
-  register_post_type( 'royaltycart-orders', $args );
+  register_post_type( 'royaltycart_orders', $args );
   
 }
 add_action( 'init', 'royaltycart_create_orders_custom_post_type', 0 );
@@ -198,7 +210,7 @@ function royaltycart_populate_order_columns($column, $post_id)
 }
 
 function royaltycart_customize_order_link( $permalink, $post ) {
-    if( $post->post_type == 'royaltycart-orders' ) {
+    if( $post->post_type == 'royaltycart_orders' ) {
         $permalink = get_admin_url().'post.php?post='.$post->ID.'&action=edit';
     }
     return $permalink;

@@ -41,6 +41,18 @@ function royaltycart_create_products_custom_post_type() {
     'capability_type' => 'page',
   );
 
+  $args = array(
+    'label' => __( 'royaltycart_products' ),
+    'description' => __( 'Royalty Cart Products' ),
+    'labels' => $labels,
+    'public' => true,
+    'menu_position' => 85, //80
+    'supports' => false,
+    'taxonomies' => array( '' ),
+    'menu_icon' => plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png',
+    'has_archive' => true
+  );
+
   register_post_type( 'royaltycart-products', $args );
 }
 add_action( 'init', 'royaltycart_create_products_custom_post_type', 0 );

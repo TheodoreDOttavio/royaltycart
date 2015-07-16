@@ -19,7 +19,10 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 define('ROYALTYCART_LIVE_PAYPAL_URL', 'https://www.paypal.com/cgi-bin/webscr');
 define('ROYALTYCART_SANDBOX_PAYPAL_URL', 'https://www.sandbox.paypal.com/cgi-bin/webscr');
 
-include 'royaltycart-functions.php';
+include 'royaltycart_functions.php';
+
+include 'royaltycart_orders.php';
+include 'royaltycart_products.php';
 
 function royaltycart_install(){
   add_action( 'init', 'royaltycart_create_post_type', 0 );
@@ -31,12 +34,9 @@ function royaltycart_install(){
   //royaltycart_insert_order();
 }
 
-
 register_activation_hook( __FILE__, 'royaltycart_install' );
 register_uninstall_hook( __FILE__, 'royaltycart_drop_tables');
 
-include 'royaltycart-orders.php';
-include 'royaltycart-products.php';
 
 add_action('admin_init', 'royaltycart_orders_add_meta_boxes');
 
