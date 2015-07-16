@@ -38,6 +38,8 @@ register_uninstall_hook( __FILE__, 'royaltycart_drop_tables');
 include 'royaltycart-orders.php';
 include 'royaltycart-products.php';
 
+add_action('admin_init', 'royaltycart_orders_add_meta_boxes');
+
 add_action('admin_menu', 'royaltycart_administration_actions');
 function royaltycart_administration_actions(){
   if ( is_admin() ) {
@@ -55,12 +57,13 @@ function royaltycart_administration_actions(){
 	
     //This adds the menu in the settings panel
     add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
-  }  
+  }
 }
-
 
 function royaltycart_menu(){
   //initiates the Admin menue
   include 'administration/royaltycart-administration.php';
 }
+
+
 ?>

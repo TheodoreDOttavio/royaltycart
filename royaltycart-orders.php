@@ -2,6 +2,8 @@
 //Security measure, disallows direct access
 defined( 'ABSPATH' ) or die( 'No script!' );
 
+add_action( 'save_post', 'royaltycart_cart_save_orders', 10, 2 );
+
 //Registers the Orders post type
 function royaltycart_create_orders_custom_post_type() {
   $labels = array(
@@ -42,6 +44,7 @@ function royaltycart_create_orders_custom_post_type() {
   );
 
   register_post_type( 'royaltycart-orders', $args );
+  
 }
 add_action( 'init', 'royaltycart_create_orders_custom_post_type', 0 );
 
@@ -123,7 +126,6 @@ function royaltycart_order_review_meta_box($royaltycart_orders){
 }
 
 
-add_action( 'save_post', 'royaltycart_cart_save_orders', 10, 2 );
 function royaltycart_cart_save_orders( $order_id, $royaltycart_orders ) {
     if ( $royaltycart_orders->post_type == 'royaltycart_orders' ) {
         // Store data in post meta table if present in post data
@@ -194,4 +196,12 @@ function royaltycart_populate_order_columns($column, $post_id)
         echo $status;
     }
 }
+
+function royaltycart_customize_order_link( $permalink, $post ) {
+    if( $post->post_type == 'royaltycart-orders' ) {
+        $permalink = get_admin_url().'post.php?post='.$post->ID.'&action=edit';
+    }
+    return $permalink;
+}
+add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
 ?>
