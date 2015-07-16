@@ -48,7 +48,7 @@ function royaltycart_create_orders_custom_post_type() {
     'description' => __( 'Royalty Cart Orders' ),
     'labels' => $labels,
     'public' => true,
-    'menu_position' => 86, //80
+    'menu_position' => 95, //80
     'supports' => false,
     'taxonomies' => array( '' ),
     'menu_icon' => plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png',
@@ -77,12 +77,12 @@ function royaltycart_order_review_meta_box($royaltycart_orders){
   $order_id = $royaltycart_orders->ID;
   $first_name = get_post_meta( $royaltycart_orders->ID, 'royaltycart_first_name', true );
   $last_name = get_post_meta( $royaltycart_orders->ID, 'royaltycart_last_name', true );
-  $email = get_post_meta( $royaltycart_orders->ID, 'royaltycart_email_address', true );
+  $email = get_post_meta( $royaltycart_orders->ID, 'royaltycart_email', true );
   $txn_id = get_post_meta( $royaltycart_orders->ID, 'royaltycart_txn_id', true );
   $ip_address = get_post_meta( $royaltycart_orders->ID, 'royaltycart_ipaddress', true );
   $total_amount = get_post_meta( $royaltycart_orders->ID, 'royaltycart_total_amount', true );
-  $address = get_post_meta( $wpsc_cart_orders->ID, 'wpsc_address', true );
-  $phone = get_post_meta( $wpsc_cart_orders->ID, 'wpspsc_phone', true );
+  $address = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_address', true );
+  $phone = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_phone', true );
   $email_sent_value = get_post_meta( $royaltycart_orders->ID, 'royaltycart_buyer_email_sent', true );
     
   $email_sent_field_msg = "No";
@@ -111,7 +111,7 @@ function royaltycart_order_review_meta_box($royaltycart_orders){
         </tr>
         <tr>
             <td>Email Address</td>
-            <td><input type="text" size="40" name="royaltycart_email_address" value="<?php echo $email; ?>" /></td>
+            <td><input type="text" size="40" name="royaltycart_email" value="<?php echo $email; ?>" /></td>
         </tr>
         <tr>
             <td>IP Address</td>
@@ -147,8 +147,8 @@ function royaltycart_cart_save_orders( $order_id, $royaltycart_orders ) {
         if ( isset( $_POST['royaltycart_last_name'] ) && $_POST['royaltycart_last_name'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_last_name', $_POST['royaltycart_last_name'] );
         }
-        if ( isset( $_POST['royaltycart_email_address'] ) && $_POST['royaltycart_email_address'] != '' ) {
-            update_post_meta( $order_id, 'royaltycart_email_address', $_POST['royaltycart_email_address'] );
+        if ( isset( $_POST['royaltycart_email'] ) && $_POST['royaltycart_email'] != '' ) {
+            update_post_meta( $order_id, 'royaltycart_email', $_POST['royaltycart_email'] );
         }
         if ( isset( $_POST['royaltycart_ipaddress'] ) && $_POST['royaltycart_ipaddress'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_ipaddress', $_POST['royaltycart_ipaddress'] );
@@ -176,7 +176,9 @@ function royaltycart_orders_display_columns( $columns )
     $columns['title'] = "Order ID";
     $columns['royaltycart_first_name'] = "First Name";
     $columns['royaltycart_last_name'] = "Last Name";
-    $columns['royaltycart_email_address'] = "Email";
+    $columns['royaltycart_phone'] = "Phone";
+	$columns['royaltycart_email'] = "Email";
+	$columns['royaltycart_address'] = "Address";
     $columns['royaltycart_total_amount'] = "Total";
     $columns['royaltycart_order_status'] = "Status";
     $columns['date'] = "Date";
@@ -195,9 +197,17 @@ function royaltycart_populate_order_columns($column, $post_id)
         $ip_address = get_post_meta( $post_id, 'royaltycart_last_name', true );
         echo $ip_address;
     }
-    else if ( 'royaltycart_email_address' == $column ) {
-        $email = get_post_meta( $post_id, 'royaltycart_email_address', true );
+    else if ( 'royaltycart_phone' == $column ) {
+        $phone = get_post_meta( $post_id, 'royaltycart_phone', true );
+        echo $phone;
+    }
+    else if ( 'royaltycart_email' == $column ) {
+        $email = get_post_meta( $post_id, 'royaltycart_email', true );
         echo $email;
+    }
+    else if ( 'royaltycart_address' == $column ) {
+        $address = get_post_meta( $post_id, 'royaltycart_address', true );
+        echo $address;
     }
     else if ( 'royaltycart_total_amount' == $column ) {
         $total_amount = get_post_meta( $post_id, 'royaltycart_total_amount', true );

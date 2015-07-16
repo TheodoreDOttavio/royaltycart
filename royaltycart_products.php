@@ -46,7 +46,7 @@ function royaltycart_create_products_custom_post_type() {
     'description' => __( 'Royalty Cart Products' ),
     'labels' => $labels,
     'public' => true,
-    'menu_position' => 85, //80
+    'menu_position' => 96, //80
     'supports' => false,
     'taxonomies' => array( '' ),
     'menu_icon' => plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png',
