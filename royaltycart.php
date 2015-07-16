@@ -40,23 +40,22 @@ include 'royaltycart-products.php';
 
 add_action('admin_menu', 'royaltycart_administration_actions');
 function royaltycart_administration_actions(){
-  //One menue item with tabs
   if ( is_admin() ) {
     // We are in admin mode
-    add_menu_page (
-      "Royalty Cart",
-      "Royalty Cart",
-      "manage_options",
-      "Royalty-Cart",
-      "royaltycart_menu",
-      plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png'
-    );
+    
+    //One menue item with tabs
+    //add_menu_page (
+    //  "Royalty Cart",
+    //  "Royalty Cart",
+    //  "manage_options",
+    //  "Royalty-Cart",
+    //  "royaltycart_menu",
+    //  plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png'
+    //);
 	
-	royaltycart_orders_add_meta_boxes();
+    //This adds the menu in the settings panel
+    add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
   }  
-  
-  //This adds the menu in the settings panel
-  //add_options_page("Royalty Cart", "Royalty Cart", 1, "Royalty-Cart", "royaltycart_menu");
 }
 
 
