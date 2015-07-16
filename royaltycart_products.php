@@ -76,7 +76,46 @@ function royaltycart_product_review_meta_box($royaltycart_products){
         </tr>
         <tr>
             <td>File Formats</td>
-            <td><input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" /></td>
+            <td>
+            	<table width="80%"><tr>
+            	  <td align='center' colspan="6"><strong>Audio Formats</strong></td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".mp3" value=".mp3"></td><td>.mp3</td><td>Mpeg Audio</td>
+            	  <td><input type="checkbox" name=".wav" value=".wav"></td><td>.wav</td><td>Microsoft Audio</td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".aif" value=".aif"></td><td>.aif</td><td>Apple Audio</td>
+            	</tr><tr>
+            	  <td align='center' colspan="6"><strong>Video Formats</strong></td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".mp4" value=".mp4"></td><td>.mp4</td><td>TV Resolution Mpeg Video</td>
+            	  <td><input type="checkbox" name=".avi" value=".avi"></td><td>.avi</td><td>TV Resolution Microsoft Video</td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".mov" value=".mov"></td><td>.mov</td><td>TV Resolution Apple Quicktime</td>
+            	  <td><input type="checkbox" name=".mp4" value="hd.mp4"></td><td>.mp4</td><td>High Definition Mpeg Video</td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".avi" value="hd.avi"></td><td>.avi</td><td>High Definition Microsoft Video</td>
+            	  <td><input type="checkbox" name=".mov" value="hd.mov"></td><td>.mov</td><td>High Definition Apple Quicktime</td>
+            	</tr><tr>
+            	  <td align='center' colspan="6"><strong>Printable Formats</strong></td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".jpg" value=".jpg"></td><td>.jpg</td><td>High Resolution Image</td>
+            	  <td><input type="checkbox" name=".pdf" value=".pdf"></td><td>.pdf</td><td>Adobe Acrobat Document</td>
+            	</tr><tr>
+            	  <td><input type="checkbox" name=".doc" value=".doc"></td><td>.doc</td><td>Word Document</td>
+            	</tr><tr>
+            	</tr></table>
+            	Placeholder: <input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" />
+            </td>
+        </tr>
+        <tr>
+            <td>Pricing</td>
+            <td>Set Price: $20<br>
+            	<input type="checkbox" name="user_select_price" value="1">
+            	Allow the customer to select the price<br>
+            	Min: $1
+            	Max: None
+            	Increments: $1
+            </td>
         </tr>
         <tr>
             <td>Payments</td>

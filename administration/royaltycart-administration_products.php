@@ -17,17 +17,21 @@ echo '
   $results = $wpdb->get_results( $mysql );
   //'SELECT * FROM '.$wpdb->prefix.'postmeta' );
   
+  echo "<table><tr>";
+  echo "<td>Name</td>";
+  echo "<td>Shortcode</td></tr>";
+
   foreach($results as $result){
   	$myproductsql = "SELECT post_id, meta_value FROM ".$wpdb->prefix."postmeta WHERE meta_key = 'royaltycart_product_name' AND post_id = ".$result->post_id;
 	$productresults = $wpdb->get_results( $myproductsql );
 	
 	foreach($productresults as $product){
-      echo "<strong>".$product->meta_value."</strong> shortcode - ";
-	  echo "[royaltycart_button id=".$product->post_id."]<br>";
+      echo "<tr><td><strong>".$product->meta_value."</strong></td>";
+	  echo "<td>[royaltycart_button id=".$product->post_id."]</td></tr>";
 	}
   }
 
-echo '
+echo '</table>
   </div>
 </div>
 ';
