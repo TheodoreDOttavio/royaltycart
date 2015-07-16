@@ -6,7 +6,7 @@
 /*
 Plugin Name: Royalty Cart
 Plugin URI: https://github.com/TheodoreDOttavio/royaltycart
-Description: A shopping cart for Musicians, Film Makers, and Collaborative artists to digital media. Payments received are divided up and sent to multiple Paypall Accounts.
+Description: A shopping cart for Musicians, Film Makers, and Collaborative artists to sell digital media. Payments received are divided up and sent to multiple Paypall Accounts.
 Author: Ted DOttavio
 Version: 1.0
 Author URI: https://github.com/TheodoreDOttavio
@@ -25,20 +25,18 @@ include 'royaltycart_orders.php';
 include 'royaltycart_products.php';
 
 function royaltycart_install(){
+	//do I need this????
   add_action( 'init', 'royaltycart_create_post_type', 0 );
 	
   //For future upgrades;
   require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-  
-  //add an empty order
-  //royaltycart_insert_order();
 }
 
 register_activation_hook( __FILE__, 'royaltycart_install' );
 register_uninstall_hook( __FILE__, 'royaltycart_drop_tables');
 
 
-add_action('admin_init', 'royaltycart_orders_add_meta_boxes');
+add_action('admin_init', 'royaltycart_add_meta_boxes');
 
 add_action('admin_menu', 'royaltycart_administration_actions');
 function royaltycart_administration_actions(){

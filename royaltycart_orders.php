@@ -4,7 +4,10 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 add_action( 'save_post', 'royaltycart_cart_save_orders', 10, 2 );
 
+
+
 //Registers the Orders post type
+add_action( 'init', 'royaltycart_create_orders_custom_post_type', 0 );
 function royaltycart_create_orders_custom_post_type() {
   $labels = array(
 	'name' => _x( 'Royalties Orders', 'Post Type General Name' ),
@@ -48,7 +51,7 @@ function royaltycart_create_orders_custom_post_type() {
     'description' => __( 'Royalty Cart Orders' ),
     'labels' => $labels,
     'public' => true,
-    'menu_position' => 95, //80
+    'menu_position' => 95,
     'supports' => false,
     'taxonomies' => array( '' ),
     'menu_icon' => plugin_dir_url( __FILE__ ).'images/cart-orders-icon.png',
@@ -58,31 +61,19 @@ function royaltycart_create_orders_custom_post_type() {
   register_post_type( 'royaltycart_orders', $args );
   
 }
-add_action( 'init', 'royaltycart_create_orders_custom_post_type', 0 );
 
-//royaltycart_orders_add_meta_boxes(); //this was in admin init function
-function royaltycart_orders_add_meta_boxes()
-{
-    add_meta_box( 'order_review_meta_box',
-        __("Order Review"),
-        'royaltycart_order_review_meta_box',
-        'royaltycart_orders', 
-        'normal', 
-        'high'
-    );
-}
 
 
 function royaltycart_order_review_meta_box($royaltycart_orders){
   $order_id = $royaltycart_orders->ID;
   $first_name = get_post_meta( $royaltycart_orders->ID, 'royaltycart_first_name', true );
   $last_name = get_post_meta( $royaltycart_orders->ID, 'royaltycart_last_name', true );
+  $phone = get_post_meta( $royaltycart_orders->ID, 'royaltycart_phone', true );
   $email = get_post_meta( $royaltycart_orders->ID, 'royaltycart_email', true );
   $txn_id = get_post_meta( $royaltycart_orders->ID, 'royaltycart_txn_id', true );
   $ip_address = get_post_meta( $royaltycart_orders->ID, 'royaltycart_ipaddress', true );
+  $address = get_post_meta( $royaltycart_orders->ID, 'royaltycart_address', true );
   $total_amount = get_post_meta( $royaltycart_orders->ID, 'royaltycart_total_amount', true );
-  $address = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_address', true );
-  $phone = get_post_meta( $royaltycart_cart_orders->ID, 'royaltycart_phone', true );
   $email_sent_value = get_post_meta( $royaltycart_orders->ID, 'royaltycart_buyer_email_sent', true );
     
   $email_sent_field_msg = "No";
@@ -138,6 +129,7 @@ function royaltycart_order_review_meta_box($royaltycart_orders){
 }
 
 
+
 function royaltycart_cart_save_orders( $order_id, $royaltycart_orders ) {
     if ( $royaltycart_orders->post_type == 'royaltycart_orders' ) {
         // Store data in post meta table if present in post data
@@ -147,26 +139,28 @@ function royaltycart_cart_save_orders( $order_id, $royaltycart_orders ) {
         if ( isset( $_POST['royaltycart_last_name'] ) && $_POST['royaltycart_last_name'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_last_name', $_POST['royaltycart_last_name'] );
         }
+		if ( isset( $_POST['royaltycart_phone'] ) && $_POST['royaltycart_phone'] != '' ) {
+            update_post_meta( $order_id, 'royaltycart_phone', $_POST['royaltycart_phone'] );
+        }
         if ( isset( $_POST['royaltycart_email'] ) && $_POST['royaltycart_email'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_email', $_POST['royaltycart_email'] );
         }
         if ( isset( $_POST['royaltycart_ipaddress'] ) && $_POST['royaltycart_ipaddress'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_ipaddress', $_POST['royaltycart_ipaddress'] );
         }
-        if ( isset( $_POST['royaltycart_total_amount'] ) && $_POST['royaltycart_total_amount'] != '' ) {
-            update_post_meta( $order_id, 'royaltycart_total_amount', $_POST['royaltycart_total_amount'] );
-        }
-        if ( isset( $_POST['royaltycart_address'] ) && $_POST['royaltycart_address'] != '' ) {
+		if ( isset( $_POST['royaltycart_address'] ) && $_POST['royaltycart_address'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_address', $_POST['royaltycart_address'] );
         }
-        if ( isset( $_POST['royaltycart_phone'] ) && $_POST['royaltycart_phone'] != '' ) {
-            update_post_meta( $order_id, 'royaltycart_phone', $_POST['royaltycart_phone'] );
+        if ( isset( $_POST['royaltycart_total_amount'] ) && $_POST['royaltycart_total_amount'] != '' ) {
+            update_post_meta( $order_id, 'royaltycart_total_amount', $_POST['royaltycart_total_amount'] );
         }
         if ( isset( $_POST['royaltycart_items_ordered'] ) && $_POST['royaltycart_items_ordered'] != '' ) {
             update_post_meta( $order_id, 'royaltycart_items_ordered', $_POST['royaltycart_items_ordered'] );
         }
     }
 }
+
+
 
 add_filter( 'manage_edit-royaltycart_orders_columns', 'royaltycart_orders_display_columns' );
 function royaltycart_orders_display_columns( $columns ) 
@@ -184,6 +178,7 @@ function royaltycart_orders_display_columns( $columns )
     $columns['date'] = "Date";
     return $columns;
 }
+
 
 
 add_action('manage_royaltycart_orders_posts_custom_column', 'royaltycart_populate_order_columns', 10, 2);
@@ -219,11 +214,13 @@ function royaltycart_populate_order_columns($column, $post_id)
     }
 }
 
+
+
+add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
 function royaltycart_customize_order_link( $permalink, $post ) {
     if( $post->post_type == 'royaltycart_orders' ) {
         $permalink = get_admin_url().'post.php?post='.$post->ID.'&action=edit';
     }
     return $permalink;
 }
-add_filter('post_type_link',"royaltycart_customize_order_link",10,2);
 ?>

@@ -12,7 +12,7 @@ function show_royaltycart_administration_usage(){
   
   <p><strong>Step 2</strong> To add an \'Add to Cart\' button for a product simply add the shortcode [royaltycart_button name=PRODUCT-NAME]</p>
   <p>Example add to cart button shortcode usage:</p>
-  <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_button name="Test Product"]</p>
+  <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_button id=0]</p>
   </div>
 </div>
 
