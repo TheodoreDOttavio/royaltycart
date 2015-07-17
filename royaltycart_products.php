@@ -104,6 +104,12 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             	  <td><input type="checkbox" name=".doc" value=".doc"></td><td>.doc</td><td>Word Document</td>
             	</tr><tr>
             	</tr></table>
+            	<p>Test re-factoring function<br>
+            	<?php $allfileformats = royaltycart_fileformat_array();
+				foreach($allfileformats as $fileformat){
+                  echo "<td><input type='checkbox' name=".$fileformat->suffix." value='test'></td><td>.doc</td><td>".$fileformat->description."</td>";
+				}
+            	?>
             	Placeholder: <input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" />
             </td>
         </tr>
@@ -113,8 +119,9 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             	<input type="checkbox" name="user_select_price" value="1">
             	Allow the customer to select the price<br>
             	Min: $1
-            	Max: None
-            	Increments: $1
+            	Type in
+            	Button Set
+            	Option Select
             </td>
         </tr>
         <tr>
@@ -192,4 +199,20 @@ function royaltycart_customize_product_link( $permalink, $post ) {
     }
     return $permalink;
 }
+
+function royaltycart_fileformat_array(){
+  //add or remove any available file formats here
+  //  No sorting is applied, arrange them here the hard way...
+  $allfileformats  = array(
+    array('suffix' => "-low.wav", 'description' => 'Low bandwidth microsoft audio'),
+    array('suffix' => ".wav", 'description' => 'CD quality microsoft audio'),
+    array('suffix' => "-low.mp3", 'description' => 'Low bandwidth mpeg audio'),
+    array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio'),
+    array('suffix' => "-net.mp4", 'description' => 'low bandwidth mpeg video'),
+    array('suffix' => "-tv.mp4", 'description' => 'TV quality mpeg video'),
+    array('suffix' => "-hd.mp4", 'description' => 'High Definition mpeg video')
+  );
+  return $allfileformats;
+}
+
 ?>
