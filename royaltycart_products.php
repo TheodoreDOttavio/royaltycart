@@ -107,7 +107,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             	<p>Test re-factoring function<br>
             	<?php $allfileformats = royaltycart_fileformat_array();
 				foreach($allfileformats as $fileformat){
-                  echo "<td><input type='checkbox' name=".$fileformat->suffix." value='test'></td><td>.doc</td><td>".$fileformat->description."</td>";
+                  echo "</tr><td><input type='checkbox' name=".$fileformat->suffix." value='test'></td><td>.doc</td><td>".$fileformat->description."</td><tr>";
 				}
             	?>
             	Placeholder: <input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" />
