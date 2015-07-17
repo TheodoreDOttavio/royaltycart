@@ -63,7 +63,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             Use this shortcode for an 'add to cart' button:
         </td></tr>
     	<tr><td colspan='2' align='center'>
-            <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_button id=<?php echo $product_id;?>]</p>
+            <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
         </td></tr>
         
         <tr>
@@ -78,50 +78,42 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             <td>File Formats</td>
             <td>
             	<table width="80%"><tr>
-            	  <td align='center' colspan="6"><strong>Audio Formats</strong></td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".mp3" value=".mp3"></td><td>.mp3</td><td>Mpeg Audio</td>
-            	  <td><input type="checkbox" name=".wav" value=".wav"></td><td>.wav</td><td>Microsoft Audio</td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".aif" value=".aif"></td><td>.aif</td><td>Apple Audio</td>
-            	</tr><tr>
-            	  <td align='center' colspan="6"><strong>Video Formats</strong></td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".mp4" value=".mp4"></td><td>.mp4</td><td>TV Resolution Mpeg Video</td>
-            	  <td><input type="checkbox" name=".avi" value=".avi"></td><td>.avi</td><td>TV Resolution Microsoft Video</td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".mov" value=".mov"></td><td>.mov</td><td>TV Resolution Apple Quicktime</td>
-            	  <td><input type="checkbox" name=".mp4" value="hd.mp4"></td><td>.mp4</td><td>High Definition Mpeg Video</td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".avi" value="hd.avi"></td><td>.avi</td><td>High Definition Microsoft Video</td>
-            	  <td><input type="checkbox" name=".mov" value="hd.mov"></td><td>.mov</td><td>High Definition Apple Quicktime</td>
-            	</tr><tr>
-            	  <td align='center' colspan="6"><strong>Printable Formats</strong></td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".jpg" value=".jpg"></td><td>.jpg</td><td>High Resolution Image</td>
-            	  <td><input type="checkbox" name=".pdf" value=".pdf"></td><td>.pdf</td><td>Adobe Acrobat Document</td>
-            	</tr><tr>
-            	  <td><input type="checkbox" name=".doc" value=".doc"></td><td>.doc</td><td>Word Document</td>
-            	</tr><tr>
+            	  </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+            	  <?php $allfileformats = royaltycart_fileformat_array();
+				  foreach($allfileformats as $fileformat){
+                    echo "</tr><td><input type='checkbox' name=".$fileformat['suffix']." value='0'></td><td>".$fileformat['suffix']."</td><td>".$fileformat['description']."</td><tr>";
+			      }?>
             	</tr></table>
-            	<p>Test re-factoring function<br>
-            	<?php $allfileformats = royaltycart_fileformat_array();
-				foreach($allfileformats as $fileformat){
-                  echo "</tr><td><input type='checkbox' name=".$fileformat->suffix." value='test'></td><td>.doc</td><td>".$fileformat->description."</td><tr>";
-				}
-            	?>
-            	Placeholder: <input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" />
+            	<br>Placeholder: <input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" />
             </td>
         </tr>
         <tr>
             <td>Pricing</td>
-            <td>Set Price: $20<br>
-            	<input type="checkbox" name="user_select_price" value="1">
-            	Allow the customer to select the price<br>
-            	Min: $1
-            	Type in
-            	Button Set
-            	Option Select
+            <td>Set Price: <input type="text" size="5" name="royaltycart_price" value="<?php echo $price; ?>" /><br>
+            	<input type="checkbox" name="royaltycart_price_byuser" value="1">Allow the customer to select the price<br>
+            	<input type="text" size="5" name="royaltycart_price_min" value="<?php echo $price_min; ?>" /> Minimum (For typed in amounts):<br>
+            	Pice options (seperate values by commas):<br>
+            	<input type="text" size="30" name="royaltycart_price_list" value="<?php echo $price_increment; ?>" />
+            	
+            	<p>Display</p>
+                <input type = "radio"
+                  name = "royaltycart_pricedisplay"
+                  id = "user_enter"
+                  value = "enter" />
+                <label for = "user_enter">Type in</label><br>
+          
+                <input type = "radio"
+                 name = "royaltycart_pricedisplay"
+                 id = "user_select"
+                 value = "select" />
+                <label for = "user_select">Pull Down Selector</label><br>
+ 
+                <input type = "radio"
+                 name = "royaltycart_pricedisplay"
+                 id = "user_button"
+                 value = "button" />
+                <label for = "user_button">Button(s)</label><br>
+ 
             </td>
         </tr>
         <tr>
@@ -210,7 +202,16 @@ function royaltycart_fileformat_array(){
     array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio'),
     array('suffix' => "-net.mp4", 'description' => 'low bandwidth mpeg video'),
     array('suffix' => "-tv.mp4", 'description' => 'TV quality mpeg video'),
-    array('suffix' => "-hd.mp4", 'description' => 'High Definition mpeg video')
+    array('suffix' => "-hd.mp4", 'description' => 'High Definition mpeg video'),
+    array('suffix' => "-net.wmv", 'description' => 'low bandwidth Windows Media video'),
+    array('suffix' => "-tv.wmv", 'description' => 'TV quality Windows Media video'),
+    array('suffix' => "-hd.wmv", 'description' => 'High Definition Windows Media video'),
+    array('suffix' => "-net.mov", 'description' => 'low bandwidth Quicktime video'),
+    array('suffix' => "-tv.mov", 'description' => 'TV quality Quicktime video'),
+    array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video'),
+    array('suffix' => ".jpg", 'description' => 'Jpeg High Resolution Image'),
+    array('suffix' => ".pdf", 'description' => 'PDF: Adobe Acrobat'),
+    array('suffix' => ".doc", 'description' => 'Word Document')
   );
   return $allfileformats;
 }

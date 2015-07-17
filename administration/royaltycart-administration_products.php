@@ -27,7 +27,7 @@ echo '
 	
 	foreach($productresults as $product){
       echo "<tr><td><strong>".$product->meta_value."</strong></td>";
-	  echo "<td>[royaltycart_button id=".$product->post_id."]</td></tr>";
+	  echo "<td>[royaltycart_purchase id=".$product->post_id."]</td></tr>";
 	}
   }
 
