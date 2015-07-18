@@ -46,9 +46,11 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $product_id = $royaltycart_products->ID;
   $product_name = get_post_meta( $royaltycart_products->ID, 'royaltycart_product_name', true );
   $basefile = get_post_meta( $royaltycart_products->ID, 'royaltycart_basefile', true );
+  
   //fileformats is an array of suffixes that will be available to download after purchase.
-  //  ['.mp4','-hd.mp4','.wmv','-hd.wmv']
+  //  ['none','.mp4','-hd.mp4','.wmv','-hd.wmv'] - array keys are numeric
   $fileformats = get_post_meta( $royaltycart_products->ID, 'royaltycart_fileformats', true );
+  
   //payout array  - determines all the people that get paid and how much.
   //  ['1']=>Sub array; //the first person is the default for remaining percentages
   //    ['value']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
@@ -58,6 +60,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //    ['comment_role']=>'Producer': Recipients title or role
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
   //  ['2']=>
+  
   $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
   //priceing array - determines what is charged for the download
   //  ['type']=>boolean: 0 sets value as base amount, 1 sets value as percentage
@@ -127,16 +130,16 @@ function royaltycart_product_review_meta_box($royaltycart_products){
         <tr>
             <td valign='top'>File Formats</td>
             <td>
-            	<?php
-            	echo "<br> just var ".$fileformats."<br>";
-            	echo '<br> umm... '.print_r($fileformats); ?>
             	<table width="80%"><tr>
             	  </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
             	  <?php
             	  $allfileformats = royaltycart_fileformat_array();
 				  foreach($allfileformats as $format){
-				  	$myvalue = "value='checked'";
-					if ( ! array_key_exists($fileformats, 'royaltycart_'.$format['suffix'])) {$myvalue= ""; }
+					if ( !array_search($format['suffix'], $fileformats)) {
+						$myvalue= "value='".$format['suffix']."'";
+					}else{
+						$myvalue = "value='".$format['suffix']."' checked";
+					}
                     echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
 			      }?>
             	</tr></table>
@@ -161,16 +164,14 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
         if ( isset( $_POST['royaltycart_basefile'] ) && $_POST['royaltycart_basefile'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_basefile', $_POST['royaltycart_basefile'] );
         }
-		//if ( isset( $_POST['royaltycart_fileformats'] ) && $_POST['royaltycart_fileformats'] != '' ) {
-        //    update_post_meta( $product_id, 'royaltycart_fileformats', $_POST['royaltycart_fileformats'] );
-        //}
         $allfileformats = royaltycart_fileformat_array();
-		$newfileformats = array();
+		$newfileformats = array(0 => 'None');
 	    foreach($allfileformats as $format){
-		  //if ( isset( $_POST['royaltycart_'.$format['suffix']] ) ) {
-		  	$newfileformats[$format['suffix']] = $_POST['royaltycart_basefile'].$format['suffix'];
+	      $aspost = str_replace(".", "_", $format['suffix']);
+		  if ( isset( $_POST['royaltycart_'.$aspost] ) ) {
+		  	$newfileformats[] = $format['suffix'];
 		  	//array_push( $newfileformats, $format['suffix'] );
-		  //}
+		  }
 		}
 		update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
     }
@@ -211,11 +212,11 @@ function royaltycart_populate_product_columns($column, $post_id)
         $fileformats = get_post_meta( $post_id, 'royaltycart_fileformats', true );
         echo $fileformats;
     }
-    else if ( 'royaltycart_payout' == $column ) {
-        $payout = get_post_meta( $post_id, 'royaltycart_payout', true );
-        echo $payout;
-    }
     else if ( 'royaltycart_priceing' == $column ) {
+        $payout = get_post_meta( $post_id, 'royaltycart_priceing', true );
+        echo $priceing;
+    }
+    else if ( 'royaltycart_payout' == $column ) {
         $payout = get_post_meta( $post_id, 'royaltycart_payout', true );
         echo $payout;
     }
