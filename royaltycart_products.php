@@ -46,16 +46,28 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $product_id = $royaltycart_products->ID;
   $product_name = get_post_meta( $royaltycart_products->ID, 'royaltycart_product_name', true );
   $basefile = get_post_meta( $royaltycart_products->ID, 'royaltycart_basefile', true );
-  //fileformats is an array for checkboxes
+  //fileformats is an array of suffixes that will be available to download after purchase.
+  //  ['.mp4','-hd.mp4','.wmv','-hd.wmv']
   $fileformats = get_post_meta( $royaltycart_products->ID, 'royaltycart_fileformats', true );
-  //payout array
-  //  [type]=>boolean: 0 sets value as base amount, 1 sets value as percentage
-  //  [value]=>Number: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
-  //  [Payee]=>Recipients accout (email for paypal)
-  //  [Payee_name]=>Name for display
-  //  [Comment_role]=>Recipients title or role
-  //  [comments]=>Additional comments abut payee
+  //payout array  - determines all the people that get paid and how much.
+  //  ['1']=>Sub array; //the first person is the default for remaining percentages
+  //    ['value']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
+  //    ['percent']=>true: false for set amounts (60% vs. $60.00)
+  //    ['payee']=>'teddottavio@gmail.com': Recipients account (email for paypal)
+  //    ['payee_name']=>'Ted DOttavio': Name for display
+  //    ['comment_role']=>'Producer': Recipients title or role
+  //    ['comments']=>'Brought everyone together': Additional comments abut payee
+  //  ['2']=>
   $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  //priceing array - determines what is charged for the download
+  //  ['type']=>boolean: 0 sets value as base amount, 1 sets value as percentage
+  //  ['price']=>10: Number for setprice, default, or suggested amount
+  //  ['user_sets']=>boolean: true allows user type-in, user selct, or multiple buttons
+  //  ['display']=>0,1,2: Type in, Buttons, Option Selection
+  //  ['min']=>1: minimum amount for user type in
+  //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
+  //  ['price_list_names']=>['$1.00','$5 Supporter','$10 donation','$15 I'm a fan!']: array for Button/Option Select Display
+  $priceing = get_post_meta( $royaltycart_priceing->ID, 'royaltycart_priceing', true );
   
   ?>
     <table>
@@ -70,59 +82,71 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             <td>Product Name/Title</td>
             <td><input type="text" size="40" name="royaltycart_product_name" value="<?php echo $product_name; ?>" /></td>
         </tr>
+        
+        <tr>
+            <td valign='top'>Price Options</td>
+            <td><input type="text" size="5" name="royaltycart_priceing_price" value="<?php echo $price; ?>" /> Set Price or Suggested Price<br>
+            	<input type="checkbox" name="royaltycart_priceing_user_sets" value="checked">Allow the customer to select the price<br>
+            	<input type="text" size="5" name="royaltycart_priceing_min" value="<?php echo $price_min; ?>" /> Minimum (For typed in amounts):<br>
+            	Pice options (seperate values by commas) example: 5,10,15:<br>
+            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $price_increment; ?>" /><br>
+            	Pice option titles (seperate titles by commas) example: $5 Thank you!,$10 Support,$15 Investment<br>
+            	<input type="text" size="40" name="royaltycart_priceing_price_list_names" value="<?php echo $price_increment; ?>" />
+            	
+            	<p>Display</p>
+                <input type = "radio"
+                  name = "royaltycart_priceing_display"
+                  id = "user_enter"
+                  value = "0" />
+                <label for = "0">Type in</label><br>
+          
+                <input type = "radio"
+                 name = "royaltycart_priceing_display"
+                 id = "user_select"
+                 value = "1" />
+                <label for = "1">Pull Down Selector</label><br>
+ 
+                <input type = "radio"
+                 name = "royaltycart_priceing_display"
+                 id = "user_button"
+                 value = "2" />
+                <label for = "2">Button(s)</label><br>
+ 
+            </td>
+        </tr>
+
+        <tr>
+            <td>Payments</td>
+            <td><input type="text" size="40" name="royaltycart_payout" value="<?php echo $payout; ?>" /></td>
+        </tr>
+        
         <tr>
             <td>Base File Name</td>
             <td><input type="text" size="40" name="royaltycart_basefile" value="<?php echo $basefile; ?>" /></td>
         </tr>
         <tr>
-            <td>File Formats</td>
+            <td valign='top'>File Formats</td>
             <td>
+            	<?php
+            	echo "<br> just var ".$fileformats."<br>";
+            	echo '<br> umm... '.print_r($fileformats); ?>
             	<table width="80%"><tr>
             	  </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
-            	  <?php $allfileformats = royaltycart_fileformat_array();
-				  foreach($allfileformats as $fileformat){
-                    echo "</tr><td><input type='checkbox' name=".$fileformat['suffix']." value='0'></td><td>".$fileformat['suffix']."</td><td>".$fileformat['description']."</td><tr>";
+            	  <?php
+            	  $allfileformats = royaltycart_fileformat_array();
+				  foreach($allfileformats as $format){
+				  	$myvalue = "value='checked'";
+					if ( ! array_key_exists($fileformats, 'royaltycart_'.$format['suffix'])) {$myvalue= ""; }
+                    echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
 			      }?>
             	</tr></table>
-            	<br>Placeholder: <input type="text" size="40" name="royaltycart_fileformats" value="<?php echo $fileformats; ?>" />
             </td>
         </tr>
-        <tr>
-            <td>Pricing</td>
-            <td>Set Price: <input type="text" size="5" name="royaltycart_price" value="<?php echo $price; ?>" /><br>
-            	<input type="checkbox" name="royaltycart_price_byuser" value="1">Allow the customer to select the price<br>
-            	<input type="text" size="5" name="royaltycart_price_min" value="<?php echo $price_min; ?>" /> Minimum (For typed in amounts):<br>
-            	Pice options (seperate values by commas):<br>
-            	<input type="text" size="30" name="royaltycart_price_list" value="<?php echo $price_increment; ?>" />
-            	
-            	<p>Display</p>
-                <input type = "radio"
-                  name = "royaltycart_pricedisplay"
-                  id = "user_enter"
-                  value = "enter" />
-                <label for = "user_enter">Type in</label><br>
-          
-                <input type = "radio"
-                 name = "royaltycart_pricedisplay"
-                 id = "user_select"
-                 value = "select" />
-                <label for = "user_select">Pull Down Selector</label><br>
- 
-                <input type = "radio"
-                 name = "royaltycart_pricedisplay"
-                 id = "user_button"
-                 value = "button" />
-                <label for = "user_button">Button(s)</label><br>
- 
-            </td>
-        </tr>
-        <tr>
-            <td>Payments</td>
-            <td><input type="text" size="40" name="royaltycart_payout" value="<?php echo $payout; ?>" /></td>
-        </tr>
+        
     </table>
     <?php
 }
+
 
 
 function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
@@ -131,16 +155,27 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
         if ( isset( $_POST['royaltycart_product_name'] ) && $_POST['royaltycart_product_name'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_product_name', $_POST['royaltycart_product_name'] );
         }
+		if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
+            update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
+        }
         if ( isset( $_POST['royaltycart_basefile'] ) && $_POST['royaltycart_basefile'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_basefile', $_POST['royaltycart_basefile'] );
         }
-		if ( isset( $_POST['royaltycart_fileformats'] ) && $_POST['royaltycart_fileformats'] != '' ) {
-            update_post_meta( $product_id, 'royaltycart_fileformats', $_POST['royaltycart_fileformats'] );
-        }
-        if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
-            update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
-        }
+		//if ( isset( $_POST['royaltycart_fileformats'] ) && $_POST['royaltycart_fileformats'] != '' ) {
+        //    update_post_meta( $product_id, 'royaltycart_fileformats', $_POST['royaltycart_fileformats'] );
+        //}
+        $allfileformats = royaltycart_fileformat_array();
+		$newfileformats = array();
+	    foreach($allfileformats as $format){
+		  //if ( isset( $_POST['royaltycart_'.$format['suffix']] ) ) {
+		  	$newfileformats[$format['suffix']] = $_POST['royaltycart_basefile'].$format['suffix'];
+		  	//array_push( $newfileformats, $format['suffix'] );
+		  //}
+		}
+		update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
     }
+	// bool array_key_exists ( mixed $key , array $array )
+	// array_key_exists() returns TRUE if the given key is set in the array. key can be any value possible for an array index. 
 }
 
 
@@ -180,6 +215,10 @@ function royaltycart_populate_product_columns($column, $post_id)
         $payout = get_post_meta( $post_id, 'royaltycart_payout', true );
         echo $payout;
     }
+    else if ( 'royaltycart_priceing' == $column ) {
+        $payout = get_post_meta( $post_id, 'royaltycart_payout', true );
+        echo $payout;
+    }
 }
 
 
@@ -192,14 +231,19 @@ function royaltycart_customize_product_link( $permalink, $post ) {
     return $permalink;
 }
 
+
+
 function royaltycart_fileformat_array(){
-  //add or remove any available file formats here
-  //  No sorting is applied, arrange them here the hard way...
+  //add or remove any possible file formats here
+  //  No sorting is applied, arrange them the hard way...
   $allfileformats  = array(
     array('suffix' => "-low.wav", 'description' => 'Low bandwidth microsoft audio'),
     array('suffix' => ".wav", 'description' => 'CD quality microsoft audio'),
     array('suffix' => "-low.mp3", 'description' => 'Low bandwidth mpeg audio'),
     array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio'),
+    array('suffix' => ".jpg", 'description' => 'Jpeg High Resolution Image'),
+    array('suffix' => ".pdf", 'description' => 'PDF: Adobe Acrobat'),
+    array('suffix' => ".doc", 'description' => 'Word Document'),
     array('suffix' => "-net.mp4", 'description' => 'low bandwidth mpeg video'),
     array('suffix' => "-tv.mp4", 'description' => 'TV quality mpeg video'),
     array('suffix' => "-hd.mp4", 'description' => 'High Definition mpeg video'),
@@ -209,9 +253,15 @@ function royaltycart_fileformat_array(){
     array('suffix' => "-net.mov", 'description' => 'low bandwidth Quicktime video'),
     array('suffix' => "-tv.mov", 'description' => 'TV quality Quicktime video'),
     array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video'),
-    array('suffix' => ".jpg", 'description' => 'Jpeg High Resolution Image'),
-    array('suffix' => ".pdf", 'description' => 'PDF: Adobe Acrobat'),
-    array('suffix' => ".doc", 'description' => 'Word Document')
+    array('suffix' => "-3d-net.mp4", 'description' => 'Anaglyph low bandwidth mpeg video'),
+    array('suffix' => "-3d-tv.mp4", 'description' => 'Anaglyph TV quality mpeg video'),
+    array('suffix' => "-3d-hd.mp4", 'description' => 'Anaglyph High Definition mpeg video'),
+    array('suffix' => "-3d-net.wmv", 'description' => 'Anaglyph low bandwidth Windows Media video'),
+    array('suffix' => "-3d-tv.wmv", 'description' => 'Anaglyph TV quality Windows Media video'),
+    array('suffix' => "-3d-hd.wmv", 'description' => 'Anaglyph High Definition Windows Media video'),
+    array('suffix' => "-3d-net.mov", 'description' => 'Anaglyph low bandwidth Quicktime video'),
+    array('suffix' => "-3d-tv.mov", 'description' => 'Anaglyph TV quality Quicktime video'),
+    array('suffix' => "-3d-hd.mov", 'description' => 'Anaglyph High Definition Quicktime video')
   );
   return $allfileformats;
 }
