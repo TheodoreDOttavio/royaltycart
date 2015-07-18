@@ -60,8 +60,8 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //    ['comment_role']=>'Producer': Recipients title or role
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
   //  ['2']=>
-  
   $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+
   //priceing array - determines what is charged for the download
   //  ['type']=>boolean: 0 sets value as base amount, 1 sets value as percentage
   //  ['price']=>10: Number for setprice, default, or suggested amount
@@ -69,7 +69,6 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //  ['display']=>0,1,2: Type in, Buttons, Option Selection
   //  ['min']=>1: minimum amount for user type in
   //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
-  //  ['price_list_names']=>['$1.00','$5 Supporter','$10 donation','$15 I'm a fan!']: array for Button/Option Select Display
   $priceing = get_post_meta( $royaltycart_priceing->ID, 'royaltycart_priceing', true );
   
   ?>
@@ -90,19 +89,13 @@ function royaltycart_product_review_meta_box($royaltycart_products){
             <td valign='top'>Price Options</td>
             <td><input type="text" size="5" name="royaltycart_priceing_price" value="<?php echo $price; ?>" /> Set Price or Suggested Price<br>
             	<input type="checkbox" name="royaltycart_priceing_user_sets" value="checked">Allow the customer to select the price<br>
-            	<input type="text" size="5" name="royaltycart_priceing_min" value="<?php echo $price_min; ?>" /> Minimum (For typed in amounts):<br>
-            	Pice options (seperate values by commas) example: 5,10,15:<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $price_increment; ?>" /><br>
-            	Pice option titles (seperate titles by commas) example: $5 Thank you!,$10 Support,$15 Investment<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list_names" value="<?php echo $price_increment; ?>" />
-            	
-            	<p>Display</p>
+            	<p>User Enrty Display Type</p>
                 <input type = "radio"
                   name = "royaltycart_priceing_display"
                   id = "user_enter"
                   value = "0" />
-                <label for = "0">Type in</label><br>
-          
+                <label for = "0">Type in -- Minimum:</label> 
+                <input type="text" size="5" name="royaltycart_priceing_min" value="<?php echo $price_min; ?>" /><br>
                 <input type = "radio"
                  name = "royaltycart_priceing_display"
                  id = "user_select"
@@ -114,12 +107,15 @@ function royaltycart_product_review_meta_box($royaltycart_products){
                  id = "user_button"
                  value = "2" />
                 <label for = "2">Button(s)</label><br>
+
+            	Pice options (seperate values by commas) example: 5,10,15:<br>
+            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $price_increment; ?>" /><br>
  
             </td>
         </tr>
 
         <tr>
-            <td>Payments</td>
+            <td valign='top'>Payments</td>
             <td><input type="text" size="40" name="royaltycart_payout" value="<?php echo $payout; ?>" /></td>
         </tr>
         
@@ -161,6 +157,8 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
         }
+        
+        //File Formats save and update
         if ( isset( $_POST['royaltycart_basefile'] ) && $_POST['royaltycart_basefile'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_basefile', $_POST['royaltycart_basefile'] );
         }
@@ -170,10 +168,27 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 	      $aspost = str_replace(".", "_", $format['suffix']);
 		  if ( isset( $_POST['royaltycart_'.$aspost] ) ) {
 		  	$newfileformats[] = $format['suffix'];
-		  	//array_push( $newfileformats, $format['suffix'] );
 		  }
 		}
+		
 		update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
+		//Priceing Save and update
+		  //priceing array - determines what is charged for the download
+  //  ['type']=>boolean: 0 sets value as base amount, 1 sets value as percentage
+  //  ['price']=>10: Number for setprice, default, or suggested amount
+  //  ['user_sets']=>boolean: true allows user type-in, user selct, or multiple buttons
+  //  ['display']=>0,1,2: Type in, Buttons, Option Selection
+  //  ['min']=>1: minimum amount for user type in
+  //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
+       $newpriceing = array();
+       if ( isset( $_POST['royaltycart_priceing_price'] ) ) {
+       	if ($_POST['royaltycart_priceing_price'] != ''){
+       	  $newpriceing['price'] = 0;
+		}else{
+		  $newpriceing['price'] = $_POST['royaltycart_priceing_price'];
+       	}
+	   }
+       
     }
 	// bool array_key_exists ( mixed $key , array $array )
 	// array_key_exists() returns TRUE if the given key is set in the array. key can be any value possible for an array index. 
@@ -213,7 +228,7 @@ function royaltycart_populate_product_columns($column, $post_id)
         echo $fileformats;
     }
     else if ( 'royaltycart_priceing' == $column ) {
-        $payout = get_post_meta( $post_id, 'royaltycart_priceing', true );
+        $priceing = get_post_meta( $post_id, 'royaltycart_priceing', true );
         echo $priceing;
     }
     else if ( 'royaltycart_payout' == $column ) {
