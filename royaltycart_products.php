@@ -63,7 +63,6 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
 
   //priceing array - determines what is charged for the download
-  //  ['type']=>boolean: 0 sets value as base amount, 1 sets value as percentage
   //  ['price']=>10: Number for setprice, default, or suggested amount
   //  ['user_sets']=>boolean: true allows user type-in, user selct, or multiple buttons
   //  ['display']=>0,1,2: Type in, Buttons, Option Selection
@@ -87,15 +86,16 @@ function royaltycart_product_review_meta_box($royaltycart_products){
         
         <tr>
             <td valign='top'>Price Options</td>
-            <td><input type="text" size="5" name="royaltycart_priceing_price" value="<?php echo $price; ?>" /> Set Price or Suggested Price<br>
-            	<input type="checkbox" name="royaltycart_priceing_user_sets" value="checked">Allow the customer to select the price<br>
+            <td>            	
+            	<input type="text" size="5" name="royaltycart_priceing_price" value="<?php echo $priceing['price']; ?>" /> Set Price or Suggested Price<br>
+            	<input type="checkbox" name="royaltycart_priceing_user_sets" value='1' >Allow the customer to select the price<br>
             	<p>User Enrty Display Type</p>
                 <input type = "radio"
                   name = "royaltycart_priceing_display"
                   id = "user_enter"
                   value = "0" />
                 <label for = "0">Type in -- Minimum:</label> 
-                <input type="text" size="5" name="royaltycart_priceing_min" value="<?php echo $price_min; ?>" /><br>
+               
                 <input type = "radio"
                  name = "royaltycart_priceing_display"
                  id = "user_select"
@@ -106,10 +106,12 @@ function royaltycart_product_review_meta_box($royaltycart_products){
                  name = "royaltycart_priceing_display"
                  id = "user_button"
                  value = "2" />
-                <label for = "2">Button(s)</label><br>
+                <label for = "2">Button(s)</label><br> 
+                
+                <input type="text" size="5" name="royaltycart_priceing_min" value="<?php echo $priceing['min']; ?>" /><br>
 
             	Pice options (seperate values by commas) example: 5,10,15:<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $price_increment; ?>" /><br>
+            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
  
             </td>
         </tr>
@@ -173,26 +175,29 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		
 		update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
 		//Priceing Save and update
-		  //priceing array - determines what is charged for the download
-  //  ['type']=>boolean: 0 sets value as base amount, 1 sets value as percentage
-  //  ['price']=>10: Number for setprice, default, or suggested amount
-  //  ['user_sets']=>boolean: true allows user type-in, user selct, or multiple buttons
-  //  ['display']=>0,1,2: Type in, Buttons, Option Selection
-  //  ['min']=>1: minimum amount for user type in
-  //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
-       $newpriceing = array();
        if ( isset( $_POST['royaltycart_priceing_price'] ) ) {
-       	if ($_POST['royaltycart_priceing_price'] != ''){
-       	  $newpriceing['price'] = 0;
-		}else{
-		  $newpriceing['price'] = $_POST['royaltycart_priceing_price'];
-       	}
+       	 if ($_POST['royaltycart_priceing_price'] != ''){
+       	   $newpriceing['price'] = $_POST['royaltycart_priceing_price'];
+		 }else{
+		   $newpriceing['price'] = 0;
+       	 }
 	   }
-       
-    }
-	// bool array_key_exists ( mixed $key , array $array )
-	// array_key_exists() returns TRUE if the given key is set in the array. key can be any value possible for an array index. 
-}
+	   if ( isset( $_POST['royaltycart_priceing_user_sets']) && $_POST['royaltycart_priceing_user_sets'] == 1 ) {
+	   	 $newpriceing['user_sets'] = 1;
+	   }else{
+	   	 $newpriceing['user_sets'] = 0;
+	   }
+       if ( isset( $_POST['royaltycart_priceing_display'] ) ) {
+       	 $newpriceing['display'] = $_POST['royaltycart_priceing_display'];
+       }
+       if ($_POST['royaltycart_priceing_min'] != "" ){
+           $newpriceing['min'] = $_POST['royaltycart_priceing_min'];
+       }else{
+		   $newpriceing['min'] = 0;
+       }
+	   update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
+    }//end post type
+}//end function
 
 
 
