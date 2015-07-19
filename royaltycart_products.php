@@ -128,7 +128,9 @@ function royaltycart_product_review_meta_box($royaltycart_products){
                 <label for = 2 >Button Set</label>
               </td>
               <td>
-              	<input name="save" type="submit" class="button button-primary button-small" id="publish" value="$<?php echo $pricearry[1]; ?>" /></td>
+              	<?php foreach($pricearry as $thisprice){
+              	  echo "<input name='save' type='submit' class='button button-primary button-small' id='publish' value='$".$thisprice."' />&nbsp;";
+				}?></td>
               </tr><tr>
               <td>
                 <input type = "radio"
@@ -138,7 +140,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
                  <?php if ( $priceing['display'] == 3 ) { echo 'checked'; } ?> />
                 <label for = 2 >Single Price Button</label>
               </td>
-              <td><input name="save" type="submit" class="button button-primary button-small" id="nil" value="$10" /></td>
+              <td><input name="save" type="submit" class="button button-primary button-small" id="nil" value="$<?php echo $pricearry[1]; ?>" /></td>
               </tr></table>
  
             </td>
