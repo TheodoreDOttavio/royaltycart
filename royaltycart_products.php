@@ -68,10 +68,17 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //  ['display']=>0,1,2: Type in, Buttons, Option Selection
   //  ['min']=>1: minimum amount for user type in
   //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
-  $priceing = get_post_meta( $royaltycart_priceing->ID, 'royaltycart_priceing', true );
+  $priceing = get_post_meta( $royaltycart_products->ID, 'royaltycart_priceing', true );
+  $pricearry = explode(",", $priceing['price_list']);
+  sort($pricearry);
   
+  echo "Pricing variable:<br>";
+  print_r($priceing);
+  echo "<br>Price List variable:<br>";
+  print_r($pricearry);
+  echo "<br>Post Variable ". print_r($_POST);
   ?>
-    <table>
+    <p><table>
     	<tr><td colspan='2' align='center'>
             Use this shortcode for an 'add to cart' button:
         </td></tr>
@@ -86,32 +93,53 @@ function royaltycart_product_review_meta_box($royaltycart_products){
         
         <tr>
             <td valign='top'>Price Options</td>
-            <td>            	
-            	<input type="text" size="5" name="royaltycart_priceing_price" value="<?php echo $priceing['price']; ?>" /> Set Price or Suggested Price<br>
-            	<input type="checkbox" name="royaltycart_priceing_user_sets" value='1' >Allow the customer to select the price<br>
-            	<p>User Enrty Display Type</p>
+            <td>Pice options (seperate values by commas) example: 5,10,15:<br>
+            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
+            	
+            <table><tr>
+              <td>User Display Type</td>
+              <td align='center'>Sample</td>
+            </tr><tr>
+              <td>
                 <input type = "radio"
                   name = "royaltycart_priceing_display"
                   id = "user_enter"
-                  value = "0" />
-                <label for = "0">Type in -- Minimum:</label> 
-               
+                  value = 0 
+                  <?php if ( $priceing['display'] == 0 ) { echo 'checked'; } ?> />
+                <label for = 0 >Type in</label>
+              </td>
+              <td>$<input type="text" size="4" name="foobar" value = 10 /> ( The Minimum value is $ <?php $pricearry['0']; ?> )</td>
+              </tr><tr>
+              <td> 
                 <input type = "radio"
                  name = "royaltycart_priceing_display"
                  id = "user_select"
-                 value = "1" />
-                <label for = "1">Pull Down Selector</label><br>
- 
+                 value = 1 
+                 <?php if ( $priceing['display'] == 1 ) { echo 'checked'; } ?> />
+                <label for = 1 >Pull Down Selector</label>
+              </td>
+              </tr><tr>
+              <td>
                 <input type = "radio"
                  name = "royaltycart_priceing_display"
                  id = "user_button"
-                 value = "2" />
-                <label for = "2">Button(s)</label><br> 
-                
-                <input type="text" size="5" name="royaltycart_priceing_min" value="<?php echo $priceing['min']; ?>" /><br>
-
-            	Pice options (seperate values by commas) example: 5,10,15:<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
+                 value = 2 
+                 <?php if ( $priceing['display'] == 2 ) { echo 'checked'; } ?> />
+                <label for = 2 >Button Set</label>
+              </td>
+              <td>
+              	<input name="save" type="submit" class="button button-primary button-small" id="publish" value="$<?php $pricearry[1]; ?>" /></td>
+              </tr><tr>
+              <td>
+                <input type = "radio"
+                 name = "royaltycart_priceing_display"
+                 id = "user_button"
+                 value = 3
+                 <?php if ( $priceing['display'] == 3 ) { echo 'checked'; } ?> />
+                <label for = 2 >Single Price Button</label>
+              </td>
+              <td><input name="save" type="submit" class="button button-primary button-small" id="nil" value="$10" /></td>
+              </tr></table>
  
             </td>
         </tr>
@@ -172,30 +200,25 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		  	$newfileformats[] = $format['suffix'];
 		  }
 		}
-		
 		update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
+		
 		//Priceing Save and update
-       if ( isset( $_POST['royaltycart_priceing_price'] ) ) {
-       	 if ($_POST['royaltycart_priceing_price'] != ''){
-       	   $newpriceing['price'] = $_POST['royaltycart_priceing_price'];
-		 }else{
-		   $newpriceing['price'] = 0;
-       	 }
-	   }
-	   if ( isset( $_POST['royaltycart_priceing_user_sets']) && $_POST['royaltycart_priceing_user_sets'] == 1 ) {
-	   	 $newpriceing['user_sets'] = 1;
-	   }else{
-	   	 $newpriceing['user_sets'] = 0;
-	   }
-       if ( isset( $_POST['royaltycart_priceing_display'] ) ) {
-       	 $newpriceing['display'] = $_POST['royaltycart_priceing_display'];
-       }
-       if ($_POST['royaltycart_priceing_min'] != "" ){
-           $newpriceing['min'] = $_POST['royaltycart_priceing_min'];
-       }else{
-		   $newpriceing['min'] = 0;
-       }
-	   update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
+        if ( isset( $_POST['royaltycart_priceing_display'] ) ) {
+	      $newpriceing['display'] = $_POST['royaltycart_priceing_display'];
+        }
+        if ( $_POST['royaltycart_priceing_min'] != "" ){
+          $newpriceing['min'] = $_POST['royaltycart_priceing_min'];
+        }else{
+		  $newpriceing['min'] = 0;
+        }
+		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
+       	  if ($_POST['royaltycart_priceing_price_list'] != ''){
+       	    $newpriceing['price_list'] = $_POST['royaltycart_priceing_price_list'];
+          }else{
+		    $newpriceing['price_list'] = $newpriceing['min'].",".$newpriceing['price'];
+       	  }
+	    }
+	    update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
     }//end post type
 }//end function
 
@@ -208,9 +231,10 @@ function royaltycart_products_display_columns( $columns )
     unset( $columns['date'] );
     $columns['title'] = "Product ID";
     $columns['royaltycart_product_name'] = "Product Name";
+	$columns['royaltycart_payout'] = "Payments";
+	$columns['royaltycart_priceing'] = "Price Setup";
     $columns['royaltycart_basefile'] = "Base File Name";
 	$columns['royaltycart_fileformats'] = "File Formats";
-	$columns['royaltycart_payout'] = "Payments";
     $columns['date'] = "Date";
     return $columns;
 }
@@ -224,6 +248,14 @@ function royaltycart_populate_product_columns($column, $post_id)
         $product_name = get_post_meta( $post_id, 'royaltycart_product_name', true );
         echo $product_name;
     }
+    else if ( 'royaltycart_payout' == $column ) {
+        $payout = get_post_meta( $post_id, 'royaltycart_payout', true );
+        echo $payout;
+    }
+    else if ( 'royaltycart_priceing' == $column ) {
+        $priceing = get_post_meta( $post_id, 'royaltycart_priceing', true );
+        echo $priceing;
+    }
     else if ( 'royaltycart_basefile' == $column ) {
         $basefile = get_post_meta( $post_id, 'royaltycart_basefile', true );
         echo $basefile;
@@ -231,14 +263,6 @@ function royaltycart_populate_product_columns($column, $post_id)
     else if ( 'royaltycart_fileformats' == $column ) {
         $fileformats = get_post_meta( $post_id, 'royaltycart_fileformats', true );
         echo $fileformats;
-    }
-    else if ( 'royaltycart_priceing' == $column ) {
-        $priceing = get_post_meta( $post_id, 'royaltycart_priceing', true );
-        echo $priceing;
-    }
-    else if ( 'royaltycart_payout' == $column ) {
-        $payout = get_post_meta( $post_id, 'royaltycart_payout', true );
-        echo $payout;
     }
 }
 
