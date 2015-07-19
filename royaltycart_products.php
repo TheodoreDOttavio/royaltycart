@@ -108,7 +108,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
                   <?php if ( $priceing['display'] == 0 ) { echo 'checked'; } ?> />
                 <label for = 0 >Type in</label>
               </td>
-              <td>$<input type="text" size="4" name="foobar" value = 10 /> ( The Minimum value is $ <?php $pricearry['0']; ?> )</td>
+              <td>$<input type="text" size="4" name="foobar" value = <?php echo $pricearry[1]; ?> /> ( The Minimum value is $ <?php echo $pricearry['0']; ?> )</td>
               </tr><tr>
               <td> 
                 <input type = "radio"
@@ -128,7 +128,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
                 <label for = 2 >Button Set</label>
               </td>
               <td>
-              	<input name="save" type="submit" class="button button-primary button-small" id="publish" value="$<?php $pricearry[1]; ?>" /></td>
+              	<input name="save" type="submit" class="button button-primary button-small" id="publish" value="$<?php echo $pricearry[1]; ?>" /></td>
               </tr><tr>
               <td>
                 <input type = "radio"
