@@ -63,6 +63,44 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
 
   //priceing array - determines what is charged for the download
+  //  ['display']=>0,1,2,3: Type in, Buttons, Option Selection, Single Button
+  //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
+  $priceing = get_post_meta( $royaltycart_products->ID, 'royaltycart_priceing', true );
+  $pricearry = explode(" ", $priceing['price_list']);
+  sort($pricearry);
+  
+  //Now choose a bootstrap display or boring table display:
+  if ( is_plugin_active( 'wordpress-bootstrap-css/hlt-bootstrapcss.php' ) ) {
+    include 'royaltycart_product_view.php';
+  }else{
+  	echo "This page will look a lot better if you install the bootstrap plugin by icontrol<br>
+  	go to Plug-ins - Add New and search for 'wordpress-bootstrap-css'<br>";
+	
+  	include 'royaltycart_product_view_raw.php';
+  } 
+}
+
+function foobar($royaltycart_products){
+  $product_id = $royaltycart_products->ID;
+  $product_name = get_post_meta( $royaltycart_products->ID, 'royaltycart_product_name', true );
+  $basefile = get_post_meta( $royaltycart_products->ID, 'royaltycart_basefile', true );
+  
+  //fileformats is an array of suffixes that will be available to download after purchase.
+  //  ['none','.mp4','-hd.mp4','.wmv','-hd.wmv'] - array keys are numeric
+  $fileformats = get_post_meta( $royaltycart_products->ID, 'royaltycart_fileformats', true );
+  
+  //payout array  - determines all the people that get paid and how much.
+  //  ['1']=>Sub array; //the first person is the default for remaining percentages
+  //    ['value']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
+  //    ['percent']=>true: false for set amounts (60% vs. $60.00)
+  //    ['payee']=>'teddottavio@gmail.com': Recipients account (email for paypal)
+  //    ['payee_name']=>'Ted DOttavio': Name for display
+  //    ['comment_role']=>'Producer': Recipients title or role
+  //    ['comments']=>'Brought everyone together': Additional comments abut payee
+  //  ['2']=>
+  $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+
+  //priceing array - determines what is charged for the download
   //  ['price']=>10: Number for setprice, default, or suggested amount
   //  ['user_sets']=>boolean: true allows user type-in, user selct, or multiple buttons
   //  ['display']=>0,1,2: Type in, Buttons, Option Selection
