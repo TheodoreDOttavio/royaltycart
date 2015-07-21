@@ -81,139 +81,13 @@ function royaltycart_product_review_meta_box($royaltycart_products){
 }
 
 function foobar($royaltycart_products){
-  $product_id = $royaltycart_products->ID;
-  $product_name = get_post_meta( $royaltycart_products->ID, 'royaltycart_product_name', true );
-  $basefile = get_post_meta( $royaltycart_products->ID, 'royaltycart_basefile', true );
-  
-  //fileformats is an array of suffixes that will be available to download after purchase.
-  //  ['none','.mp4','-hd.mp4','.wmv','-hd.wmv'] - array keys are numeric
-  $fileformats = get_post_meta( $royaltycart_products->ID, 'royaltycart_fileformats', true );
-  
-  //payout array  - determines all the people that get paid and how much.
-  //  ['1']=>Sub array; //the first person is the default for remaining percentages
-  //    ['value']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
-  //    ['percent']=>true: false for set amounts (60% vs. $60.00)
-  //    ['payee']=>'teddottavio@gmail.com': Recipients account (email for paypal)
-  //    ['payee_name']=>'Ted DOttavio': Name for display
-  //    ['comment_role']=>'Producer': Recipients title or role
-  //    ['comments']=>'Brought everyone together': Additional comments abut payee
-  //  ['2']=>
-  $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
 
-  //priceing array - determines what is charged for the download
-  //  ['price']=>10: Number for setprice, default, or suggested amount
-  //  ['user_sets']=>boolean: true allows user type-in, user selct, or multiple buttons
-  //  ['display']=>0,1,2: Type in, Buttons, Option Selection
-  //  ['min']=>1: minimum amount for user type in
-  //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
-  $priceing = get_post_meta( $royaltycart_products->ID, 'royaltycart_priceing', true );
-  $pricearry = explode(",", $priceing['price_list']);
-  sort($pricearry);
-  
   echo "Pricing variable:<br>";
   print_r($priceing);
   echo "<br>Price List variable:<br>";
   print_r($pricearry);
   echo "<br>Post Variable ". print_r($_POST);
-  ?>
-    <p><table>
-    	<tr><td colspan='2' align='center'>
-            Use this shortcode for an 'add to cart' button:
-        </td></tr>
-    	<tr><td colspan='2' align='center'>
-            <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
-        </td></tr>
-        
-        <tr>
-            <td>Product Name/Title</td>
-            <td><input type="text" size="40" name="royaltycart_product_name" value="<?php echo $product_name; ?>" /></td>
-        </tr>
-        
-        <tr>
-            <td valign='top'>Price Options</td>
-            <td>Pice options (seperate values by commas) example: 5,10,15:<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
-            	
-            <table><tr>
-              <td>User Display Type</td>
-              <td align='center'>Sample</td>
-            </tr><tr>
-              <td>
-                <input type = "radio"
-                  name = "royaltycart_priceing_display"
-                  id = "user_enter"
-                  value = 0 
-                  <?php if ( $priceing['display'] == 0 ) { echo 'checked'; } ?> />
-                <label for = 0 >Type in</label>
-              </td>
-              <td>$<input type="text" size="4" name="foobar" value = <?php echo $pricearry[1]; ?> /> ( The Minimum value is $ <?php echo $pricearry['0']; ?> )</td>
-              </tr><tr>
-              <td> 
-                <input type = "radio"
-                 name = "royaltycart_priceing_display"
-                 id = "user_select"
-                 value = 1 
-                 <?php if ( $priceing['display'] == 1 ) { echo 'checked'; } ?> />
-                <label for = 1 >Pull Down Selector</label>
-              </td>
-              </tr><tr>
-              <td>
-                <input type = "radio"
-                 name = "royaltycart_priceing_display"
-                 id = "user_button"
-                 value = 2 
-                 <?php if ( $priceing['display'] == 2 ) { echo 'checked'; } ?> />
-                <label for = 2 >Button Set</label>
-              </td>
-              <td>
-              	<?php foreach($pricearry as $thisprice){
-              	  echo "<input name='save' type='submit' class='button button-primary button-small' id='publish' value='$".$thisprice."' />&nbsp;";
-				}?></td>
-              </tr><tr>
-              <td>
-                <input type = "radio"
-                 name = "royaltycart_priceing_display"
-                 id = "user_button"
-                 value = 3
-                 <?php if ( $priceing['display'] == 3 ) { echo 'checked'; } ?> />
-                <label for = 2 >Single Price Button</label>
-              </td>
-              <td><input name="save" type="submit" class="button button-primary button-small" id="nil" value="$<?php echo $pricearry[1]; ?>" /></td>
-              </tr></table>
- 
-            </td>
-        </tr>
 
-        <tr>
-            <td valign='top'>Payments</td>
-            <td><input type="text" size="40" name="royaltycart_payout" value="<?php echo $payout; ?>" /></td>
-        </tr>
-        
-        <tr>
-            <td>Base File Name</td>
-            <td><input type="text" size="40" name="royaltycart_basefile" value="<?php echo $basefile; ?>" /></td>
-        </tr>
-        <tr>
-            <td valign='top'>File Formats</td>
-            <td>
-            	<table width="80%"><tr>
-            	  </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
-            	  <?php
-            	  $allfileformats = royaltycart_fileformat_array();
-				  foreach($allfileformats as $format){
-					if ( !array_search($format['suffix'], $fileformats)) {
-						$myvalue= "value='".$format['suffix']."'";
-					}else{
-						$myvalue = "value='".$format['suffix']."' checked";
-					}
-                    echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
-			      }?>
-            	</tr></table>
-            </td>
-        </tr>
-        
-    </table>
-    <?php
 }
 
 
@@ -224,6 +98,26 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
         if ( isset( $_POST['royaltycart_product_name'] ) && $_POST['royaltycart_product_name'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_product_name', $_POST['royaltycart_product_name'] );
         }
+
+		//Priceing Save and update
+        if ( isset( $_POST['royaltycart_priceing_display'] ) ) {
+	      $newpriceing['display'] = $_POST['royaltycart_priceing_display'];
+        }
+        if ( $_POST['royaltycart_priceing_min'] != "" ){
+          $newpriceing['min'] = $_POST['royaltycart_priceing_min'];
+        }else{
+		  $newpriceing['min'] = 0;
+        }
+		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
+       	  if ($_POST['royaltycart_priceing_price_list'] != ''){
+       	    $newpriceing['price_list'] = $_POST['royaltycart_priceing_price_list'];
+          }else{
+		    $newpriceing['price_list'] = $newpriceing['min'].",".$newpriceing['price'];
+       	  }
+	    }
+	    update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
+		
+		//Payments save and update
 		if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
         }
@@ -242,23 +136,7 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		}
 		update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
 		
-		//Priceing Save and update
-        if ( isset( $_POST['royaltycart_priceing_display'] ) ) {
-	      $newpriceing['display'] = $_POST['royaltycart_priceing_display'];
-        }
-        if ( $_POST['royaltycart_priceing_min'] != "" ){
-          $newpriceing['min'] = $_POST['royaltycart_priceing_min'];
-        }else{
-		  $newpriceing['min'] = 0;
-        }
-		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
-       	  if ($_POST['royaltycart_priceing_price_list'] != ''){
-       	    $newpriceing['price_list'] = $_POST['royaltycart_priceing_price_list'];
-          }else{
-		    $newpriceing['price_list'] = $newpriceing['min'].",".$newpriceing['price'];
-       	  }
-	    }
-	    update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
+
     }//end post type
 }//end function
 

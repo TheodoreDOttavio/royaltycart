@@ -3,40 +3,25 @@
 defined( 'ABSPATH' ) or die( 'No script!' );
 ?>
 
-<div class="bootstrap-wpadmin">
-
-
-<div class="well">
-<?php
-  echo "Pricing variable:<br>";
-  print_r($priceing);
-  echo "<br>Price List variable:<br>";
-  print_r($pricearry);
-  echo "<br>Post Variable ". print_r($_POST);
-?>
-</div> 
-
-<div class="well" align="center">
-	Shortcode for this product is 
-	<p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
-</div>
-
-<div class="panel panel-success">
-  <!-- Default panel contents -->
-  <div class="panel-heading" align="center">Product Name/Title</div>
-  <div class="panel-body" align="center" >
-    <input type="text" size="40" name="royaltycart_product_name" value="<?php echo $product_name; ?>" />
-  </div>
-</div>  
-  
-<div class="panel panel-info">
-  <!-- Default panel contents -->
-  <div class="panel-heading" align="center">Price Options</div>
-  <div class="panel-body" align="center" >
-    <input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
-  </div>
-  <div class="panel-body" >
-    <table width='100%'><tr>
+    <p><table>
+    	<tr><td colspan='2' align='center'>
+            Use this shortcode for an 'add to cart' button:
+        </td></tr>
+    	<tr><td colspan='2' align='center'>
+            <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
+        </td></tr>
+        
+        <tr>
+            <td>Product Name/Title</td>
+            <td><input type="text" size="40" name="royaltycart_product_name" value="<?php echo $product_name; ?>" /></td>
+        </tr>
+        
+        <tr>
+            <td valign='top'>Price Options</td>
+            <td>Pice options (seperate values by commas) example: 5,10,15:<br>
+            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
+            	
+            <table><tr>
               <td>User Display Type</td>
               <td align='center'>Sample</td>
             </tr><tr>
@@ -82,16 +67,6 @@ defined( 'ABSPATH' ) or die( 'No script!' );
               </td>
               <td><input name="save" type="submit" class="button button-primary button-small" id="nil" value="$<?php echo $pricearry[1]; ?>" /></td>
               </tr></table>
-  </div>
-</div>  
-  
-    <p><table>  
-        <tr>
-            <td valign='top'>Price Options</td>
-            <td>Pice options (seperate values by commas) example: 5,10,15:<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
-            	
-            
  
             </td>
         </tr>
@@ -125,5 +100,3 @@ defined( 'ABSPATH' ) or die( 'No script!' );
         </tr>
         
     </table>
-
-</div>

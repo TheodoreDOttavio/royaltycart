@@ -81,12 +81,21 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <div class="panel panel-danger">
   <!-- Default panel contents -->
   <div class="panel-heading" align="center">Payments</div>
-  <div class="panel-body" align="center" >
-    <input type="text" size="40" name="royaltycart_payout" value="<?php echo $payout; ?>" />
+  <div class="panel-body" >
+  	<?php foreach($payout as $payee){
+      echo "<input type='text' size='5' name='royaltycart_payee_value' value=".$payee['value']." />";
+      echo "<input type='checkbox' name='royaltycart_payee_percent' value=".$payee['percent']." />"; //format me!!!
+      echo "<input type='text' size='10' name='royaltycart_payee' value=".$payee['payee']." />";
+      echo "<input type='text' size='10' name='royaltycart_payee_name' value=".$payee['payee_name']." />";
+      echo "<input type='text' size='10' name='royaltycart_comment_role' value=".$payee['comment_role']." />";
+      echo "<input type='text' size='10' name='royaltycart_comments' value=".$payee['comments']." />";
+	}
+    ?>
   </div>
 </div> 
 
-<div class="panel panel-info">
+
+<div class="panel panel-warning">
   <div class="panel-heading" align="center">Downloads</div>
   <div class="panel-body" align="center" >
   	Base File Name<br>
