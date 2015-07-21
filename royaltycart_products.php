@@ -318,17 +318,21 @@ function royaltycart_customize_product_link( $permalink, $post ) {
 
 
 
-function royaltycart_fileformat_array(){
+function royaltycart_fileformat_array($mytype){
   //add or remove any possible file formats here
   //  No sorting is applied, arrange them the hard way...
-  $allfileformats  = array(
+  $audiofileformats  = array(
     array('suffix' => "-low.wav", 'description' => 'Low bandwidth microsoft audio'),
     array('suffix' => ".wav", 'description' => 'CD quality microsoft audio'),
     array('suffix' => "-low.mp3", 'description' => 'Low bandwidth mpeg audio'),
-    array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio'),
+    array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio')
+  );
+  $otherfileformats  = array(
     array('suffix' => ".jpg", 'description' => 'Jpeg High Resolution Image'),
     array('suffix' => ".pdf", 'description' => 'PDF: Adobe Acrobat'),
-    array('suffix' => ".doc", 'description' => 'Word Document'),
+    array('suffix' => ".doc", 'description' => 'Word Document')
+  );
+  $videofileformats  = array(
     array('suffix' => "-net.mp4", 'description' => 'low bandwidth mpeg video'),
     array('suffix' => "-tv.mp4", 'description' => 'TV quality mpeg video'),
     array('suffix' => "-hd.mp4", 'description' => 'High Definition mpeg video'),
@@ -337,7 +341,9 @@ function royaltycart_fileformat_array(){
     array('suffix' => "-hd.wmv", 'description' => 'High Definition Windows Media video'),
     array('suffix' => "-net.mov", 'description' => 'low bandwidth Quicktime video'),
     array('suffix' => "-tv.mov", 'description' => 'TV quality Quicktime video'),
-    array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video'),
+    array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video')
+  );
+  $anaglyphvideofileformats  = array(
     array('suffix' => "-3d-net.mp4", 'description' => 'Anaglyph low bandwidth mpeg video'),
     array('suffix' => "-3d-tv.mp4", 'description' => 'Anaglyph TV quality mpeg video'),
     array('suffix' => "-3d-hd.mp4", 'description' => 'Anaglyph High Definition mpeg video'),
@@ -348,7 +354,25 @@ function royaltycart_fileformat_array(){
     array('suffix' => "-3d-tv.mov", 'description' => 'Anaglyph TV quality Quicktime video'),
     array('suffix' => "-3d-hd.mov", 'description' => 'Anaglyph High Definition Quicktime video')
   );
-  return $allfileformats;
+  
+  switch ($mytype) {
+    case 'audio':
+        return $audiofileformats;
+        break;
+    case 'video':
+        return $videofileformats;
+        break;
+    case 'other':
+        return $otherfileformats;
+        break;
+    case 'anaglyphvideo':
+        return $anaglyphvideofileformats;
+        break;
+	case '':
+        return array_merge($audiofileformats,$videofileformats,$otherfileformats,$anaglyphvideofileformats);
+        break;
+  }
+ 
 }
 
 ?>

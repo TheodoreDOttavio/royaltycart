@@ -3,38 +3,11 @@
 defined( 'ABSPATH' ) or die( 'No script!' );
 ?>
 
+<!-- Inline javascript for nav tabs -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
 <div class="bootstrap-wpadmin">
 
-
-<script type="text/javascript">
-$('#rcvideo').click(function (e) {
-  e.preventDefault()
-  $(this).tab('show')
-})
-</script>
-
-<div>
-
-  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist" id="myTab">
-    <li role="presentation" class="active"><a href="#rcaudio" aria-controls="rcaudio" role="tab" data-toggle="tab">Audio</a></li>
-    <li role="presentation"><a href="#rcvideo" aria-controls="rcvideo" role="tab" data-toggle="tab">Video</a></li>
-    <li role="presentation"><a href="#rc3dvideo" aria-controls="rc3dvideo" role="tab" data-toggle="tab">3d Video</a></li>
-    <li role="presentation"><a href="#rcother" aria-controls="rcother" role="tab" data-toggle="tab">Other File types</a></li>
-  </ul>
-
-  <!-- Tab panes -->
-  <div class="tab-content">
-    <div role="tabpanel" class="tab-pane active" id="rcaudio">Audio</div>
-    <div role="tabpanel" class="tab-pane" id="rcvideo">Videos</div>
-    <div role="tabpanel" class="tab-pane" id="rc3dvideo">3d anaglyphs</div>
-    <div role="tabpanel" class="tab-pane" id="rcother">pdf and images</div>
-  </div>
-
-</div>
-
-
-  
 <div class="well" align="center">
 	Shortcode for this product is 
 	<p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
@@ -104,6 +77,7 @@ $('#rcvideo').click(function (e) {
   </div>
 </div>  
  
+
 <div class="panel panel-danger">
   <!-- Default panel contents -->
   <div class="panel-heading" align="center">Payments</div>
@@ -119,19 +93,86 @@ $('#rcvideo').click(function (e) {
     <input type="text" size="40" name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
   </div>
   <div class="panel-body" >
-  	<table width="80%" class="table"><tr>
-    </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
-    <?php
-      $allfileformats = royaltycart_fileformat_array();
-	  foreach($allfileformats as $format){
-	    if ( !array_search($format['suffix'], $fileformats)) {
-          $myvalue= "value='".$format['suffix']."'";
-      }else{
-        $myvalue = "value='".$format['suffix']."' checked";
-      }
-      echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
-      }?>
-    </tr></table>
+  	
+<div>
+  <!-- Nav tabs -->
+  <ul class="nav nav-tabs" role="tablist" id=>
+    <li role="presentation" class="active"><a href="#rcaudio" aria-controls="rcaudio" role="tab" data-toggle="tab">Audio</a></li>
+    <li role="presentation"><a href="#rcvideo" aria-controls="rcvideo" role="tab" data-toggle="tab">Video</a></li>
+    <li role="presentation"><a href="#rc3dvideo" aria-controls="rc3dvideo" role="tab" data-toggle="tab">3d Video</a></li>
+    <li role="presentation"><a href="#rcother" aria-controls="rcother" role="tab" data-toggle="tab">Other File types</a></li>
+  </ul>
+
+  <!-- Tab panes -->
+  <div class="tab-content">
+    <div role="tabpanel" class="tab-pane active" id="rcaudio">
+      <table width="80%" class="table"><tr>
+      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      <?php
+        $allfileformats = royaltycart_fileformat_array('audio');
+	    foreach($allfileformats as $format){
+	      if ( !array_search($format['suffix'], $fileformats)) {
+            $myvalue= "value='".$format['suffix']."'";
+        }else{
+          $myvalue = "value='".$format['suffix']."' checked";
+        }
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        }?>
+      </tr></table>
+    </div>
+      
+    <div role="tabpanel" class="tab-pane" id="rcvideo">
+      <table width="80%" class="table"><tr>
+      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      <?php
+        $allfileformats = royaltycart_fileformat_array('video');
+	    foreach($allfileformats as $format){
+	      if ( !array_search($format['suffix'], $fileformats)) {
+            $myvalue= "value='".$format['suffix']."'";
+        }else{
+          $myvalue = "value='".$format['suffix']."' checked";
+        }
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        }?>
+      </tr></table>
+    </div>
+    
+    <div role="tabpanel" class="tab-pane" id="rc3dvideo">
+      <table width="80%" class="table"><tr>
+      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      <?php
+        $allfileformats = royaltycart_fileformat_array('anaglyphvideo');
+	    foreach($allfileformats as $format){
+	      if ( !array_search($format['suffix'], $fileformats)) {
+            $myvalue= "value='".$format['suffix']."'";
+        }else{
+          $myvalue = "value='".$format['suffix']."' checked";
+        }
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        }?>
+      </tr></table>
+    </div>
+    
+    <div role="tabpanel" class="tab-pane" id="rcother">
+      <table width="80%" class="table"><tr>
+      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      <?php
+        $allfileformats = royaltycart_fileformat_array('other');
+	    foreach($allfileformats as $format){
+	      if ( !array_search($format['suffix'], $fileformats)) {
+            $myvalue= "value='".$format['suffix']."'";
+        }else{
+          $myvalue = "value='".$format['suffix']."' checked";
+        }
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        }?>
+      </tr></table>
+    </div>
+  </div>
+</div>
+  	
+  	
+  	
   </div>
 </div> 
 
