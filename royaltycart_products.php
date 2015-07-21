@@ -61,6 +61,15 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
   //  ['2']=>
   $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  //add an empty payee
+  $emptypayee = array('value' => 0,
+    'percent' => 0,
+    'payee' => "",
+    'payee_name' => "",
+    'comment_role' => "",
+    'comments' => ""
+  );
+  $payout = array_merge($payout,$emptypayee);
 
   //priceing array - determines what is charged for the download
   //  ['display']=>0,1,2,3: Type in, Buttons, Option Selection, Single Button

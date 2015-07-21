@@ -82,13 +82,15 @@ defined( 'ABSPATH' ) or die( 'No script!' );
   <!-- Default panel contents -->
   <div class="panel-heading" align="center">Payments</div>
   <div class="panel-body" >
-  	<?php foreach($payout as $payee){
-      echo "<input type='text' size='5' name='royaltycart_payee_value' value=".$payee['value']." />";
-      echo "<input type='checkbox' name='royaltycart_payee_percent' value=".$payee['percent']." />"; //format me!!!
-      echo "<input type='text' size='10' name='royaltycart_payee' value=".$payee['payee']." />";
-      echo "<input type='text' size='10' name='royaltycart_payee_name' value=".$payee['payee_name']." />";
-      echo "<input type='text' size='10' name='royaltycart_comment_role' value=".$payee['comment_role']." />";
-      echo "<input type='text' size='10' name='royaltycart_comments' value=".$payee['comments']." />";
+  	<?php print_r($payout);
+  	foreach($payout as $key => $value){
+  	  $payee = $value;
+      echo "<input type='text' size='5' name='royaltycart_payee_value_".$key."' value=".$payee['value']." />";
+      echo "<input type='checkbox' name='royaltycart_payee_percent_".$key."' value=".$payee['percent']." />"; //format me!!!
+      echo "<input type='text' size='10' name='royaltycart_payee_".$key."' value=".$payee['payee']." />";
+      echo "<input type='text' size='10' name='royaltycart_payee_name_".$key."' value=".$payee['payee_name']." />";
+      echo "<input type='text' size='10' name='royaltycart_comment_role_".$key."' value=".$payee['comment_role']." />";
+      echo "<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
 	}
     ?>
   </div>
