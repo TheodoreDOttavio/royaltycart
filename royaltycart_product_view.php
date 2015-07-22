@@ -79,7 +79,6 @@ defined( 'ABSPATH' ) or die( 'No script!' );
  
 
 <div class="panel panel-danger">
-  <!-- Default panel contents -->
   <div class="panel-heading" align="center">Payments</div>
   <div class="panel-body" >
   	<?php print_r($payout);
@@ -127,8 +126,11 @@ defined( 'ABSPATH' ) or die( 'No script!' );
         }else{
           $myvalue = "value='".$format['suffix']."' checked";
         }
-        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
-        }?>
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td>";
+        echo "<td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        $myicon = explode(".",$format['suffix']);
+        echo "<td><img src='images/fileicon/".$myicon[1].".png'></td>";
+		}?>
       </tr></table>
     </div>
       
