@@ -220,9 +220,9 @@ function royaltycart_fileformat_array($mytype){
     array('suffix' => ".doc", 'description' => 'Word Document')
   );
   $videofileformats  = array(
-    array('suffix' => "-net.mp4", 'description' => 'low bandwidth mpeg video'),
-    array('suffix' => "-tv.mp4", 'description' => 'TV quality mpeg video'),
-    array('suffix' => "-hd.mp4", 'description' => 'High Definition mpeg video'),
+    array('suffix' => "-net.mpg", 'description' => 'low bandwidth mpeg video'),
+    array('suffix' => "-tv.mpg", 'description' => 'TV quality mpeg video'),
+    array('suffix' => "-hd.mpg", 'description' => 'High Definition mpeg video'),
     array('suffix' => "-net.wmv", 'description' => 'low bandwidth Windows Media video'),
     array('suffix' => "-tv.wmv", 'description' => 'TV quality Windows Media video'),
     array('suffix' => "-hd.wmv", 'description' => 'High Definition Windows Media video'),
@@ -231,9 +231,9 @@ function royaltycart_fileformat_array($mytype){
     array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video')
   );
   $anaglyphvideofileformats  = array(
-    array('suffix' => "-3d-net.mp4", 'description' => 'Anaglyph low bandwidth mpeg video'),
-    array('suffix' => "-3d-tv.mp4", 'description' => 'Anaglyph TV quality mpeg video'),
-    array('suffix' => "-3d-hd.mp4", 'description' => 'Anaglyph High Definition mpeg video'),
+    array('suffix' => "-3d-net.mpg", 'description' => 'Anaglyph low bandwidth mpeg video'),
+    array('suffix' => "-3d-tv.mpg", 'description' => 'Anaglyph TV quality mpeg video'),
+    array('suffix' => "-3d-hd.mpg", 'description' => 'Anaglyph High Definition mpeg video'),
     array('suffix' => "-3d-net.wmv", 'description' => 'Anaglyph low bandwidth Windows Media video'),
     array('suffix' => "-3d-tv.wmv", 'description' => 'Anaglyph TV quality Windows Media video'),
     array('suffix' => "-3d-hd.wmv", 'description' => 'Anaglyph High Definition Windows Media video'),

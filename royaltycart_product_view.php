@@ -117,7 +117,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
   <div class="tab-content">
     <div role="tabpanel" class="tab-pane active" id="rcaudio">
       <table width="80%" class="table"><tr>
-      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      </tr><td>&nbsp;</td><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
       <?php
         $allfileformats = royaltycart_fileformat_array('audio');
 	    foreach($allfileformats as $format){
@@ -126,17 +126,17 @@ defined( 'ABSPATH' ) or die( 'No script!' );
         }else{
           $myvalue = "value='".$format['suffix']."' checked";
         }
-        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td>";
-        echo "<td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
-        $myicon = explode(".",$format['suffix']);
-        echo "<td><img src='images/fileicon/".$myicon[1].".png'></td>";
+		$myicon = explode(".",$format['suffix']);
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td>";        
+        echo "<td><img src='".plugin_dir_url( __FILE__ )."images/fileicons/".$myicon[1].".png'></td>";
+		echo "<td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
 		}?>
       </tr></table>
     </div>
       
     <div role="tabpanel" class="tab-pane" id="rcvideo">
       <table width="80%" class="table"><tr>
-      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      </tr><td>&nbsp;</td><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
       <?php
         $allfileformats = royaltycart_fileformat_array('video');
 	    foreach($allfileformats as $format){
@@ -145,14 +145,17 @@ defined( 'ABSPATH' ) or die( 'No script!' );
         }else{
           $myvalue = "value='".$format['suffix']."' checked";
         }
-        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+		$myicon = explode(".",$format['suffix']);
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td>";        
+        echo "<td><img src='".plugin_dir_url( __FILE__ )."images/fileicons/".$myicon[1].".png'></td>";
+		echo "<td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
         }?>
       </tr></table>
     </div>
     
     <div role="tabpanel" class="tab-pane" id="rc3dvideo">
       <table width="80%" class="table"><tr>
-      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      </tr><td>&nbsp;</td><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
       <?php
         $allfileformats = royaltycart_fileformat_array('anaglyphvideo');
 	    foreach($allfileformats as $format){
@@ -161,14 +164,17 @@ defined( 'ABSPATH' ) or die( 'No script!' );
         }else{
           $myvalue = "value='".$format['suffix']."' checked";
         }
-        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        $myicon = explode(".",$format['suffix']);
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td>";        
+        echo "<td><img src='".plugin_dir_url( __FILE__ )."images/fileicons/".$myicon[1].".png'></td>";
+		echo "<td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
         }?>
       </tr></table>
     </div>
     
     <div role="tabpanel" class="tab-pane" id="rcother">
       <table width="80%" class="table"><tr>
-      </tr><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
+      </tr><td>&nbsp;</td><td>&nbsp;</td><td>File Suffix</td><td>Description</td><tr>
       <?php
         $allfileformats = royaltycart_fileformat_array('other');
 	    foreach($allfileformats as $format){
@@ -177,7 +183,10 @@ defined( 'ABSPATH' ) or die( 'No script!' );
         }else{
           $myvalue = "value='".$format['suffix']."' checked";
         }
-        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td><td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
+        $myicon = explode(".",$format['suffix']);
+        echo "</tr><td><input type='checkbox' name='royaltycart_".$format['suffix']."' ".$myvalue."></td>";        
+        echo "<td><img src='".plugin_dir_url( __FILE__ )."images/fileicons/".$myicon[1].".png'></td>";
+		echo "<td>".$format['suffix']."</td><td>".$format['description']."</td><tr>";
         }?>
       </tr></table>
     </div>
