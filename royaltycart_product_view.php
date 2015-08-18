@@ -101,6 +101,25 @@ defined( 'ABSPATH' ) or die( 'No script!' );
   <div class="panel-body" align="center" >
   	Base File Name<br>
     <input type="text" size="40" name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
+    <br>File Path:
+    <br><?php 
+    DEFINE("WPFILEUPLOAD_DIR", '/'.substr(WP_PLUGIN_DIR, strlen(ABSPATH)) .'/'.dirname(plugin_basename (__FILE__)).'/');
+    DEFINE("ABSWPFILEUPLOAD_DIR", ( substr(ABSPATH, -1) == "/" ? substr(ABSPATH, 0, -1) : ABSPATH ).WPFILEUPLOAD_DIR);
+	
+	DEFINE("RCFILEUPLOAD_DIR", '/'.substr(WP_PLUGIN_DIR, strlen(ABSPATH)) .'/');
+	
+	  echo ("<p>RCFILEUPLOAD_DIR: ".RCFILEUPLOAD_DIR);
+	  echo ("<p>ABSPATH: ".ABSPATH);
+	  echo("<p>__FILE__ ".__FILE__);
+      echo("<p>".plugin_dir_url( __FILE__ )."images/fileicons/".$myicon[1]);
+    ?>
+    
+ 
+    
+    <br>from functions: php wp_handle_upload( $file, $overrides, $time ); 
+
+
+
   </div>
   <div class="panel-body" >
   	

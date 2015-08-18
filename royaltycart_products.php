@@ -38,6 +38,40 @@ function royaltycart_create_products_custom_post_type() {
   );
 
   register_post_type( 'royaltycart_products', $args );
+  
+  //looks like this is the spot to upload a file
+  //check_admin_referer('otto-theme-options');
+  $form_fields = array ('save'); // this is a list of the form field contents I want passed along between page views
+  $method = 'ftp'; // Normally you leave this an empty string and it figures it out by itself, but you can override the filesystem method here
+ 
+  // check to see if we are trying to save a file
+  if (isset($_POST['save'])) {
+	// okay, let's see about getting credentials
+    $url = wp_nonce_url('themes.php?page=otto','otto-theme-options');
+    if (false === ($creds = request_filesystem_credentials($url, $method, false, false, $form_fields) ) ) {
+      // if we get here, then we don't have credentials yet,
+      // but have just produced a form for the user to fill in,
+      // so stop processing for now
+      return true; // stop the normal page form from displaying
+    }
+	// now we have some credentials, try to get the wp_filesystem running
+    if ( ! WP_Filesystem($creds) ) {
+      // our credentials were no good, ask the user for them again
+      request_filesystem_credentials($url, $method, true, false, $form_fields);
+      return true;
+    }
+	// get the upload directory and make a test.txt file
+    $upload_dir = wp_upload_dir();
+    $filename = trailingslashit($upload_dir['path']).'test.txt';
+ 
+    // by this point, the $wp_filesystem global should be working, so let's use it to create a file
+    global $wp_filesystem;
+    if ( ! $wp_filesystem->put_contents( $filename, 'Test file contents', FS_CHMOD_FILE) ) {
+      echo 'error saving file!';
+    }
+    }
+	
+	
 }
 
 
@@ -78,7 +112,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $pricearry = explode(" ", $priceing['price_list']);
   sort($pricearry);
   
-  //Now choose a bootstrap display or boring table display:
+  //Now choose a bootstrap display or a boring table display by looking for a thirdparty plugin:
   if ( is_plugin_active( 'wordpress-bootstrap-css/hlt-bootstrapcss.php' ) ) {
     include 'royaltycart_product_view.php';
   }else{
