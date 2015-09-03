@@ -9,9 +9,8 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <!-- enables bootsrap in the admin page -->
 <div class="bootstrap-wpadmin">
 
-
-<div>
-  <!-- Nav tabs -->
+	
+<div>  <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id=>
     <li role="presentation" class="active"><a href="#rcproductmain" aria-controls="rcproductmain" role="tab" data-toggle="tab">Main</a></li>
     <li role="presentation"><a href="#rcproductpriceing" aria-controls="rcproductpriceing" role="tab" data-toggle="tab">Priceing</a></li>
@@ -21,22 +20,28 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
   
 <div class="tab-content">
-  <div role="tabpanel" class="tab-pane active" id="rcproductmain">
-  
-<div class="well" align="center">
-	Shortcode for this product is 
-	<p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
-</div>
 
+
+
+
+
+<div role="tabpanel" class="tab-pane active" id="rcproductmain">
+  
 <div class="panel panel-success">
-  <!-- Default panel contents -->
   <div class="panel-heading" align="center">Product Name/Title</div>
   <div class="panel-body" align="center" >
     <input type="text" size="40" name="royaltycart_product_name" value="<?php echo $product_name; ?>" />
   </div>
 </div>
 
+<div class="well" align="center">
+	Shortcode for this product is 
+	<p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
 </div>
+
+</div> <!-- end rcproductmain -->
+
+
 
 
 
@@ -92,12 +97,14 @@ defined( 'ABSPATH' ) or die( 'No script!' );
               <td><input name="save" type="submit" class="button button-primary button-small" id="nil" value="$<?php echo $pricearry[1]; ?>" /></td>
               </tr></table>
   </div>
-</div>  
+</div>  <!-- end rcproductpriceing-->
   
-  
+
+
+
+
 <div role="tabpanel" class="tab-pane active" id="rcproductpayments"> 
 
-<div class="panel panel-danger">
   	<?php print_r($payout);
   	foreach($payout as $key => $value){
   	  $payee = $value;
@@ -109,14 +116,18 @@ defined( 'ABSPATH' ) or die( 'No script!' );
       echo "<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
 	}
     ?>
-</div>
 
-</div>
+</div>  <!-- end rcproductpayments-->
+
+
+
+
+
 
 
 <div role="tabpanel" class="tab-pane active" id="rcproductdownloads">
   
-<div class="panel panel-warning">
+
   <div class="panel-body" align="center" >
   	Base File Name<br>
     <input type="text" size="40" name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
@@ -172,14 +183,16 @@ defined( 'ABSPATH' ) or die( 'No script!' );
   </div>
 </div>
   	
-  	
-  	
-  </div>
-</div> 
+
+</div>  <!-- end Panel Body -->
 
 
-</div>
-  </div>
+</div>  <!-- end rcproductdownloads -->
 
-</div> <!-- end Tab content -->
-</div> <!-- end Main Tabs -->
+
+
+
+
+</div> <!-- end Panel content -->
+</div> <!-- end Nav Tabs -->
+</div> <!-- end Bootstrap Div -->
