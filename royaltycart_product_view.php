@@ -9,16 +9,14 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <!-- enables bootsrap in the admin page -->
 <div class="bootstrap-wpadmin">
 
-	
+    	
 <div>  <!-- Nav tabs -->
-  <ul class="nav nav-tabs" role="tablist" id=>
+  <ul class="nav nav-tabs" role="tablist" id="mainnavtabs">
     <li role="presentation" class="active"><a href="#rcproductmain" aria-controls="rcproductmain" role="tab" data-toggle="tab">Main</a></li>
     <li role="presentation"><a href="#rcproductpriceing" aria-controls="rcproductpriceing" role="tab" data-toggle="tab">Priceing</a></li>
     <li role="presentation"><a href="#rcproductpayments" aria-controls="rcproductpayments" role="tab" data-toggle="tab">Payments</a></li>
     <li role="presentation"><a href="#rcproductdownloads" aria-controls="rcproductdownloads" role="tab" data-toggle="tab">Downloads</a></li>
-  </ul>
-
-  
+  </ul>  
 <div class="tab-content">
 
 
