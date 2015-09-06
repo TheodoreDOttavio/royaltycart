@@ -47,8 +47,12 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 <div role="tabpanel" class="tab-pane active" id="rcproductpriceing">
   <div class="panel-body" align="center" >
-    <input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
+    <input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />  
   </div>
+  <div class="panel-body" align="center" >
+    <span class="glyphicon glyphicon-warning-sign"></span>The Min is $ <?php echo $pricearry['0']; ?>
+  </div>
+    
   <div class="panel-body" >
     <table width='100%'><tr>
               <td><h3>User Display Type</h3></td>
@@ -62,7 +66,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
                   <?php if ( $priceing['display'] == 0 ) { echo 'checked'; } ?> />
                 <label for = 0 >Type in</label>
               </td>
-              <td>$<input type="text" size="4" name="foobar" value = <?php echo $pricearry[1]; ?> /> ( The Minimum value is $ <?php echo $pricearry['0']; ?> )</td>
+              <td>$<input type="text" size="4" name="foobar" value = <?php echo $pricearry[1]; ?> /></td>
               </tr><tr>
               <td> 
                 <input type = "radio"
