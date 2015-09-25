@@ -9,7 +9,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <!-- enables bootsrap in the admin page -->
 <div class="bootstrap-wpadmin"> <!-- Bootstrap Div -->
 
-    	
+
 <div>  <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id="mainnavtabs">
     <li role="presentation" class="active"><a href="#rcproductmain" aria-controls="rcproductmain" role="tab" data-toggle="tab">Main</a></li>
@@ -108,7 +108,9 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 <div role="tabpanel" class="tab-pane active" id="rcproductpayments"> 
 
-  	<?php print_r($payout);
+	In Development
+  	<!-- 
+  	php print_r($payout);
   	foreach($payout as $key => $value){
   	  $payee = $value;
       echo "<input type='text' size='5' name='royaltycart_payee_value_".$key."' value=".$payee['value']." />";
@@ -118,7 +120,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
       echo "<input type='text' size='10' name='royaltycart_comment_role_".$key."' value=".$payee['comment_role']." />";
       echo "<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
 	}
-    ?>
+    -->
 
 </div>  <!-- end rcproductpayments-->
 
