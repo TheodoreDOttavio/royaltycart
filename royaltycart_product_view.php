@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
 <!-- enables bootsrap in the admin page -->
-<div class="bootstrap-wpadmin">
+<div class="bootstrap-wpadmin"> <!-- Bootstrap Div -->
 
     	
 <div>  <!-- Nav tabs -->
@@ -16,14 +16,15 @@ defined( 'ABSPATH' ) or die( 'No script!' );
     <li role="presentation"><a href="#rcproductpriceing" aria-controls="rcproductpriceing" role="tab" data-toggle="tab">Priceing</a></li>
     <li role="presentation"><a href="#rcproductpayments" aria-controls="rcproductpayments" role="tab" data-toggle="tab">Payments</a></li>
     <li role="presentation"><a href="#rcproductdownloads" aria-controls="rcproductdownloads" role="tab" data-toggle="tab">Downloads</a></li>
-  </ul>  
-<div class="tab-content">
+  </ul>
+  
+<div class="tab-content"> <!-- Panel Content -->
 
 
 
 
 
-<div role="tabpanel" class="tab-pane active" id="rcproductmain">
+<div role="tabpanel" class="tab-pane active" id="rcproductmain"> <!-- rcproductmain -->
   
 <div class="panel panel-success">
   <div class="panel-heading" align="center">Product Name/Title</div>
@@ -195,6 +196,6 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 
 
-</div> <!-- end Panel content -->
+</div> <!-- end Panel Content -->
 </div> <!-- end Nav Tabs -->
 </div> <!-- end Bootstrap Div -->
