@@ -3,27 +3,28 @@
 defined( 'ABSPATH' ) or die( 'No script!' );
 ?>
 
-<!-- Inline javascript for nav tabs -->
+<!-- Inline javascript for nav tabs 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<!-- enables bootsrap in the admin page -->
-<div class="bootstrap-wpadmin">
+<!-- enables bootsrap in the admin page 
+<div class="bootstrap-wpadmin"> <!-- Bootstrap Div -->
 
-    	
+
 <div>  <!-- Nav tabs -->
   <ul class="nav nav-tabs" role="tablist" id="mainnavtabs">
     <li role="presentation" class="active"><a href="#rcproductmain" aria-controls="rcproductmain" role="tab" data-toggle="tab">Main</a></li>
     <li role="presentation"><a href="#rcproductpriceing" aria-controls="rcproductpriceing" role="tab" data-toggle="tab">Priceing</a></li>
     <li role="presentation"><a href="#rcproductpayments" aria-controls="rcproductpayments" role="tab" data-toggle="tab">Payments</a></li>
     <li role="presentation"><a href="#rcproductdownloads" aria-controls="rcproductdownloads" role="tab" data-toggle="tab">Downloads</a></li>
-  </ul>  
-<div class="tab-content">
+  </ul>
+  
+<div class="tab-content"> <!-- Panel Content -->
 
 
 
 
 
-<div role="tabpanel" class="tab-pane active" id="rcproductmain">
+<div role="tabpanel" class="tab-pane active" id="rcproductmain"> <!-- rcproductmain -->
   
 <div class="panel panel-success">
   <div class="panel-heading" align="center">Product Name/Title</div>
@@ -48,7 +49,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
     <input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />  
   </div>
   <div class="panel-body" align="center" >
-    <span class="glyphicon glyphicon-warning-sign"></span>The Min is $ <?php echo $pricearry['0']; ?>
+    <span class="glyphicon glyphicon-warning-sign">The Min is</span> $ <?php echo $pricearry['0']; ?>
   </div>
     
   <div class="panel-body" >
@@ -107,17 +108,23 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 <div role="tabpanel" class="tab-pane active" id="rcproductpayments"> 
 
-  	<?php print_r($payout);
+<p class="rctitle">In Development</p>
+
+	<ul>
+  	
+  	<?php 
   	foreach($payout as $key => $value){
   	  $payee = $value;
-      echo "<input type='text' size='5' name='royaltycart_payee_value_".$key."' value=".$payee['value']." />";
-      echo "<input type='checkbox' name='royaltycart_payee_percent_".$key."' value=".$payee['percent']." />"; //format me!!!
-      echo "<input type='text' size='10' name='royaltycart_payee_".$key."' value=".$payee['payee']." />";
-      echo "<input type='text' size='10' name='royaltycart_payee_name_".$key."' value=".$payee['payee_name']." />";
-      echo "<input type='text' size='10' name='royaltycart_comment_role_".$key."' value=".$payee['comment_role']." />";
-      echo "<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
+      echo "<li>Value<input type='text' size='5' name='royaltycart_payee_value_".$key."' value=".$payee['value']." />";
+      echo "Check for Percentage<input type='checkbox' name='royaltycart_payee_percent_".$key."' value=".$payee['percent']." />"; //format me!!!
+      echo "<li>Paypal<input type='text' size='10' name='royaltycart_payee_".$key."' value=".$payee['payee']." />";
+      echo "<li>Name<input type='text' size='10' name='royaltycart_payee_name_".$key."' value=".$payee['payee_name']." />";
+      echo "<li>Project Role<input type='text' size='10' name='royaltycart_comment_role_".$key."' value=".$payee['comment_role']." />";
+      echo "<li>Other Comments<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
 	}
     ?>
+    <!-- print_r($payout); -->
+    </ul>
 
 </div>  <!-- end rcproductpayments-->
 
@@ -195,6 +202,6 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 
 
-</div> <!-- end Panel content -->
+</div> <!-- end Panel Content -->
 </div> <!-- end Nav Tabs -->
 </div> <!-- end Bootstrap Div -->

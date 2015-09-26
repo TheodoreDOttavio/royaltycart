@@ -3,23 +3,23 @@
 defined( 'ABSPATH' ) or die( 'No script!' );
 ?>
 
+<div class="rctitle">Product Name
+    <input type="text" size="20" class="rcinfobox" name="royaltycart_product_name" value="<?php echo $product_name; ?>" />
+</div>
+
+<div class="rcdescriptionheader">Use this shortcode for an 'add to cart' button
+    <span class = "rcinfobox">[royaltycart_purchase id=<?php echo $product_id;?>]</div>
+
+<div class="rctitle">Price Options
+<div class="rcdescriptionheader">Seperate values with a space example: "5 9.99 20"
+<input type="text" size="20" class="rcinfo" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
+</div>
+    
     <p><table>
-    	<tr><td colspan='2' align='center'>
-            Use this shortcode for an 'add to cart' button:
-        </td></tr>
-    	<tr><td colspan='2' align='center'>
-            <p style="background-color: #DDDDDD; padding: 5px; display: inline;">[royaltycart_purchase id=<?php echo $product_id;?>]</p>
-        </td></tr>
-        
-        <tr>
-            <td>Product Name/Title</td>
-            <td><input type="text" size="40" name="royaltycart_product_name" value="<?php echo $product_name; ?>" /></td>
-        </tr>
-        
         <tr>
             <td valign='top'>Price Options</td>
             <td>Pice options (seperate values by commas) example: 5,10,15:<br>
-            	<input type="text" size="40" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" /><br>
+            	<br>
             	
             <table><tr>
               <td>User Display Type</td>

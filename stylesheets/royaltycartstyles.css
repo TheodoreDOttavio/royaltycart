@@ -1,0 +1,32 @@
+.rctitle {
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 1.25em;
+	color: #0000ff;
+	text-align: left;
+	padding: 3px;
+}
+
+.rcdescriptionheader {
+	font-family: 'Josefin Sans', sans-serif;
+	font-size: 1em;
+	color: #0000ff;
+	text-align: left;
+	padding: 1px;
+}
+
+.rcinfo{
+	font-family: 'Righteous', cursive;
+	font-size: 1em;
+	text-align: right;
+	padding: 5px;
+}
+
+.rcinfobox{
+	font-family: 'Righteous', cursive;
+	font-size: 1.125em;
+	background-color: #DDDDDD;
+	text-align: center;
+	padding: 5px;
+	border-radius: 15px;
+	padding: 5px;
+}

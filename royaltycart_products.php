@@ -44,8 +44,11 @@ function royaltycart_create_products_custom_post_type() {
 
 function royaltycart_product_review_meta_box($royaltycart_products){
   $product_id = $royaltycart_products->ID;
+  
   $product_name = get_post_meta( $royaltycart_products->ID, 'royaltycart_product_name', true );
+  if ( empty($product_name)) { $product_name = "New Product Name";}
   $basefile = get_post_meta( $royaltycart_products->ID, 'royaltycart_basefile', true );
+  if ( empty($basefile)) { $basefile = "new_file_name";}
   
   //fileformats is an array of suffixes that will be available to download after purchase.
   //  ['none','.mp4','-hd.mp4','.wmv','-hd.wmv'] - array keys are numeric
@@ -60,15 +63,9 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //    ['comment_role']=>'Producer': Recipients title or role
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
   //  ['2']=>
-  $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
-  //check for empty array and determine next payee id#
-  //  the payee id is for this product only, not a real database index.
-  $nextpayee = 1;
-  if (count($payout) == 0){
-  	$payout = array();
-  }
-  //add an empty payee
-  $emptypayee = array('Payee_id' => $nextpayee,
+  
+  //create an empty payee
+  $emptypayee = array(
     'value' => 0,
     'percent' => 0,
     'payee' => "",
@@ -76,35 +73,38 @@ function royaltycart_product_review_meta_box($royaltycart_products){
     'comment_role' => "",
     'comments' => ""
   );
-  $payout = array_merge($payout, $emptypayee);
+  $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  if ( empty($payout['0'])) {
+      $nextpayee = 1;
+      $payout = array ($nextpayee => $emptypayee);
+  }else {
+      //$payout = ($nextpayee => $emptypayee);
+  }
+
 
   //priceing array - determines what is charged for the download
-  //  ['display']=>0,1,2,3: Type in, Buttons, Option Selection, Single Button
-  //  ['price_list']=>[1,5,10,15]: array for multiple buttons or pull down list
+  //  ['display']=>"0","1","2","3": Type in, Buttons, Option Selection, Single Button
+  //  ['price_list']=>"1 5 10 15": array for multiple buttons or pull down list
   $priceing = get_post_meta( $royaltycart_products->ID, 'royaltycart_priceing', true );
+  if ( empty($priceing['price_list'])) {
+  	$priceing = array(
+	  "display" => "1",
+	  "price_list" => "1 5 10 20"
+	 );
+  }
   $pricearry = explode(" ", $priceing['price_list']);
   sort($pricearry);
   
   //DISPLAY
   //Now choose a bootstrap display or a boring table display by looking for a thirdparty plugin:
-  if ( is_plugin_active( 'wordpress-bootstrap-css/hlt-bootstrapcss.php' ) ) {
-    include 'royaltycart_product_view.php';
-  }else{
-  	echo "This page will look a lot better if you install the bootstrap plugin by icontrol<br>
-  	go to Plug-ins - Add New and search for 'wordpress-bootstrap-css'<br>";
+  //if ( is_plugin_active( 'wordpress-bootstrap-css/hlt-bootstrapcss.php' ) ) {
+  //  include 'royaltycart_product_view.php';
+  //}else{
+  //	echo "This page will look a lot better if you install the bootstrap plugin by icontrol<br>
+  //	go to Plug-ins - Add New and search for 'wordpress-bootstrap-css'<br>";
 	
   	include 'royaltycart_product_view_raw.php';
-  } 
-}
-
-function foobar($royaltycart_products){
-
-  echo "Pricing variable:<br>";
-  print_r($priceing);
-  echo "<br>Price List variable:<br>";
-  print_r($pricearry);
-  echo "<br>Post Variable ". print_r($_POST);
-
+  //} 
 }
 
 
@@ -117,35 +117,30 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
         }
 
 		//Priceing Save and update
+		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
+       	  if ($_POST['royaltycart_priceing_price_list'] != ''){
+       	    $newpriceing['price_list'] = $_POST['royaltycart_priceing_price_list'];
+          }else{
+		    $newpriceing['price_list'] = "1 10 15 20";
+       	  }
+	    }
         if ( isset( $_POST['royaltycart_priceing_display'] ) ) {
 	      $newpriceing['display'] = $_POST['royaltycart_priceing_display'];
 	    }else{
 	      $newpriceing['display'] = "1";
         }
-        if ( $_POST['royaltycart_priceing_min'] != "" ){
-          $newpriceing['min'] = $_POST['royaltycart_priceing_min'];
-        }else{
-		  $newpriceing['min'] = 0;
-        }
-		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
-       	  if ($_POST['royaltycart_priceing_price_list'] != ''){
-       	    $newpriceing['price_list'] = $_POST['royaltycart_priceing_price_list'];
-          }else{
-		    $newpriceing['price_list'] = $newpriceing['min'].",".$newpriceing['price'];
-       	  }
-	    }
 	    update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
 		
 		//Payments save and update
-		if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
-            update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
-        }
+		//if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
+        //    update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
+        //}
         
         //File Formats save and update
         if ( isset( $_POST['royaltycart_basefile'] ) && $_POST['royaltycart_basefile'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_basefile', $_POST['royaltycart_basefile'] );
         }
-        $allfileformats = royaltycart_fileformat_array();
+        $allfileformats = royaltycart_fileformat_array('audio');
 		$newfileformats = array(0 => 'None');
 	    foreach($allfileformats as $format){
 	      $aspost = str_replace(".", "_", $format['suffix']);
@@ -165,17 +160,13 @@ add_filter( 'manage_edit-royaltycart_products_columns', 'royaltycart_products_di
 function royaltycart_products_display_columns( $columns ) 
 {
     unset( $columns['comments'] );
-    unset( $columns['date'] );
+	unset( $columns['date'] );
     $columns['title'] = "Product ID";
     $columns['royaltycart_product_name'] = "Product Name";
-	$columns['royaltycart_payout'] = "Payments";
-	$columns['royaltycart_priceing'] = "Price Setup";
     $columns['royaltycart_basefile'] = "Base File Name";
-	$columns['royaltycart_fileformats'] = "File Formats";
     $columns['date'] = "Date";
     return $columns;
 }
-
 
 
 add_action('manage_royaltycart_products_posts_custom_column', 'royaltycart_populate_product_columns', 10, 2);
@@ -266,7 +257,8 @@ function royaltycart_fileformat_array($mytype){
         return $anaglyphvideofileformats;
         break;
 	case '':
-        return array_merge($audiofileformats,$videofileformats,$otherfileformats,$anaglyphvideofileformats);
+	    return $videofileformats;
+        //return array_merge($audiofileformats,$videofileformats,$otherfileformats,$anaglyphvideofileformats);
         break;
   }
  

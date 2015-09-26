@@ -125,6 +125,14 @@ function royaltycart_order_review_meta_box($royaltycart_orders){
             <td><input type="text" size="20" name="royaltycart_buyer_email_sent" value="<?php echo $email_sent_field_msg; ?>" readonly /></td>
         </tr>
     </table>
+    
+    <p>Stuff to do - add an admin Order Box with these things:<br>
+    Display who was paid and how much<br>
+    Add a count of downloads and an option to reset the downloads<br>
+    Add an option to add products to this order<br>
+    Add a button to re-email the download link (thanks for ordering) button<br>
+    </p>
+    
     <?php
 }
 
