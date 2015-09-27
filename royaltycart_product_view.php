@@ -3,10 +3,10 @@
 defined( 'ABSPATH' ) or die( 'No script!' );
 ?>
 
-<!-- Inline javascript for nav tabs -->
+<!-- Inline javascript for nav tabs 
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 
-<!-- enables bootsrap in the admin page -->
+<!-- enables bootsrap in the admin page 
 <div class="bootstrap-wpadmin"> <!-- Bootstrap Div -->
 
 
@@ -108,19 +108,23 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 <div role="tabpanel" class="tab-pane active" id="rcproductpayments"> 
 
-	In Development
-  	<!-- 
-  	php print_r($payout);
+<p class="rctitle">In Development</p>
+
+	<ul>
+  	
+  	<?php 
   	foreach($payout as $key => $value){
   	  $payee = $value;
-      echo "<input type='text' size='5' name='royaltycart_payee_value_".$key."' value=".$payee['value']." />";
-      echo "<input type='checkbox' name='royaltycart_payee_percent_".$key."' value=".$payee['percent']." />"; //format me!!!
-      echo "<input type='text' size='10' name='royaltycart_payee_".$key."' value=".$payee['payee']." />";
-      echo "<input type='text' size='10' name='royaltycart_payee_name_".$key."' value=".$payee['payee_name']." />";
-      echo "<input type='text' size='10' name='royaltycart_comment_role_".$key."' value=".$payee['comment_role']." />";
-      echo "<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
+      echo "<li>Value<input type='text' size='5' name='royaltycart_payee_value_".$key."' value=".$payee['value']." />";
+      echo "Check for Percentage<input type='checkbox' name='royaltycart_payee_percent_".$key."' value=".$payee['percent']." />"; //format me!!!
+      echo "<li>Paypal<input type='text' size='10' name='royaltycart_payee_".$key."' value=".$payee['payee']." />";
+      echo "<li>Name<input type='text' size='10' name='royaltycart_payee_name_".$key."' value=".$payee['payee_name']." />";
+      echo "<li>Project Role<input type='text' size='10' name='royaltycart_comment_role_".$key."' value=".$payee['comment_role']." />";
+      echo "<li>Other Comments<input type='text' size='10' name='royaltycart_comments_".$key."' value=".$payee['comments']." />";
 	}
-    -->
+    ?>
+    <!-- print_r($payout); -->
+    </ul>
 
 </div>  <!-- end rcproductpayments-->
 

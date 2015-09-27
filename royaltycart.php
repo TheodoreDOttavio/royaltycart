@@ -32,11 +32,24 @@ function royaltycart_drop_tables(){
 }
 
 
+//trying to add custom stylesheets
+//http://codex.wordpress.org/Function_Reference/wp_enqueue_style
+//<link href='https://fonts.googleapis.com/css?family=Josefin+Sans|Righteous' rel='stylesheet' type='text/css'>
+
+add_action( 'admin_enqueue_scripts', 'royaltycart_admin_styles' );
+function royaltycart_admin_styles() {
+    wp_enqueue_style( 'royaltycartStylesheet', plugins_url('stylesheets/royaltycartstyles.css', __FILE__));
+    wp_enqueue_style( 'royaltycartGoogleFonts', 'https://fonts.googleapis.com/css?family=Josefin+Sans|Righteous');    
+   }
+
 
 //Plugin-wide variables
 define('ROYALTYCART_LIVE_PAYPAL_URL', 'https://www.paypal.com/cgi-bin/webscr');
 define('ROYALTYCART_SANDBOX_PAYPAL_URL', 'https://www.sandbox.paypal.com/cgi-bin/webscr');
 
+require_once( ABSPATH . 'wp-admin/includes/image.php' );
+require_once( ABSPATH . 'wp-admin/includes/file.php' );
+require_once( ABSPATH . 'wp-admin/includes/media.php' );
 
 
 //Add two sidebar menues for orders and products
@@ -63,4 +76,6 @@ function royaltycart_add_meta_boxes()
         'high'
     );
 }
+
+
 ?>
