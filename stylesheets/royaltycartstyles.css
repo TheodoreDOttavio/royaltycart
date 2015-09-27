@@ -4,13 +4,14 @@
 	color: #0000ff;
 	text-align: left;
 	padding: 3px;
+	border-top: 1px dashed blue;
 }
 
-.rcdescriptionheader {
+.rcdescription {
 	font-family: 'Josefin Sans', sans-serif;
 	font-size: 1em;
 	color: #0000ff;
-	text-align: left;
+	text-align: center;
 	padding: 1px;
 }
 
@@ -26,7 +27,7 @@
 	font-size: 1.125em;
 	background-color: #DDDDDD;
 	text-align: center;
-	padding: 5px;
 	border-radius: 15px;
 	padding: 5px;
+	margin: 4px;
 }
