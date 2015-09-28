@@ -148,23 +148,21 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
             $upload_overrides = array( 'test_form' => false );
 			
 			$rc_dirname = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id;
-			add_filter( 'upload_dir', 'royaltycart_upload_dir', $rc_dirname, $product_id );
-			//define( 'UPLOADS', '' );
+			//add_filter( 'upload_dir', 'royaltycart_upload_dir', $rc_dirname, $product_id );
 			
 			//check for existing custom folder
-			if( ! file_exists( $rc_dirname ) ){
-			  wp_mkdir_p( $rc_dirname );
-			}
+			//if( ! file_exists( $rc_dirname ) ){
+			//  wp_mkdir_p( $rc_dirname );
+			//}
 			
 			//check what the form is posting - this will also create the directory for non custom paths
             $uploadinfo = wp_upload_dir();
 
             $movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
 
-            //update_post_meta( $product_id, 'royaltycart_basefile', $movefile['error'] . "---" . $uploadinfo['path'] . "---" . $uploadedfile['file'] . "---" . $uploadedfile['name'] );
-            update_post_meta( $product_id, 'royaltycart_basefile', $rc_dirname . "---" . $uploadinfo['path'] . "---" . $movefile['url']);
+            update_post_meta( $product_id, 'royaltycart_basefile', $rc_dirname . "<br>" . $uploadinfo['path'] . "<br>" . $movefile['url']);
 			
-			remove_filter( 'upload_dir', 'royaltycart_upload_dir' );
+			//remove_filter( 'upload_dir', 'royaltycart_upload_dir' );
         }
 
 //http://codex.wordpress.org/Class_Reference/WP_Error
