@@ -32,15 +32,22 @@ function royaltycart_drop_tables(){
 }
 
 
-//trying to add custom stylesheets
-//http://codex.wordpress.org/Function_Reference/wp_enqueue_style
-//<link href='https://fonts.googleapis.com/css?family=Josefin+Sans|Righteous' rel='stylesheet' type='text/css'>
-
-add_action( 'admin_enqueue_scripts', 'royaltycart_admin_styles' );
-function royaltycart_admin_styles() {
+//Custom stylesheets
+add_action( 'admin_enqueue_scripts', 'royaltycart_admin_scripts' );
+function royaltycart_admin_scripts() {
     wp_enqueue_style( 'royaltycartStylesheet', plugins_url('stylesheets/royaltycartstyles.css', __FILE__));
-    wp_enqueue_style( 'royaltycartGoogleFonts', 'https://fonts.googleapis.com/css?family=Josefin+Sans|Righteous');    
+    wp_enqueue_style( 'royaltycartGoogleFonts', 'https://fonts.googleapis.com/css?family=Josefin+Sans|Righteous');
+	
+	//https://wordpress.org/support/topic/howto-integrate-the-media-library-into-a-plugin?replies=4
+	//5yr old post. didn't work out, but leaving the java in...
+	//wp_enqueue_script(plugins_url('scripts/royaltycartjava.js', __FILE__));
    }
+
+//multipart form is needed for file uploads
+add_action('post_edit_form_tag', 'royaltycart_add_edit_form_multipart_encoding');
+function royaltycart_add_edit_form_multipart_encoding() {
+    echo ' enctype="multipart/form-data"';
+}
 
 
 //Plugin-wide variables
