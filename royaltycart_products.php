@@ -2,8 +2,9 @@
 //Security measure, disallows direct access
 defined( 'ABSPATH' ) or die( 'No script!' );
 
-add_action( 'save_post', 'royaltycart_cart_save_products', 10, 2 );
+global $product_id;
 
+add_action( 'save_post', 'royaltycart_cart_save_products', 10, 2 );
 
 
 //Registers the Products post type
@@ -144,50 +145,46 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		
 		
         if ( isset( $_FILES['rc_media_upload'] ) && $_FILES['rc_media_upload']['size'] > 0 ) {
-            $uploadedfile = $_FILES['rc_media_upload'];	
-            $upload_overrides = array( 'test_form' => false );
-			
-			$rc_dirname = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id;
-			//add_filter( 'upload_dir', 'royaltycart_upload_dir', $rc_dirname, $product_id );
-			
-			//check for existing custom folder
-			//if( ! file_exists( $rc_dirname ) ){
-			//  wp_mkdir_p( $rc_dirname );
-			//}
+			$uploadedfile = $_FILES['rc_media_upload'];	
+			$upload_overrides = array( 'test_form' => false );
+
+			add_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
+			add_filter( 'upload_dir', 'royaltycart_upload_dir' );
 			
 			//check what the form is posting - this will also create the directory for non custom paths
-            $uploadinfo = wp_upload_dir();
+			$uploadinfo = wp_upload_dir();
 
-            $movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
 
-            update_post_meta( $product_id, 'royaltycart_basefile', $rc_dirname . "<br>" . $uploadinfo['path'] . "<br>" . $movefile['url']);
-			
-			//remove_filter( 'upload_dir', 'royaltycart_upload_dir' );
+			update_post_meta( $product_id, 'royaltycart_basefile', '29<br>' . $movefile['file'] . "<br>" . $uploadinfo['path'] . "<br>" . $movefile['errors']);
+
+			//clean up...
+			remove_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
+			remove_filter( 'upload_dir', 'royaltycart_upload_dir' );
         }
 
-//http://codex.wordpress.org/Class_Reference/WP_Error
-//http://stackoverflow.com/questions/11891010/wordpress-is-there-a-built-in-function-to-display-validation-errors-for-option
-
-//http://wordpress.stackexchange.com/questions/4307/how-can-i-add-an-image-upload-field-directly-to-a-custom-write-panel/4413#4413
-    
     }//end post type
 }//end function
 
 
-add_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter' );
-
 function royaltycart_custom_upload_filter( $file ){
-    $file['name'] = 'rc-' . $file['name'];
+	$namearray = explode('.', $file['name']);
+	$extension = array_pop($namearray);
+	//royaltycart_basefile
+    $file['name'] = $_POST['royaltycart_product_name'] . '.' . $extension;
     return $file;
 }
 
 
-
 function royaltycart_upload_dir( $param ){
-    $mydir = '/royaltycart';
-
-    $param['path'] = $param['path'] . $mydir;
-    $param['url'] = $param['url'] . $mydir;
+	$mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $_POST['ID'];
+    
+    $param['path'] = $mydir;
+    $param['url'] = $mydir;
+	
+	//$mydir = '/royaltycart/' . $_POST['ID'];
+    //$param['path'] = $param['path'] . $mydir;
+    //$param['url'] = $param['url'] . $mydir;
 
     error_log("path={$param['path']}");  
     error_log("url={$param['url']}");
