@@ -1,6 +1,6 @@
 .rctitle {
 	font-family: 'Josefin Sans', sans-serif;
-	font-size: 1.25em;
+	font-size: 22px;
 	color: #0000ff;
 	text-align: left;
 	padding: 4px;
@@ -8,22 +8,16 @@
 
 .rcdescription {
 	font-family: 'Josefin Sans', sans-serif;
-	font-size: 1em;
+	font-size: 16px;
 	color: #0000ff;
 	text-align: center;
 	padding: 2px;
 }
 
-.rcinfo{
-	font-family: 'Righteous', sans-serif;
-	font-size: 1em;
-	text-align: right;
-	padding: 5px;
-}
-
 .rcinfobox{
-	font-family: 'Righteous', sans-serif;
-	font-size: 1.125em;
+	font-family: 'Molengo', sans-serif;
+	font-size: 16px;
+	color: #0000ff;
 	background-color: #DDDDDD;
 	text-align: center;
 	border-radius: 15px;
@@ -31,17 +25,36 @@
 	margin: 4px;
 }
 
+.rcpulldown{
+	font-family: 'Molengo', sans-serif;
+	font-size: 16px;
+	color: #0000ff;
+	background-color: #f2f2f2;
+	text-align: center;
+	border-radius: 15px;
+	padding: 7px;
+	margin: 4px;
+}
+
+.rcfileinput{
+	font-family: 'Molengo', sans-serif;
+	font-size: 16px;
+	color: #0000ff;
+	padding: 5px;
+	margin: 4px;
+}
+
 .rcradio{
 	font-family: 'Josefin Sans', sans-serif;
-	font-size: 1em;
+	font-size: 16px;
 	color: #0000ff;
 	text-align: left;
-	padding: 5px;
+	padding: 2px;
 	margin: 3px;
 }
 
 .rcbox_plain {
-	background-color: #ffffff;
+	background-color: #f2f2ff;
 	padding: 4px;
 	border-radius: 0 0 15px 15px;
 	border: 2px solid blue;

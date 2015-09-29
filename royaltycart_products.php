@@ -109,6 +109,9 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $rcfilelist = $rcfilelisttmp;
 
 
+  //Prepare list for file suffix selection
+  $rcsuffixlist = royaltycart_fileformat_array();
+  
   //DISPLAY
   include 'royaltycart_product_view.php';
 }
@@ -169,7 +172,7 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 
 			$movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
 
-			update_post_meta( $product_id, 'royaltycart_basefile', '29<br>' . $movefile['file'] . "<br>" . $uploadinfo['path'] . "<br>" . $movefile['errors']);
+			//update_post_meta( $product_id, 'royaltycart_basefile', '29<br>' . $movefile['file'] . "<br>" . $uploadinfo['path'] . "<br>" . $movefile['errors']);
 
 			//clean up...
 			remove_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
@@ -181,10 +184,20 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 
 
 function royaltycart_custom_upload_filter( $file ){
+	//check existing file extension against the selected extension
 	$namearray = explode('.', $file['name']);
-	$extension = array_pop($namearray);
-	//royaltycart_basefile
-    $file['name'] = $_POST['royaltycart_product_name'] . '.' . $extension;
+	$currentextension = array_pop($namearray);
+	$namearray = explode('.', $_POST['file_suffix']);
+	$newextension = array_pop($namearray);
+	
+	//If the extensions match or there is no extension, use the selection
+	if ($currentextension == $newextension && $currentextension != ""){
+		$extension = $_POST['file_suffix'];
+	}else{
+		$extension = "." . $currentextension;
+	}
+	
+    $file['name'] = $_POST['royaltycart_basefile'] . $extension;
     return $file;
 }
 
@@ -261,21 +274,18 @@ function royaltycart_customize_product_link( $permalink, $post ) {
 
 
 
-function royaltycart_fileformat_array($mytype){
+function royaltycart_fileformat_array(){
   //add or remove any possible file formats here
-  //  No sorting is applied, arrange them the hard way...
-  $audiofileformats  = array(
+  //  No sorting is applied, arranged the hard way...
+  return array(
     array('suffix' => "-low.wav", 'description' => 'Low bandwidth microsoft audio'),
     array('suffix' => ".wav", 'description' => 'CD quality microsoft audio'),
     array('suffix' => "-low.mp3", 'description' => 'Low bandwidth mpeg audio'),
-    array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio')
-  );
-  $otherfileformats  = array(
+    array('suffix' => ".mp3", 'description' => 'CD quality mpeg audio'),
+    array('suffix' => "-sm.jpg", 'description' => 'Jpeg Low Resolution Image'),
     array('suffix' => ".jpg", 'description' => 'Jpeg High Resolution Image'),
     array('suffix' => ".pdf", 'description' => 'PDF: Adobe Acrobat'),
-    array('suffix' => ".doc", 'description' => 'Word Document')
-  );
-  $videofileformats  = array(
+    array('suffix' => ".doc", 'description' => 'Word Document'),
     array('suffix' => "-net.mpg", 'description' => 'low bandwidth mpeg video'),
     array('suffix' => "-tv.mpg", 'description' => 'TV quality mpeg video'),
     array('suffix' => "-hd.mpg", 'description' => 'High Definition mpeg video'),
@@ -284,9 +294,7 @@ function royaltycart_fileformat_array($mytype){
     array('suffix' => "-hd.wmv", 'description' => 'High Definition Windows Media video'),
     array('suffix' => "-net.mov", 'description' => 'low bandwidth Quicktime video'),
     array('suffix' => "-tv.mov", 'description' => 'TV quality Quicktime video'),
-    array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video')
-  );
-  $anaglyphvideofileformats  = array(
+    array('suffix' => "-hd.mov", 'description' => 'High Definition Quicktime video'),
     array('suffix' => "-3d-net.mpg", 'description' => 'Anaglyph low bandwidth mpeg video'),
     array('suffix' => "-3d-tv.mpg", 'description' => 'Anaglyph TV quality mpeg video'),
     array('suffix' => "-3d-hd.mpg", 'description' => 'Anaglyph High Definition mpeg video'),
@@ -297,26 +305,6 @@ function royaltycart_fileformat_array($mytype){
     array('suffix' => "-3d-tv.mov", 'description' => 'Anaglyph TV quality Quicktime video'),
     array('suffix' => "-3d-hd.mov", 'description' => 'Anaglyph High Definition Quicktime video')
   );
-  
-  switch ($mytype) {
-    case 'audio':
-        return $audiofileformats;
-        break;
-    case 'video':
-        return $videofileformats;
-        break;
-    case 'other':
-        return $otherfileformats;
-        break;
-    case 'anaglyphvideo':
-        return $anaglyphvideofileformats;
-        break;
-	case '':
-	    return $videofileformats;
-        //return array_merge($audiofileformats,$videofileformats,$otherfileformats,$anaglyphvideofileformats);
-        break;
-  }
- 
 }
 
 ?>

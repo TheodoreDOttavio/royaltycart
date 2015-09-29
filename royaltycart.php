@@ -36,7 +36,7 @@ function royaltycart_drop_tables(){
 add_action( 'admin_enqueue_scripts', 'royaltycart_admin_scripts' );
 function royaltycart_admin_scripts() {
     wp_enqueue_style( 'royaltycartStylesheet', plugins_url('stylesheets/royaltycartstyles.css', __FILE__));
-    wp_enqueue_style( 'royaltycartGoogleFonts', 'https://fonts.googleapis.com/css?family=Josefin+Sans|Righteous');
+    wp_enqueue_style( 'royaltycartGoogleFonts', 'https://fonts.googleapis.com/css?family=Josefin+Sans|Molengo');
 	
 	//https://wordpress.org/support/topic/howto-integrate-the-media-library-into-a-plugin?replies=4
 	//5yr old post. didn't work out, but leaving the java in...
