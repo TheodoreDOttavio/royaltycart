@@ -55,17 +55,25 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 <div class="rcbox_plain">
  <div class="rctitle">Files Available for Download</div>
+ <?php
+  foreach($rcfilelist as $rcfile){
+  	echo ("<div class='rcinfobox'>");
+    echo ($rcfile);
+	echo ("</div>");
+  };
+ ?>
+
+ <div class="rctitle">Add more files available with this purchase</div>
  <div class="rcdescription">Base Filename</div>
  <input type="text" size="60" class="rcinfobox" name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
- <div class="rcdescription">Files Found</div>
  
+ <div class="rcdescription">Upload Media</div>
+ <input type="file" name="rc_media_upload" id="rc_media_upload"  multiple="false" />
+ 
+ <div class="rcdescription">Info For Testing</div>
  <div class="rcdescription">
  <?php echo $basefile; ?>
  </div>
- 
- <div class="rctitle">Add files to download after purchase</div>
- <input type="file" name="rc_media_upload" id="rc_media_upload"  multiple="false" />
-  
 </div>
 
 <div class="rcbox_plain">

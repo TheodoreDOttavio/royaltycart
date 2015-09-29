@@ -96,6 +96,19 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $pricearry = explode(" ", $priceing['price_list']);
   sort($pricearry);
   
+  //List out available product files
+  $rcproductdir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/*.*";
+  $rcfilelisttmp = array();
+  $rcfiles = glob($rcproductdir);
+  foreach($rcfiles as $rcfile){
+  	//the extra steps here avoid the php error: Only variables should be passed by reference
+    $rcfilenames = explode("/", $rcfile);
+	$rcfilename = end($rcfilenames);
+  	array_push($rcfilelisttmp, $rcfilename);
+  }
+  $rcfilelist = $rcfilelisttmp;
+
+
   //DISPLAY
   include 'royaltycart_product_view.php';
 }
