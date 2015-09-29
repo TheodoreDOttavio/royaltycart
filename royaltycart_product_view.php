@@ -6,18 +6,20 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <div class="rcbox_plain">
  <div class="rctitle">Product Name</div>
  <div align="center">
-   <input type="text" size="60" class="rcinfobox" name="royaltycart_product_name" value="<?php echo $product_name; ?>" />
+   <input type="text" size="60" class="rctextinput" name="royaltycart_product_name" value="<?php echo $product_name; ?>" />
  </div>
 
  <div class="rcdescription">Use this shortcode for an 'add to cart' button</div>
- <div class="rcinfobox">[royaltycart_purchase id=<?php echo $product_id;?>]</div>
+ <div align="center">
+   <div class="rcinfobox">[royaltycart_purchase id=<?php echo $product_id;?>]</div>
+ </div>
 </div>
 
 <div class="rcbox_money">
  <div class="rctitle">Price Options</div>
  <div class="rcdescription">Seperate values with a space like this: "5 9.99 20"</div>
  <div align="center">
-   <input type="text" size="60" class="rcinfobox" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
+   <input type="text" size="60" class="rctextinput" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
  
  <div class="rcdescription">Display Type</div>
  <select class='rcpulldown' name="royaltycart_priceing_display">
@@ -40,12 +42,42 @@ defined( 'ABSPATH' ) or die( 'No script!' );
  </select>
 </div>
 
- <div class="rctitle">Payments</div>
+<div class="rctitle">Payments</div>
+  <!-- Payee Block -->
+  <table><tr><td width="50%">
+  	<div class="rccontent">
+  	  <?php if ($payout['percent']){
+  	  	echo $payout['value'];
+  	  	echo "%";
+	  }else{
+	  	echo "$";
+		echo $payout['value'];
+	  } ?> to 
+  	  <?php echo ($payout['payee_name']. " - " . $payout['comment_role']); ?>
+    </div>
+  </td><td>
+  <div align="left">
+    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee_name" value="<?php echo $payout['payee_name']; ?>" />
+  </div>
+  <div align="left">
+    <input type="text" size="20" class="rctextinputsmall" name="royaltycart_payout_value" value="<?php echo $payout['value']; ?>" />
+    <input type='checkbox' name='royaltycart_payout_percent' "checked">Percentage
+    <input type="text" size="20" class="rctextinputsmall" name="royaltycart_payout_payee" value="<?php echo $payout['payee']; ?>" />
+  </div>
+  <div align="left">
+   <input type="text" size="30" class="rctextinputsmall" name="royaltycart_payout_comment_role" value="<?php echo $payout['comment_role']; ?>" />
+  </div>
+  <div align="left">
+   <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comments" value="<?php echo $payout['comments']; ?>" />
+  </div>
+  </td></tr></table>
+  <!-- end Payee Block -->
 </div>
-
+    
 
 <div class="rcbox_plain">
  <div class="rctitle">Available for Download</div>
+ <div align="center">
  <?php
   foreach($rcfilelist as $rcfile){
   	echo ("<div class='rcinfobox'>");
@@ -53,11 +85,12 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 	echo ("</div>");
   };
  ?>
+ </div>
 
  <div class="rctitle">Add more files available with this purchase</div>
  <div class="rcdescription">Base Filename</div>
  <div align="center">
-   <input type="text" size="60" class='rcinfobox' name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
+   <input type="text" size="60" class='rctextinput' name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
  </div>
  
  <div class="rcdescription">Upload Media</div>

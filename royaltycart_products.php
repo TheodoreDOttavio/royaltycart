@@ -67,20 +67,20 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   
   //create an empty payee
   $emptypayee = array(
-    'value' => 0,
-    'percent' => 0,
-    'payee' => "",
-    'payee_name' => "",
-    'comment_role' => "",
-    'comments' => ""
+    'value' => 5,
+    'percent' => 1,
+    'payee' => "teddottavio@yahoo.com",
+    'payee_name' => "Ted DOttavio",
+    'comment_role' => "Plug in Author",
+    'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
   );
-  $payout = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
-  if ( empty($payout['0'])) {
-      $nextpayee = 1;
-      $payout = array ($nextpayee => $emptypayee);
-  }else {
-      //$payout = ($nextpayee => $emptypayee);
-  }
+  $payout = $emptypayee; //get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  // if ( empty($payout['0'])) {
+      // $nextpayee = 1;
+      // $payout = array ($nextpayee => $emptypayee);
+  // }else {
+      // //$payout = ($nextpayee => $emptypayee);
+  // }
 
 
   //priceing array - determines what is charged for the download
