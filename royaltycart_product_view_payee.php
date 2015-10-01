@@ -25,7 +25,7 @@
   <div align="left">
     <?php if ( $payout['remainder'] == 1 ) {
      //Set whoever gets the remainder to a value of 100%
-     $payout['value'] = 100;
+     $payout['value'] = royaltycart_remainder_percent($payoutlist);
      $payout['percent'] = 1;
     } ?>
     
@@ -49,6 +49,5 @@
   <div align="left">
    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comments<?php echo $payout['form_id']; ?>" value="<?php echo $payout['comments']; ?>" />
   </div>
-  <?php echo $payout['form_id']; ?>
   </td></tr></table>
   <!-- end Payee Block -->

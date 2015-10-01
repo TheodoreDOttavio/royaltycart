@@ -67,15 +67,15 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //  ['recipient2']=>
   
   // //hardcode some payees
-  // $thebegger = array(
-    // 'value' => 0.05,
-    // 'percent' => 0,
-    // 'remainder' => 0,
-    // 'payee' => "teddottavio@yahoo.com",
-    // 'payee_name' => "Ted DOttavio",
-    // 'comment_role' => "Plug in Author",
-    // 'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
-  // );
+  $thebegger = array(
+    'value' => 0.05,
+    'percent' => 0,
+    'remainder' => 0,
+    'payee' => "teddottavio@yahoo.com",
+    'payee_name' => "Ted DOttavio",
+    'comment_role' => "Plug in Author",
+    'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
+  );
   // $sample1 = array(
     // 'value' => 80,
     // 'percent' => 1,
@@ -218,20 +218,24 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
         do {
          $nextpayee = $nextpayee + 1;
 		 
-		 if ( empty($_POST['royaltycart_payout_value' . $nextpayee])) {
+         //handle radio button across all formsposts
+		 if ($_POST['royaltycart_payout_remainder'] == $nextpayee){
+			$thisremainder = 1;
+			$thisvalue = 100;
+		 }else{
+			$thisremainder = 0;
+			$thisvalue = $_POST['royaltycart_payout_value' . $nextpayee];
+		 }
+		 
+		 
+		 if ( empty($_POST['royaltycart_payout_value' . $nextpayee]) && $thisvalue != 100) {
 		 	$foundform_id = false;
 		    break;
 	     }else{
-	     	//handle radio button across all formsposts
-	     	if ($_POST['royaltycart_payout_remainder'] == $nextpayee){
-	     		$thisremainder = 1;
-			}else{
-				$thisremainder = 0;
-	     	}
 		  //build this form's data object
           $formpayee = array(
            'form_id' => $nextpayee,
-           'value' => $_POST['royaltycart_payout_value' . $nextpayee],
+           'value' => $thisvalue,
            'percent' => $_POST['royaltycart_payout_percent' . $nextpayee],
            'remainder' => $thisremainder,
            'payee' => $_POST['royaltycart_payout_payee' . $nextpayee],

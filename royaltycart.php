@@ -118,4 +118,18 @@ function array_sort($array, $on, $order=SORT_ASC){
     }
     return $new_array;
 }
+
+
+function royaltycart_remainder_percent($payoutlist){
+	//add up percents - skip remainder
+	$totalpercentpaidout = 0;
+	foreach($payoutlist as $payout){
+		if ($payout['remainder'] == 0){
+			if ($payout['percent'] == 1){
+				$totalpercentpaidout = $totalpercentpaidout + $payout['value'];
+			}
+		}
+	}
+	return 100-$totalpercentpaidout;
+}
 ?>
