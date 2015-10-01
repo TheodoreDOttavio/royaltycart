@@ -17,6 +17,8 @@
       }
       echo " to "; 
   	  echo ($payout['payee_name']. " - " . $payout['comment_role']); ?>
+  	  <input type='checkbox' name = 'royaltycart_payout_remove<?php echo $payout['form_id']; ?>' 
+       id = 'royaltycart_payout_remove<?php echo $payout['form_id']; ?>' value="1">Delete Payee
     </div>
   </td><td>
   <div align="left">
