@@ -9,9 +9,25 @@ defined( 'ABSPATH' ) or die( 'No script!' );
    <input type="text" size="60" class="rctextinput" name="royaltycart_product_name" value="<?php echo $product_name; ?>" />
  </div>
 
- <div class="rcdescription">Use this shortcode for an 'add to cart' button</div>
+ <div class="rcdescription">Use this shortcode</div>
  <div align="center">
    <div class="rcinfobox">[royaltycart_purchase id=<?php echo $product_id;?>]</div>
+  <?php
+ switch ($priceing['display']) {
+  case '0':
+   include 'royaltycart_product_addtocart0.php';
+   break;
+  case '1':
+   include 'royaltycart_product_addtocart1.php';
+   break;
+  case '2':
+   include 'royaltycart_product_addtocart2.php';
+   break;
+  case '3':
+   include 'royaltycart_product_addtocart3.php';
+   break;
+ };
+ ?>
  </div>
 </div>
 
@@ -43,35 +59,11 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 </div>
 
 <div class="rctitle">Payments</div>
-  <!-- Payee Block -->
-  <table><tr><td width="50%">
-  	<div class="rccontent">
-  	  <?php if ($payout['percent']){
-  	  	echo $payout['value'];
-  	  	echo "%";
-	  }else{
-	  	echo "$";
-		echo $payout['value'];
-	  } ?> to 
-  	  <?php echo ($payout['payee_name']. " - " . $payout['comment_role']); ?>
-    </div>
-  </td><td>
-  <div align="left">
-    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee_name" value="<?php echo $payout['payee_name']; ?>" />
-  </div>
-  <div align="left">
-    <input type="text" size="20" class="rctextinputsmall" name="royaltycart_payout_value" value="<?php echo $payout['value']; ?>" />
-    <input type='checkbox' name='royaltycart_payout_percent' "checked">Percentage
-    <input type="text" size="20" class="rctextinputsmall" name="royaltycart_payout_payee" value="<?php echo $payout['payee']; ?>" />
-  </div>
-  <div align="left">
-   <input type="text" size="30" class="rctextinputsmall" name="royaltycart_payout_comment_role" value="<?php echo $payout['comment_role']; ?>" />
-  </div>
-  <div align="left">
-   <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comments" value="<?php echo $payout['comments']; ?>" />
-  </div>
-  </td></tr></table>
-  <!-- end Payee Block -->
+  <?php 
+  foreach($payoutlist as $payout){
+    include 'royaltycart_product_view_payee.php';
+  };
+  ?>
 </div>
     
 
@@ -111,8 +103,6 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 </div>
 
 <div class="rcbox_plain">
- <div class="rctitle">Preview</div>
- <div class="rcdescription">This is what the shortcode will add to your site</div>
-
+ <div class="rctitle">Preview the results of a Purchase</div>
  <div class="rcdescription">Sample of payouts when this is purchased</div>
-</div>        
+</div>

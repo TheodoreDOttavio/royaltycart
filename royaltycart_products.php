@@ -56,25 +56,81 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $fileformats = get_post_meta( $royaltycart_products->ID, 'royaltycart_fileformats', true );
   
   //payout array  - determines all the people that get paid and how much.
-  //  ['1']=>Sub array; //the first person is the default for remaining percentages
+  //  ['recipient1']=>Sub array;
   //    ['value']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
   //    ['percent']=>true: false for set amounts (60% vs. $60.00)
+  //    ['remainder']=>false: One recipent gets the rest when values are less than total paid 
   //    ['payee']=>'teddottavio@gmail.com': Recipients account (email for paypal)
   //    ['payee_name']=>'Ted DOttavio': Name for display
   //    ['comment_role']=>'Producer': Recipients title or role
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
-  //  ['2']=>
+  //  ['recipient2']=>
   
   //create an empty payee
   $emptypayee = array(
-    'value' => 5,
+    'value' => 0,
     'percent' => 1,
+    'remainder'=> 0,
+    'payee' => "email",
+    'payee_name' => "No Name",
+    'comment_role' => "",
+    'comments' => ""
+  );
+  $thebegger = array(
+    'value' => 0.05,
+    'percent' => 0,
+    'remainder' => 0,
     'payee' => "teddottavio@yahoo.com",
     'payee_name' => "Ted DOttavio",
     'comment_role' => "Plug in Author",
     'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
   );
-  $payout = $emptypayee; //get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  $sample1 = array(
+    'value' => 80,
+    'percent' => 1,
+    'remainder' => 1,
+    'payee' => "teddottavio@yahoo.com",
+    'payee_name' => "Joe Smith",
+    'comment_role' => "Producer",
+    'comments' => ""
+  );
+  $sample2 = array(
+    'value' => 10,
+    'percent' => 1,
+    'remainder' => 0,
+    'payee' => "ashley@yahoo.com",
+    'payee_name' => "Ashley",
+    'comment_role' => "Lead Actress",
+    'comments' => ""
+  );
+  $sample3 = array(
+    'value' => 10,
+    'percent' => 1,
+    'remainder' => 0,
+    'payee' => "brian@yahoo.com",
+    'payee_name' => "Brian",
+    'comment_role' => "Lead Actor",
+    'comments' => ""
+  );
+  $sample4 = array(
+    'value' => 20,
+    'percent' => 1,
+    'remainder' => 0,
+    'payee' => "teddottavio@yahoo.com",
+    'payee_name' => "Richard",
+    'comment_role' => "Wardrobe",
+    'comments' => ""
+  );
+  $payoutlist = array(
+    'recipient1' => $sample1,
+    'recipient2' => $sample2,
+    'recipient3' => $sample3,
+    'recipient4' => $sample4,
+    'recipient5' => $thebegger,
+    'recipient6' => $emptypayee,
+  );
+  $payoutlist = array_sort($payoutlist, 'value', SORT_DESC);
+  //$payout = $emptypayee; //get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
   // if ( empty($payout['0'])) {
       // $nextpayee = 1;
       // $payout = array ($nextpayee => $emptypayee);
@@ -128,7 +184,10 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		//Priceing Save and update
 		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
        	  if ($_POST['royaltycart_priceing_price_list'] != ''){
-       	    $newpriceing['price_list'] = $_POST['royaltycart_priceing_price_list'];
+       	    //sort the list
+       	      $pricearry = explode(" ", $_POST['royaltycart_priceing_price_list']);
+              sort($pricearry);
+       	    $newpriceing['price_list'] = implode(" ", $pricearry);
           }else{
 		    $newpriceing['price_list'] = "1 10 15 20";
        	  }
