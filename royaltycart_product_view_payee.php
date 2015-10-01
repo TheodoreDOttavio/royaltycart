@@ -36,9 +36,9 @@
     >%
     
     or remainder <input type = "radio"
-    name = "royaltycart_payout_remainder<?php echo $payout['form_id']; ?>" 
-    id = "royaltycart_payout_remainder<?php echo $payout['form_id']; ?>" 
-    value="1" 
+    name = "royaltycart_payout_remainder" 
+    id = "royaltycart_payout_remainder" 
+    value="<?php echo $payout['form_id']; ?>" 
     <?php if ( $payout['remainder'] == 1 ) { echo 'checked'; } ?> />
     
     <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee<?php echo $payout['form_id']; ?>" value="<?php echo $payout['payee']; ?>" />

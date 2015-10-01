@@ -222,11 +222,18 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		 	$foundform_id = false;
 		    break;
 	     }else{
+	     	//handle radio button across all formsposts
+	     	if ($_POST['royaltycart_payout_remainder'] == $nextpayee){
+	     		$thisremainder = 1;
+			}else{
+				$thisremainder = 0;
+	     	}
+		  //build this form's data object
           $formpayee = array(
            'form_id' => $nextpayee,
            'value' => $_POST['royaltycart_payout_value' . $nextpayee],
-           'percent' => 1, //$_POST['royaltycart_payout_percent' . $nextpayee],
-           'remainder' => 0, //$_POST['royaltycart_payout_remainder' . $nextpayee],
+           'percent' => $_POST['royaltycart_payout_percent' . $nextpayee],
+           'remainder' => $thisremainder,
            'payee' => $_POST['royaltycart_payout_payee' . $nextpayee],
            'payee_name' => $_POST['royaltycart_payout_payee_name' . $nextpayee],
            'comment_role' => $_POST['royaltycart_payout_comment_role' . $nextpayee],
