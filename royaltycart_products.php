@@ -66,77 +66,87 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
   //  ['recipient2']=>
   
+  // //hardcode some payees
+  // $thebegger = array(
+    // 'value' => 0.05,
+    // 'percent' => 0,
+    // 'remainder' => 0,
+    // 'payee' => "teddottavio@yahoo.com",
+    // 'payee_name' => "Ted DOttavio",
+    // 'comment_role' => "Plug in Author",
+    // 'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
+  // );
+  // $sample1 = array(
+    // 'value' => 80,
+    // 'percent' => 1,
+    // 'remainder' => 1,
+    // 'payee' => "teddottavio@yahoo.com",
+    // 'payee_name' => "Joe Smith",
+    // 'comment_role' => "Producer",
+    // 'comments' => ""
+  // );
+  // $sample2 = array(
+    // 'value' => 10,
+    // 'percent' => 1,
+    // 'remainder' => 0,
+    // 'payee' => "ashley@yahoo.com",
+    // 'payee_name' => "Ashley",
+    // 'comment_role' => "Lead Actress",
+    // 'comments' => ""
+  // );
+  // $sample3 = array(
+    // 'value' => 10,
+    // 'percent' => 1,
+    // 'remainder' => 0,
+    // 'payee' => "brian@yahoo.com",
+    // 'payee_name' => "Brian",
+    // 'comment_role' => "Lead Actor",
+    // 'comments' => ""
+  // );
+  // $sample4 = array(
+    // 'value' => 20,
+    // 'percent' => 1,
+    // 'remainder' => 0,
+    // 'payee' => "teddottavio@yahoo.com",
+    // 'payee_name' => "Richard",
+    // 'comment_role' => "Wardrobe",
+    // 'comments' => ""
+  // );
+  // $payoutlist = array(
+    // 'recipient1' => $sample1,
+    // 'recipient2' => $sample2,
+    // 'recipient3' => $sample3,
+    // 'recipient4' => $sample4,
+    // 'recipient5' => $thebegger
+  // );
+  
+  //$payoutlist = array();
+  //pull list in from data, sort it and here ID is just an ordering so reset it.
+  $getpayoutlist = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  
+  $getpayoutlist = array_sort($getpayoutlist, 'value', SORT_DESC);
+  
+  $nextpayee = 1;
+  foreach($getpayoutlist as $getpayee){
+  	$getpayee['form_id'] = $nextpayee;
+  	$payoutlist['recipient' . $nextpayee] = $getpayee;
+	$nextpayee = $nextpayee + 1;
+  }
+  
   //create an empty payee
   $emptypayee = array(
+    'form_id' => $nextpayee,
     'value' => 0,
     'percent' => 1,
     'remainder'=> 0,
     'payee' => "email",
-    'payee_name' => "No Name",
+    'payee_name' => "No Name " . $nextpayee,
     'comment_role' => "",
     'comments' => ""
   );
-  $thebegger = array(
-    'value' => 0.05,
-    'percent' => 0,
-    'remainder' => 0,
-    'payee' => "teddottavio@yahoo.com",
-    'payee_name' => "Ted DOttavio",
-    'comment_role' => "Plug in Author",
-    'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
-  );
-  $sample1 = array(
-    'value' => 80,
-    'percent' => 1,
-    'remainder' => 1,
-    'payee' => "teddottavio@yahoo.com",
-    'payee_name' => "Joe Smith",
-    'comment_role' => "Producer",
-    'comments' => ""
-  );
-  $sample2 = array(
-    'value' => 10,
-    'percent' => 1,
-    'remainder' => 0,
-    'payee' => "ashley@yahoo.com",
-    'payee_name' => "Ashley",
-    'comment_role' => "Lead Actress",
-    'comments' => ""
-  );
-  $sample3 = array(
-    'value' => 10,
-    'percent' => 1,
-    'remainder' => 0,
-    'payee' => "brian@yahoo.com",
-    'payee_name' => "Brian",
-    'comment_role' => "Lead Actor",
-    'comments' => ""
-  );
-  $sample4 = array(
-    'value' => 20,
-    'percent' => 1,
-    'remainder' => 0,
-    'payee' => "teddottavio@yahoo.com",
-    'payee_name' => "Richard",
-    'comment_role' => "Wardrobe",
-    'comments' => ""
-  );
-  $payoutlist = array(
-    'recipient1' => $sample1,
-    'recipient2' => $sample2,
-    'recipient3' => $sample3,
-    'recipient4' => $sample4,
-    'recipient5' => $thebegger,
-    'recipient6' => $emptypayee,
-  );
-  $payoutlist = array_sort($payoutlist, 'value', SORT_DESC);
-  //$payout = $emptypayee; //get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
-  // if ( empty($payout['0'])) {
-      // $nextpayee = 1;
-      // $payout = array ($nextpayee => $emptypayee);
-  // }else {
-      // //$payout = ($nextpayee => $emptypayee);
-  // }
+  
+  $payoutlist['recipient' . $nextpayee] = $emptypayee;
+
 
 
   //priceing array - determines what is charged for the download
@@ -197,12 +207,39 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 	    }else{
 	      $newpriceing['display'] = "1";
         }
-	    update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
+        update_post_meta( $product_id, 'royaltycart_priceing', $newpriceing );
 		
-		//Payments save and update
-		//if ( isset( $_POST['royaltycart_payout'] ) && $_POST['royaltycart_payout'] != '' ) {
-        //    update_post_meta( $product_id, 'royaltycart_payout', $_POST['royaltycart_payout'] );
-        //}
+		
+        //Payments save and update
+        //generate $payoutlist object
+        $payoutlist = array();
+        $nextpayee = 0;
+		$foundform_id = true;
+        do {
+         $nextpayee = $nextpayee + 1;
+		 
+		 if ( empty($_POST['royaltycart_payout_value' . $nextpayee])) {
+		 	$foundform_id = false;
+		    break;
+	     }else{
+          $formpayee = array(
+           'form_id' => $nextpayee,
+           'value' => $_POST['royaltycart_payout_value' . $nextpayee],
+           'percent' => 1, //$_POST['royaltycart_payout_percent' . $nextpayee],
+           'remainder' => 0, //$_POST['royaltycart_payout_remainder' . $nextpayee],
+           'payee' => $_POST['royaltycart_payout_payee' . $nextpayee],
+           'payee_name' => $_POST['royaltycart_payout_payee_name' . $nextpayee],
+           'comment_role' => $_POST['royaltycart_payout_comment_role' . $nextpayee],
+           'comments' => $_POST['royaltycart_payout_comments' . $nextpayee]
+          );
+		  $payoutlist['recipient' . $nextpayee] = $formpayee;
+		 }
+		 
+        } while ($foundform_id = true);
+		
+        update_post_meta( $product_id, 'royaltycart_payout', $payoutlist );
+
+
         
         //File Formats save and update
         if ( isset( $_POST['royaltycart_basefile'] ) && $_POST['royaltycart_basefile'] != '' ) {

@@ -20,32 +20,35 @@
     </div>
   </td><td>
   <div align="left">
-    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee_name" value="<?php echo $payout['payee_name']; ?>" />
+    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee_name<?php echo $payout['form_id']; ?>" value="<?php echo $payout['payee_name']; ?>" />
   </div>
   <div align="left">
-    <!-- Set whoever gets the remainder to a value od 100% -->
     <?php if ( $payout['remainder'] == 1 ) {
+     //Set whoever gets the remainder to a value of 100%
      $payout['value'] = 100;
      $payout['percent'] = 1;
     } ?>
     
-    <input type="text" size="6" class="rctextinputsmall" name="royaltycart_payout_value" value="<?php echo $payout['value']; ?>" />
-    <input type='checkbox' name='royaltycart_payout_percent' 
-    <?php if($payout['percent'] == 1){echo(" checked = '1' "); } ?>
+    <input type="text" size="6" class="rctextinputsmall" name="royaltycart_payout_value<?php echo $payout['form_id']; ?>" value="<?php echo $payout['value']; ?>" />
+    <input type='checkbox' name = 'royaltycart_payout_percent<?php echo $payout['form_id']; ?>' 
+    id = 'royaltycart_payout_percent<?php echo $payout['form_id']; ?>'
+    value="1" <?php if($payout['percent'] == 1){echo(" checked = '1' "); } ?>
     >%
     
     or remainder <input type = "radio"
-    name = "royaltycart_payout_remainder"
-    value = "1"
+    name = "royaltycart_payout_remainder<?php echo $payout['form_id']; ?>" 
+    id = "royaltycart_payout_remainder<?php echo $payout['form_id']; ?>" 
+    value="1" 
     <?php if ( $payout['remainder'] == 1 ) { echo 'checked'; } ?> />
     
-    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee" value="<?php echo $payout['payee']; ?>" />
+    <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_payee<?php echo $payout['form_id']; ?>" value="<?php echo $payout['payee']; ?>" />
   </div>
   <div align="left">
-   <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comment_role" value="<?php echo $payout['comment_role']; ?>" />
+   <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comment_role<?php echo $payout['form_id']; ?>" value="<?php echo $payout['comment_role']; ?>" />
   </div>
   <div align="left">
-   <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comments" value="<?php echo $payout['comments']; ?>" />
+   <input type="text" size="60" class="rctextinputsmall" name="royaltycart_payout_comments<?php echo $payout['form_id']; ?>" value="<?php echo $payout['comments']; ?>" />
   </div>
+  <?php echo $payout['form_id']; ?>
   </td></tr></table>
   <!-- end Payee Block -->
