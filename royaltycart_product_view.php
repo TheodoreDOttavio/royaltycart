@@ -110,8 +110,23 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <div class="rcbox_plain">
  <div class="rctitle">Preview the results of a Purchase</div>
   <div align = "center">
+  	<div class="rcdescription">Lowest Payment</div>
   <?php 
-  foreach($payoutlist as $payout){
+  foreach($payments_low as $payment){
+    include 'royaltycart_product_preview_payout.php';
+  };
+  ?>
+  
+  <div class="rcdescription">Suggested Payment</div>
+    <?php 
+  foreach($payments_med as $payment){
+    include 'royaltycart_product_preview_payout.php';
+  };
+  ?>
+  
+  <div class="rcdescription">High Payment</div>
+    <?php 
+  foreach($payments_hign as $payment){
     include 'royaltycart_product_preview_payout.php';
   };
   ?>

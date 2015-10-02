@@ -3,7 +3,9 @@
 <table width = "400"><tr><td width = "15%" align = "right">
 <div class="rccontent">
   <?php 
-  if ( $payout['remainder'] != 1 ) {
+  if ( $payout['remainder'] == 1 ) {
+  	echo (royaltycart_remainder_percent($payoutlist) . "%");
+  }else{
     
     if ($payout['percent']){
       echo $payout['value'];

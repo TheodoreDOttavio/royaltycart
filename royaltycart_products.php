@@ -134,6 +134,11 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   $pricearry = explode(" ", $priceing['price_list']);
   sort($pricearry);
   
+  	//send a list of payments
+	$payments_low = royaltycart_process_payouts($payoutlist, $pricearry[0]);
+	$payments_med = royaltycart_process_payouts($payoutlist, $pricearry[1]);
+	$payments_high = royaltycart_process_payouts($payoutlist, $pricearry[2]);
+  
   //List out available product files
   $rcproductdir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/*.*";
   $rcfilelisttmp = array();

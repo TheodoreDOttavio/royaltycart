@@ -132,4 +132,82 @@ function royaltycart_remainder_percent($payoutlist){
 	}
 	return 100-$totalpercentpaidout;
 }
+
+
+function royaltycart_process_payouts($payoutlist, $received){
+  //Prepare a list of arrays - Min is $0.02
+  //Deduct $ amounts before percentages, then give the remainder to one name
+	//payments array  - determines all the people that get paid and how much.
+    //  ['recipient1']=>Sub array;
+    //    ['amount']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
+    //    ['payee']=>'teddottavio@gmail.com': Recipients account (email for paypal)
+    //    ['payee_name']=>'Ted DOttavio': Name for display
+    //    ['comment_role']=>'Producer': Recipients title or role
+    //  ['recipient2']=>
+
+  //Cash deductions
+  foreach ($payoutlist as $payout){
+  	if ($payout['remainder'] == 0){
+  	  if ($payout['percent'] == 0){
+  	  	//deduct from amount
+  	  	$received = $received - $payout['value'];
+  	  	//set the amount into resulting array
+  	  	$newpayee = array(
+  	  	  'amount' => $payout['value'],
+  	  	  'payee' => $payout['payee'],
+  	  	  'payee_name' => $payout['payee_name'],
+  	  	  'comment_role' => $payout['comment_role']
+  	  	);
+   
+  	  	$payments['recipient'.$payout['rclistindex']] = $newpayee;
+	  }
+	}
+  }
+  
+  $totalpercentagesgoingout = 0;
+  
+  //percent deductions
+  foreach ($payoutlist as $payout){
+  	if ($payout['remainder'] == 0){
+  	  if ($payout['percent'] == 1){
+  	  	$amount = (.01 * $payout['value']) * $received;
+  	  	if ($amount < .02){$amount = 0.02;}
+		
+  	  	//to deduct from amount
+  	  	$totalpercentagesgoingout .= $amount;
+		
+  	  	//set the amount into resulting array
+  	  	$newpayee = array(
+  	  	  'amount' => $amount,
+  	  	  'payee' => $payout['payee'],
+  	  	  'payee_name' => $payout['payee_name'],
+  	  	  'comment_role' => $payout['comment_role']
+  	  	);
+   
+  	  	$payments['recipient'.$payout['rclistindex']] = $newpayee;
+	  }
+	}
+  }
+  
+  $received = $received - $totalpercentagesgoingout;
+  
+  //now go through and find the primary recipient
+  foreach ($payoutlist as $payout){
+  	if ($payout['remainder'] == 1){
+  	  	//set the amount into resulting array
+  	  	$newpayee = array(
+  	  	  'amount' => $received,
+  	  	  'payee' => $payout['payee'],
+  	  	  'payee_name' => $payout['payee_name'],
+  	  	  'comment_role' => $payout['comment_role']
+  	  	);
+  	  	$payments['recipient'.$payout['rclistindex']] = $newpayee;
+	  }
+
+  }
+  
+  $payments = array_sort($payments, 'amount', SORT_DESC);
+  
+  return $payments;
+}
 ?>
