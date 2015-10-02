@@ -59,9 +59,14 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 </div>
 
 <div class="rctitle">Payments</div>
+  <div align = "center">
   <?php 
   foreach($payoutlist as $payout){
     include 'royaltycart_product_view_payee.php';
+  };
+  echo("</div><div class='rcdescription'>Edit Payees</div>");
+  foreach($payoutlist as $payout){
+    include 'royaltycart_product_edit_payee.php';
   };
   ?>
 </div>
@@ -104,5 +109,11 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 <div class="rcbox_plain">
  <div class="rctitle">Preview the results of a Purchase</div>
- <div class="rcdescription">Sample of payouts when this is purchased</div>
+  <div align = "center">
+  <?php 
+  foreach($payoutlist as $payout){
+    include 'royaltycart_product_preview_payout.php';
+  };
+  ?>
+  </div>
 </div>

@@ -89,8 +89,8 @@ function royaltycart_product_review_meta_box($royaltycart_products){
     'percent' => 0,
     'remainder' => 0,
     'payee' => "teddottavio@yahoo.com",
-    'payee_name' => "Ted DOttavio",
-    'comment_role' => "Software Developer",
+    'payee_name' => "Royalty Cart",
+    'comment_role' => "Software Donation",
     'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
    );
    

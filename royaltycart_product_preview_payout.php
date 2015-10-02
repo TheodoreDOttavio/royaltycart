@@ -3,7 +3,9 @@
 <table width = "400"><tr><td width = "15%" align = "right">
 <div class="rccontent">
   <?php 
-  if ( $payout['remainder'] != 1 ) {
+  if ( $payout['remainder'] == 1 ) {
+    echo "Remainder";
+  }else{
     
     if ($payout['percent']){
       echo $payout['value'];
@@ -19,10 +21,7 @@
   
   echo "</div></td><td width = '20%'><div class='rccontent'>"; 
   
-  if ( $payout['remainder'] != 1 ) {
-    echo ("<input type='checkbox' name = 'royaltycart_payout_remove" . $payout['rclistindex'] ."'");
-    echo ("id = 'royaltycart_payout_remove" . $payout['rclistindex'] . "' value='1' >Delete");
-  }
+
 
   echo ("</div></td></tr></table><!-- end View Payee Block -->");
 } ?>
