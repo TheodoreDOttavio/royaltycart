@@ -66,7 +66,25 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //    ['comments']=>'Brought everyone together': Additional comments abut payee
   //  ['recipient2']=>
   
-  $thebegger = array(
+  //pull list in from data, sort it and here ID is just an ordering so reset it.
+  $nextpayee = 1;
+  $getpayoutlist = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+  
+  if (empty($getpayoutlist)){
+   $theowner = array(
+    'rclistindex' => $nextpayee,
+    'value' => 100,
+    'percent' => 1,
+    'remainder' => 1,
+    'payee' => "Paypall Email",
+    'payee_name' => "Name",
+    'comment_role' => "Primary Recipient",
+    'comments' => ""
+   );
+   $payoutlist['recipient' . $nextpayee] = $theowner;
+   $nextpayee = $nextpayee + 1;
+   $thebegger = array(
+    'rclistindex' => $nextpayee,
     'value' => 0.05,
     'percent' => 0,
     'remainder' => 0,
@@ -74,39 +92,33 @@ function royaltycart_product_review_meta_box($royaltycart_products){
     'payee_name' => "Ted DOttavio",
     'comment_role' => "Software Developer",
     'comments' => "Thank you for using this plug in. Leave this here if you would like to donate"
-  );
- 
-  //pull list in from data, sort it and here ID is just an ordering so reset it.
-  $getpayoutlist = get_post_meta( $royaltycart_products->ID, 'royaltycart_payout', true );
+   );
+   
+   $payoutlist['recipient' . $nextpayee] = $thebegger;
+   $nextpayee = $nextpayee + 1;
+  }else{
+   $getpayoutlist = array_sort($getpayoutlist, 'value', SORT_DESC);
   
-  $getpayoutlist = array_sort($getpayoutlist, 'value', SORT_DESC);
-  
-  $nextpayee = 1;
-  foreach($getpayoutlist as $getpayee){
-  	$getpayee['form_id'] = $nextpayee;
-  	$payoutlist['recipient' . $nextpayee] = $getpayee;
-	$nextpayee = $nextpayee + 1;
+   foreach($getpayoutlist as $getpayee){
+    $getpayee['rclistindex'] = $nextpayee;
+    $payoutlist['recipient' . $nextpayee] = $getpayee;
+    $nextpayee = $nextpayee + 1;
+   }
   }
   
-  if ($nextpayee = 1){
-  	$payoutlist['recipient' . $nextpayee] = $thebegger;
-	$nextpayee = $nextpayee + 1;
-  }
+    //create an empty payee
+    $emptypayee = array(
+     'rclistindex' => $nextpayee,
+     'value' => 0,
+     'percent' => 1,
+     'remainder'=> 0,
+     'payee' => "Paypall Email",
+     'payee_name' => "Add a Recipient",
+     'comment_role' => "Role or Title",
+     'comments' => ""
+    );
   
-  //create an empty payee
-  $emptypayee = array(
-    'form_id' => $nextpayee,
-    'value' => 0,
-    'percent' => 1,
-    'remainder'=> 0,
-    'payee' => "email",
-    'payee_name' => "No Name " . $nextpayee,
-    'comment_role' => "",
-    'comments' => ""
-  );
-  
-  $payoutlist['recipient' . $nextpayee] = $emptypayee;
-
+    $payoutlist['recipient' . $nextpayee] = $emptypayee;
 
 
   //priceing array - determines what is charged for the download
@@ -145,11 +157,13 @@ function royaltycart_product_review_meta_box($royaltycart_products){
 
 
 function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
+	// Store data in post meta table if present in post data
     if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
-        // Store data in post meta table if present in post data
+        //Product Name
         if ( isset( $_POST['royaltycart_product_name'] ) && $_POST['royaltycart_product_name'] != '' ) {
             update_post_meta( $product_id, 'royaltycart_product_name', $_POST['royaltycart_product_name'] );
         }
+
 
 		//Priceing Save and update
 		if ( isset( $_POST['royaltycart_priceing_price_list'] ) ) {
@@ -171,34 +185,36 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
 		
 		
         //Payments save and update
-        //generate $payoutlist object
-        $payoutlist = array();
+          //generate $payoutlist object
         $nextpayee = 0;
-		$foundform_id = true;
+		
         do {
          $nextpayee = $nextpayee + 1;
-		 $thisvalue = 0;
 		 
-         //handle radio button across all formsposts
-         if (isset($_POST['royaltycart_payout_remainder'])){
-		 if ($_POST['royaltycart_payout_remainder'] == $nextpayee){
-			$thisremainder = 1;
-			$thisvalue = 100;
-		 }else{
-			$thisremainder = 0;
-			$thisvalue = $_POST['royaltycart_payout_value' . $nextpayee];
-		 }
-		 }
-		 
-		 
-		 if ( empty($_POST['royaltycart_payout_value' . $nextpayee]) && $thisvalue != 100) {
-		 	$foundform_id = false;
-		    break;
-	     }else{
+          //handle radio button across all formsposts
+          if ($_POST['royaltycart_payout_remainder'] == $nextpayee){
+            $thisremainder = 1;
+			$rcvalue = 100;
+          }else{
+            $thisremainder = 0;
+			$rcvalue = $_POST['royaltycart_payout_value' . $nextpayee];
+          }
+          
+		  //line 188 crashes on a new post.
+		  //ok... how about a hidden field of the last index# to break?
+		  //  then there would have to be a test to update so the empty on the end is not included.
+		  // Basically using the radio buttons leaves value as 0 - so what? 
+		  //  maybe add a primary recipient when the beggar is added?
+		  if ( empty($_POST['royaltycart_payout_value'.$nextpayee]) ) {
+		  	if ($rcvalue != 100){
+             break;
+			}
+		  }
+		  
 		  //build this form's data object
           $formpayee = array(
-           'form_id' => $nextpayee,
-           'value' => $thisvalue,
+           'rclistindex' => $nextpayee,
+           'value' => $rcvalue,
            'percent' => $_POST['royaltycart_payout_percent' . $nextpayee],
            'remainder' => $thisremainder,
            'payee' => $_POST['royaltycart_payout_payee' . $nextpayee],
@@ -206,13 +222,11 @@ function royaltycart_cart_save_products( $product_id, $royaltycart_products ) {
            'comment_role' => $_POST['royaltycart_payout_comment_role' . $nextpayee],
            'comments' => $_POST['royaltycart_payout_comments' . $nextpayee]
           );
-		  $payoutlist['recipient' . $nextpayee] = $formpayee;
-		 }
-		 
-        } while ($foundform_id = true);
+		  
+          $payoutlist['recipient' . $nextpayee] = $formpayee;
+        } while ($nextpayee < 100);
 		
         update_post_meta( $product_id, 'royaltycart_payout', $payoutlist );
-
 
         
         //File Formats save and update
