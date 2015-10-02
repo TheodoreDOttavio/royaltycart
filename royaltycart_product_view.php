@@ -110,23 +110,23 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 <div class="rcbox_plain">
  <div class="rctitle">Preview the results of a Purchase</div>
   <div align = "center">
-  	<div class="rcdescription">Lowest Payment</div>
+  	<div class="rcdescription">$<?php echo ($pricearry[0]); ?> Donated</div>
   <?php 
   foreach($payments_low as $payment){
     include 'royaltycart_product_preview_payout.php';
   };
   ?>
   
-  <div class="rcdescription">Suggested Payment</div>
+  <div class="rcdescription">$<?php echo ($pricearry[1]); ?> Donated</div>
     <?php 
   foreach($payments_med as $payment){
     include 'royaltycart_product_preview_payout.php';
   };
   ?>
   
-  <div class="rcdescription">High Payment</div>
+  <div class="rcdescription">$<?php echo ($pricearry[count($pricearry)-1]); ?> Donated</div>
     <?php 
-  foreach($payments_hign as $payment){
+  foreach($payments_high as $payment){
     include 'royaltycart_product_preview_payout.php';
   };
   ?>

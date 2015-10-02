@@ -144,14 +144,16 @@ function royaltycart_process_payouts($payoutlist, $received){
     //    ['payee_name']=>'Ted DOttavio': Name for display
     //    ['comment_role']=>'Producer': Recipients title or role
     //  ['recipient2']=>
+  $totalgoingout = 0;
 
   //Cash deductions
   foreach ($payoutlist as $payout){
   	if ($payout['remainder'] == 0){
   	  if ($payout['percent'] == 0){
   	  	//deduct from amount
-  	  	$received = $received - $payout['value'];
+  	  	$totalgoingout += $payout['value'];
   	  	//set the amount into resulting array
+  	  	if ($payout['value'] >0){
   	  	$newpayee = array(
   	  	  'amount' => $payout['value'],
   	  	  'payee' => $payout['payee'],
@@ -160,11 +162,10 @@ function royaltycart_process_payouts($payoutlist, $received){
   	  	);
    
   	  	$payments['recipient'.$payout['rclistindex']] = $newpayee;
+		}
 	  }
 	}
   }
-  
-  $totalpercentagesgoingout = 0;
   
   //percent deductions
   foreach ($payoutlist as $payout){
@@ -174,9 +175,10 @@ function royaltycart_process_payouts($payoutlist, $received){
   	  	if ($amount < .02){$amount = 0.02;}
 		
   	  	//to deduct from amount
-  	  	$totalpercentagesgoingout .= $amount;
+  	  	$totalgoingout += $amount;
 		
   	  	//set the amount into resulting array
+  	  	if ($payout['value'] >0){
   	  	$newpayee = array(
   	  	  'amount' => $amount,
   	  	  'payee' => $payout['payee'],
@@ -185,18 +187,17 @@ function royaltycart_process_payouts($payoutlist, $received){
   	  	);
    
   	  	$payments['recipient'.$payout['rclistindex']] = $newpayee;
+		}
 	  }
 	}
   }
-  
-  $received = $received - $totalpercentagesgoingout;
   
   //now go through and find the primary recipient
   foreach ($payoutlist as $payout){
   	if ($payout['remainder'] == 1){
   	  	//set the amount into resulting array
   	  	$newpayee = array(
-  	  	  'amount' => $received,
+  	  	  'amount' => $received - $totalgoingout,
   	  	  'payee' => $payout['payee'],
   	  	  'payee_name' => $payout['payee_name'],
   	  	  'comment_role' => $payout['comment_role']
