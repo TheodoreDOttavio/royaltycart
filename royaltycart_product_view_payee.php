@@ -1,6 +1,6 @@
 <?php if ( $payout['value'] != 0 ) {
   echo ("<!-- View Payee Block -->");
-  echo ("<table width = '400'><tr><td width = '15%' align = 'right'>");
+  echo ("<div align = 'center'><table width = '400'><tr><td width = '15%' align = 'right'>");
   echo ("<div class='rccontent'>");
 
   if ( $payout['remainder'] == 1 ) {
@@ -26,6 +26,6 @@
     echo ("id = 'royaltycart_product_payout_remove" . $payout['rclistindex'] . "' value='1' >Delete");
   }
 
-  echo ("</div></td></tr></table>");
+  echo ("</div></td></tr></table></div>");
   echo ("<!-- End View Payee Block -->");
 } ?>

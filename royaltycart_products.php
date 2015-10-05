@@ -288,12 +288,14 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
 
 
 function royaltycart_delete_product($product_id){
-  $mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . '/';
+  $mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id;
 
   if (! is_dir($mydir)) {
     throw new InvalidArgumentException("$dirPath must be a directory");
   }
-
+  if (substr($mydir, strlen($mydir) - 1, 1) != '/') {
+    $mydir .= '/';
+  }
   $files = glob($mydir . '*', GLOB_MARK);
   foreach ($files as $file) {
     unlink($file);
