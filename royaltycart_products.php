@@ -365,7 +365,7 @@ function royaltycart_products_display_columns( $columns )
 {
     unset( $columns['comments'] );
 	unset( $columns['date'] );
-	$columns['title'] = "Product ID";
+	$columns['title'] = "Product Name";
     //$columns['royaltycart_product_name'] = "Product Name";
     $columns['royaltycart_product_shortcode'] = "Display Shortcode";
     $columns['date'] = "Date";
