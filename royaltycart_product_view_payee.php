@@ -1,8 +1,8 @@
-<?php if ( $payout['value'] != 0 ) {?>
-<!-- View Payee Block -->
-<table width = "400"><tr><td width = "15%" align = "right">
-<div class="rccontent">
-  <?php 
+<?php if ( $payout['value'] != 0 ) {
+  echo ("<!-- View Payee Block -->");
+  echo ("<table width = '400'><tr><td width = '15%' align = 'right'>");
+  echo ("<div class='rccontent'>");
+
   if ( $payout['remainder'] == 1 ) {
   	echo (royaltycart_remainder_percent($payoutlist) . "%");
   }else{
@@ -22,9 +22,10 @@
   echo "</div></td><td width = '20%'><div class='rccontent'>"; 
   
   if ( $payout['remainder'] != 1 ) {
-    echo ("<input type='checkbox' name = 'royaltycart_payout_remove" . $payout['rclistindex'] ."'");
-    echo ("id = 'royaltycart_payout_remove" . $payout['rclistindex'] . "' value='1' >Delete");
+    echo ("<input type='checkbox' name = 'royaltycart_product_payout_remove" . $payout['rclistindex'] ."'");
+    echo ("id = 'royaltycart_product_payout_remove" . $payout['rclistindex'] . "' value='1' >Delete");
   }
 
-  echo ("</div></td></tr></table><!-- end View Payee Block -->");
+  echo ("</div></td></tr></table>");
+  echo ("<!-- End View Payee Block -->");
 } ?>

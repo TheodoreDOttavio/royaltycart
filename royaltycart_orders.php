@@ -182,4 +182,8 @@ function royaltycart_customize_order_link( $permalink, $post ) {
     }
     return $permalink;
 }
+
+//something that might be useful
+//// Send email to admin.
+//    wp_mail( 'admin@example.com', $subject, $message );
 ?>

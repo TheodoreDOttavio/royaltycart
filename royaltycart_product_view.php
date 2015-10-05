@@ -1,8 +1,21 @@
 <?php
 //Security measure, disallows direct access
 defined( 'ABSPATH' ) or die( 'No script!' );
-?>
 
+
+//Message box with things to do...error messages and all..
+if (!empty($messagearray)){
+  echo("<div class='rcbox_error'>");
+  echo("<div class='rcdescription'>This product is not ready to sell.</div>");
+  
+  foreach($messagearray as $message){
+   echo "<div class='rccontent'>" . $message . "</div>";
+  }
+
+  echo("</div>");
+ }
+?>
+   
 <div class="rcbox_plain">
  <div class="rctitle">Product Name</div>
  <div align="center">
@@ -13,7 +26,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
  <div align="center">
    <div class="rcinfobox">[royaltycart_purchase id=<?php echo $product_id;?>]</div>
   <?php
- switch ($priceing['display']) {
+  switch ($priceing['display']) {
   case '0':
    include 'royaltycart_product_addtocart0.php';
    break;
@@ -26,19 +39,20 @@ defined( 'ABSPATH' ) or die( 'No script!' );
   case '3':
    include 'royaltycart_product_addtocart3.php';
    break;
- };
+  };
  ?>
  </div>
 </div>
+
 
 <div class="rcbox_money">
  <div class="rctitle">Price Options</div>
  <div class="rcdescription">Seperate values with a space like this: "5 9.99 20"</div>
  <div align="center">
-   <input type="text" size="60" class="rctextinput" name="royaltycart_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
+   <input type="text" size="60" class="rctextinput" name="royaltycart_product_priceing_price_list" value="<?php echo $priceing['price_list']; ?>" />
  
  <div class="rcdescription">Display Type</div>
- <select class='rcpulldown' name="royaltycart_priceing_display">
+ <select class='rcpulldown' name="royaltycart_product_priceing_display">
    <option value="0" <?php if ( $priceing['display'] == 0 ) { echo 'Selected'; } ?> />
    Type in any amount over $ <?php echo $pricearry['0']; ?>
    </option>
@@ -56,21 +70,20 @@ defined( 'ABSPATH' ) or die( 'No script!' );
    </option>
 
  </select>
-</div>
+ </div>
 
-<div class="rctitle">Payments</div>
-  <div align = "center">
+ <div class="rctitle">Payments</div>
   <?php 
   foreach($payoutlist as $payout){
     include 'royaltycart_product_view_payee.php';
   };
-  echo("</div><div class='rcdescription'>Edit Payees</div>");
+  echo("<div class='rcdescription'>Edit Payees</div>");
   foreach($payoutlist as $payout){
     include 'royaltycart_product_edit_payee.php';
   };
   ?>
-</div>
-    
+</div>   
+
 
 <div class="rcbox_plain">
  <div class="rctitle">Available for Download</div>
@@ -87,7 +100,7 @@ defined( 'ABSPATH' ) or die( 'No script!' );
  <div class="rctitle">Add more files available with this purchase</div>
  <div class="rcdescription">Base Filename</div>
  <div align="center">
-   <input type="text" size="60" class='rctextinput' name="royaltycart_basefile" value="<?php echo $basefile; ?>" />
+   <input type="text" size="60" class='rctextinput' name="royaltycart_product_basefile" value="<?php echo $basefile; ?>" />
  </div>
  
  <div class="rcdescription">Upload Media</div>

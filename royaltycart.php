@@ -86,6 +86,25 @@ function royaltycart_add_meta_boxes()
 
 
 //tools and functions
+
+function royaltycart_messagearray_set($messagearray, $msgkey, $msgvalue){
+  $newmessagearray = array();
+  //maintain current array without the incoming key
+  if (!empty($messagearray)){
+  foreach ($messagearray as $key => $value){
+    if ($msgkey != $key) {
+      if ($value != "" ){
+        $newmessagearray[$key]=$value;
+      }
+    }
+  }
+  }
+  //add the incoming key
+  $newmessagearray[$msgkey]=$msgvalue;
+  return $newmessagearray;
+}
+
+
 function array_sort($array, $on, $order=SORT_ASC){
     $new_array = array();
     $sortable_array = array();
@@ -150,12 +169,16 @@ function royaltycart_process_payouts($payoutlist, $received){
   foreach ($payoutlist as $payout){
   	if ($payout['remainder'] == 0){
   	  if ($payout['percent'] == 0){
+  	    $amount = $payout['value'];
+        if ($amount < .02 && $amount != 0){$amount = 0.02;}
+  	  	
   	  	//deduct from amount
-  	  	$totalgoingout += $payout['value'];
+  	  	$totalgoingout += $amount;
+  	  	
   	  	//set the amount into resulting array
   	  	if ($payout['value'] >0){
   	  	$newpayee = array(
-  	  	  'amount' => $payout['value'],
+  	  	  'amount' => $amount,
   	  	  'payee' => $payout['payee'],
   	  	  'payee_name' => $payout['payee_name'],
   	  	  'comment_role' => $payout['comment_role']
@@ -172,7 +195,7 @@ function royaltycart_process_payouts($payoutlist, $received){
   	if ($payout['remainder'] == 0){
   	  if ($payout['percent'] == 1){
   	  	$amount = (.01 * $payout['value']) * $received;
-  	  	if ($amount < .02){$amount = 0.02;}
+  	  	if ($amount < .02 && $amount != 0){$amount = 0.02;}
 		
   	  	//to deduct from amount
   	  	$totalgoingout += $amount;

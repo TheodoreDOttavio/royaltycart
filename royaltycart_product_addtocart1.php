@@ -10,7 +10,7 @@
     foreach($rc_pricelist as $rc_amt){
       echo ("<option value='" . $rc_amt . "'");
         if ($rc_amt == $rc_pricelist[1]){
-          echo (" 'Selected'");
+          echo (" selected");
         }
       echo (" />$ " . $rc_amt . "</option>");
     };
