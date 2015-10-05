@@ -179,6 +179,7 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
   //Product Name
   if ( isset( $_POST['royaltycart_product_name'] ) && $_POST['royaltycart_product_name'] != '' ) {
     update_post_meta( $product_id, 'royaltycart_product_name', $_POST['royaltycart_product_name'] );
+	royaltycart_product_title_function( $product_id, esc_attr($_POST['royaltycart_product_name']) );
   }else{
     $messagearray = royaltycart_messagearray_set($messagearray, "name", "Enter a Product Name");
   }
@@ -250,19 +251,10 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
   }
 
         
-  //File Formats save and update
+  //Downloads save and update
   if ( isset( $_POST['royaltycart_product_basefile'] ) && $_POST['royaltycart_product_basefile'] != '' ) {
       update_post_meta( $product_id, 'royaltycart_product_basefile', $_POST['royaltycart_product_basefile'] );
   }
-  $allfileformats = royaltycart_fileformat_array('audio');
-  $newfileformats = array(0 => 'None');
-  foreach($allfileformats as $format){
-    $aspost = str_replace(".", "_", $format['suffix']);
-    if ( isset( $_POST['royaltycart_'.$aspost] ) ) {
-      $newfileformats[] = $format['suffix'];
-    }
-  }
-  update_post_meta( $product_id, 'royaltycart_fileformats', $newfileformats );
 
 
   if ( isset( $_FILES['rc_media_upload'] ) && $_FILES['rc_media_upload']['size'] > 0 ) {
@@ -287,6 +279,25 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
 
 
 
+function royaltycart_product_title_function( $post_id, $newtitle ){
+  //wp_update creates an infinite loop when used in save_post because it calls save post.
+  //need to update the main (non meta) posts in a seperate function like this.
+  if ( ! wp_is_post_revision( $post_id ) ){
+    // unhook and re-hook the save function
+    remove_action('save_post', 'royaltycart_save_products');
+
+    $newpostdata = array (
+	    'ID' => $post_id,
+	    'post_title' => $newtitle
+	  );
+    wp_update_post( $newpostdata );
+
+    add_action('save_post', 'royaltycart_save_products');
+  }
+}
+
+
+
 function royaltycart_delete_product($product_id){
   $mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id;
 
@@ -303,6 +314,12 @@ function royaltycart_delete_product($product_id){
   rmdir($mydir);
 }
 
+
+
+function royaltycart_delete_download($product_id, $filename){
+  $mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/" . $filename;
+  unlink($file);
+}
 
 
 function royaltycart_custom_upload_filter( $file ){
@@ -331,10 +348,6 @@ function royaltycart_upload_dir( $param ){
     $param['path'] = $mydir;
     $param['url'] = $mydir;
 	
-	//$mydir = '/royaltycart/' . $_POST['ID'];
-    //$param['path'] = $param['path'] . $mydir;
-    //$param['url'] = $param['url'] . $mydir;
-
     error_log("path={$param['path']}");  
     error_log("url={$param['url']}");
     error_log("subdir={$param['subdir']}");
@@ -352,8 +365,8 @@ function royaltycart_products_display_columns( $columns )
 {
     unset( $columns['comments'] );
 	unset( $columns['date'] );
-    $columns['title'] = "Product ID";
-    $columns['royaltycart_product_name'] = "Product Name";
+	$columns['title'] = "Product ID";
+    //$columns['royaltycart_product_name'] = "Product Name";
     $columns['royaltycart_product_shortcode'] = "Display Shortcode";
     $columns['date'] = "Date";
     return $columns;
@@ -380,10 +393,10 @@ function royaltycart_populate_product_columns($column, $post_id)
         $basefile = get_post_meta( $post_id, 'royaltycart_product_basefile', true );
         echo $basefile;
     }
-    else if ( 'royaltycart_fileformats' == $column ) {
-        $fileformats = get_post_meta( $post_id, 'royaltycart_fileformats', true );
-        echo $fileformats;
-    }
+    // else if ( 'royaltycart_fileformats' == $column ) {
+        // $fileformats = get_post_meta( $post_id, 'royaltycart_fileformats', true );
+        // echo $fileformats;
+    // }
     else if ( 'royaltycart_product_shortcode' == $column ) {
         $rcshortcode = get_post_meta( $post_id, 'royaltycart_product_shortcode', true );
         echo $rcshortcode;
