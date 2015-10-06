@@ -78,7 +78,12 @@ if (!empty($messagearray)){
     include 'royaltycart_product_view_payee.php';
   };
   echo("<div class='rcdescription'>Edit Payees</div>");
+  $rccounter = 0;
   foreach($payoutlist as $payout){
+  	if ($rccounter == (count($payoutlist)-1)){
+  	  echo("<div class='rcdescription'>Add a new Payee</div>");
+  	}
+	$rccounter += 1;
     include 'royaltycart_product_edit_payee.php';
   };
   ?>

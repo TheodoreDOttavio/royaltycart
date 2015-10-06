@@ -1,0 +1,28 @@
+Products:
+  delete payee
+  adding payee with value 0
+  delete file graphic
+  remove or use  fileformats meta field
+  Deal with removal based on value=0
+  
+Orders:
+  Display order with css
+  -lookup and collect what paypal needs to order
+  
+  -reset download count
+  -resend thankyou email
+  
+  Add product payout list
+  Add Download count
+  Add ordered count or income to product meta table
+
+Response emails
+  links based on order ID
+  linked to all orders views?
+  or an option to have a response per product?
+
+add shortcode response:
+  creates an order
+
+create a downloads page
+  Add downloads count to Order Id
