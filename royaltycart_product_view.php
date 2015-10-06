@@ -91,8 +91,8 @@ if (!empty($messagearray)){
  <?php
   foreach($rcfilelist as $rcfile){
     echo ("<div class='rcinfobox'>");
-    echo ("remove <input type='checkbox' name = 'royaltycart_product_remove_file' 
-      id = 'royaltycart_product_remove_file' value = '" . $rcfile . "' />");
+    $rcfileid = "royaltycart_product_remove_file_" . substr($rcfile, 0, -4);
+    echo ("remove <input type='checkbox' name = '" . $rcfileid . "' />");
     echo ($rcfile);
     echo ("</div>");
   };

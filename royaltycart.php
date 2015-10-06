@@ -18,7 +18,6 @@ defined( 'ABSPATH' ) or die( 'No script!' );
 
 register_activation_hook( __FILE__, 'royaltycart_install' );
 function royaltycart_install(){
-	//do I need this????
   add_action( 'init', 'royaltycart_create_post_type', 0 );
 	
   //For future upgrades;
@@ -26,8 +25,8 @@ function royaltycart_install(){
 }
 
 
-register_uninstall_hook( __FILE__, 'royaltycart_drop_tables');
-function royaltycart_drop_tables(){
+register_uninstall_hook( __FILE__, 'royaltycart_purge');
+function royaltycart_purge(){
   //remove cpt posts!
 }
 

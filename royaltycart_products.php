@@ -147,16 +147,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
 	$payments_high = royaltycart_process_payouts($payoutlist, $pricearry[count($pricearry)-1]);
   
   //List out available product files
-  $rcproductdir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/*.*";
-  $rcfilelisttmp = array();
-  $rcfiles = glob($rcproductdir);
-  foreach($rcfiles as $rcfile){
-  	//the extra steps here avoid the php error: Only variables should be passed by reference
-    $rcfilenames = explode("/", $rcfile);
-	$rcfilename = end($rcfilenames);
-  	array_push($rcfilelisttmp, $rcfilename);
-  }
-  $rcfilelist = $rcfilelisttmp;
+  $rcfilelist = get_product_files($product_id);
 
   if (empty($rcfilelist)){
     $messagearray = royaltycart_messagearray_set($messagearray, "files", "Add files to download");
@@ -172,9 +163,9 @@ function royaltycart_product_review_meta_box($royaltycart_products){
 
 
 function royaltycart_save_products( $product_id, $royaltycart_products ) {
-// Store data in post meta table if present in post data
+// Check post type and this handles new/update saves based on form _Post data
 if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
-  $messagearray=array();
+  $messagearray = array();
     
   //Product Name
   if ( isset( $_POST['royaltycart_product_name'] ) && $_POST['royaltycart_product_name'] != '' ) {
@@ -252,28 +243,42 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
 
         
   //Downloads save and update
+    //Basefile Name
   if ( isset( $_POST['royaltycart_product_basefile'] ) && $_POST['royaltycart_product_basefile'] != '' ) {
       update_post_meta( $product_id, 'royaltycart_product_basefile', $_POST['royaltycart_product_basefile'] );
   }
 
 
-  if ( isset( $_FILES['rc_media_upload'] ) && $_FILES['rc_media_upload']['size'] > 0 ) {
-      $uploadedfile = $_FILES['rc_media_upload'];	
-      $upload_overrides = array( 'test_form' => false );
-
-      add_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
-      add_filter( 'upload_dir', 'royaltycart_upload_dir' );
-			
-      //check what the form is posting - this will also create the directory for non custom paths
-      $uploadinfo = wp_upload_dir();
-
-      $movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
-
-      //clean up...
-      remove_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
-      remove_filter( 'upload_dir', 'royaltycart_upload_dir' );
+    //Check for file delete
+  $rcfilelist = get_product_files($product_id);
+  foreach($rcfilelist as $rcfile){
+  	$rcfileid = "royaltycart_product_remove_file_" . substr($rcfile, 0, -4);
+    if ( isset( $_POST[$rcfileid] ) && $_POST[$rcfileid] = '1' ) {
+      royaltycart_delete_download($product_id, $rcfile);
+      //$messagearray = royaltycart_messagearray_set($messagearray, "task", "Removed file " . $rcfile);
+    }
   }
+	  
+	  
+    //Check for and upload new files
+  if ( isset( $_FILES['rc_media_upload'] ) && $_FILES['rc_media_upload']['size'] > 0 ) {
+    $uploadedfile = $_FILES['rc_media_upload'];	
+    $upload_overrides = array( 'test_form' => false );
 
+    add_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
+    add_filter( 'upload_dir', 'royaltycart_upload_dir' );
+
+    //check what the form is posting - this will also create the directory for non custom paths
+    $uploadinfo = wp_upload_dir();
+
+    $movefile = wp_handle_upload( $uploadedfile, $upload_overrides );
+
+    //clean up...
+    remove_filter('wp_handle_upload_prefilter', 'royaltycart_custom_upload_filter');
+    remove_filter( 'upload_dir', 'royaltycart_upload_dir' );
+  }
+  
+  update_post_meta( $product_id, 'royaltycart_product_errors', $messagearray );
 }//end post type
 }//end function
 
@@ -318,8 +323,24 @@ function royaltycart_delete_product($product_id){
 
 function royaltycart_delete_download($product_id, $filename){
   $mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/" . $filename;
-  unlink($file);
+  unlink($mydir);
 }
+
+
+function get_product_files($product_id){
+  $rcproductdir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/*.*";
+  $rcfilelisttmp = array();
+  $rcfiles = glob($rcproductdir);
+  foreach($rcfiles as $rcfile){
+  	//the extra steps here avoid the php error: Only variables should be passed by reference
+    $rcfilenames = explode("/", $rcfile);
+	$rcfilename = end($rcfilenames);
+  	array_push($rcfilelisttmp, $rcfilename);
+  }
+  $rcfilelist = $rcfilelisttmp;
+  return $rcfilelist;
+}
+
 
 
 function royaltycart_custom_upload_filter( $file ){
