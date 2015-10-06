@@ -142,9 +142,9 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   sort($pricearry);
   
   	//send a list of payments
-	$payments_low = royaltycart_process_payouts($payoutlist, $pricearry[0]);
-	$payments_med = royaltycart_process_payouts($payoutlist, $pricearry[1]);
-	$payments_high = royaltycart_process_payouts($payoutlist, $pricearry[count($pricearry)-1]);
+	$payments_low = royaltycart_process_payouts($payoutlist, $pricearry[0],0);
+	$payments_med = royaltycart_process_payouts($payoutlist, $pricearry[1],0);
+	$payments_high = royaltycart_process_payouts($payoutlist, $pricearry[count($pricearry)-1],0);
   
   //List out available product files
   $rcfilelist = get_product_files($product_id);
@@ -234,13 +234,22 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
      'comment_role' => $_POST['royaltycart_product_payout_comment_role' . $nextpayee],
      'comments' => $_POST['royaltycart_product_payout_comments' . $nextpayee]
     );
+	
+    //error checking for invalid payees
+    if (stripos($_POST['royaltycart_product_payout_payee' . $nextpayee], "@") == false){
+      $messagearray = royaltycart_messagearray_set($messagearray, "Payee_". $nextpayee, "Please enter a valid email for " . $_POST['royaltycart_product_payout_payee_name' . $nextpayee]);
+    }
 
     $payoutlist['recipient' . $nextpayee] = $formpayee;
   } while ($nextpayee < 100);
 
   update_post_meta( $product_id, 'royaltycart_product_payout', $payoutlist );
+  
+  //Report errors on payout
+  if (royaltycart_process_payouts($payoutlist, 1, 1)){
+  	$messagearray = royaltycart_messagearray_set($messagearray, "Payouts". $nextpayee, "Payment percentages and values exceed the product price");
   }
-
+  }
         
   //Downloads save and update
     //Basefile Name
@@ -255,6 +264,7 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
   	$rcfileid = "royaltycart_product_remove_file_" . substr($rcfile, 0, -4);
     if ( isset( $_POST[$rcfileid] ) && $_POST[$rcfileid] = '1' ) {
       royaltycart_delete_download($product_id, $rcfile);
+	  //commented out because message array shows up as a red error box.
       //$messagearray = royaltycart_messagearray_set($messagearray, "task", "Removed file " . $rcfile);
     }
   }
@@ -279,6 +289,13 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
   }
   
   update_post_meta( $product_id, 'royaltycart_product_errors', $messagearray );
+  
+  if(empty($messagearray)){
+    update_post_meta( $product_id, 'royaltycart_product_shortcode', "[royaltycart_purchase_id=" . $product_id . "]" );
+  }else{
+    update_post_meta( $product_id, 'royaltycart_product_shortcode', "This product has errors" );
+  }
+  
 }//end post type
 }//end function
 

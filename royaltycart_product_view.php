@@ -24,7 +24,7 @@ if (!empty($messagearray)){
 
  <div class="rcdescription">Use this shortcode</div>
  <div align="center">
-   <div class="rcinfobox">[royaltycart_purchase id=<?php echo $product_id;?>]</div>
+   <div class="rcinfobox">[royaltycart_purchase_id=<?php echo $product_id;?>]</div>
   <?php
   switch ($priceing['display']) {
   case '0':

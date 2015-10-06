@@ -152,7 +152,7 @@ function royaltycart_remainder_percent($payoutlist){
 }
 
 
-function royaltycart_process_payouts($payoutlist, $received){
+function royaltycart_process_payouts($payoutlist, $received, $errorcheck){
   //Prepare a list of arrays - Min is $0.02
   //Deduct $ amounts before percentages, then give the remainder to one name
 	//payments array  - determines all the people that get paid and how much.
@@ -231,6 +231,15 @@ function royaltycart_process_payouts($payoutlist, $received){
   
   $payments = array_sort($payments, 'amount', SORT_DESC);
   
-  return $payments;
+  //return list or return an error report
+  if ($errorcheck == 0){
+    return $payments;
+  }else{
+    if (($received - $totalgoingout) < 0 ){
+      return 1;
+    }else{
+      return 0;
+    }
+  }
 }
 ?>
