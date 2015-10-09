@@ -163,6 +163,7 @@ function royaltycart_process_payouts($payoutlist, $received, $errorcheck){
     //    ['comment_role']=>'Producer': Recipients title or role
     //  ['recipient2']=>
   $totalgoingout = 0;
+  $fee = 0.30;
 
   //Cash deductions
   foreach ($payoutlist as $payout){
@@ -218,13 +219,22 @@ function royaltycart_process_payouts($payoutlist, $received, $errorcheck){
   foreach ($payoutlist as $payout){
   	if ($payout['remainder'] == 1){
   	  	//set the amount into resulting array
+		$fee += round((($received - $totalgoingout) * 0.029), 2);
+		
   	  	$newpayee = array(
-  	  	  'amount' => $received - $totalgoingout,
+  	  	  'amount' => $received - ($totalgoingout + $fee),
   	  	  'payee' => $payout['payee'],
   	  	  'payee_name' => $payout['payee_name'],
   	  	  'comment_role' => $payout['comment_role']
   	  	);
+		$newfee = array(
+  	  	  'amount' => $fee,
+  	  	  'payee' => 'Transaction Fee',
+  	  	  'payee_name' => 'Paypal',
+  	  	  'comment_role' => 'Transaction Fee'
+  	  	);
   	  	$payments['recipient'.$payout['rclistindex']] = $newpayee;
+		$payments['fees'.$payout['rclistindex']] = $newfee;
 	  }
 
   }

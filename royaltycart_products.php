@@ -80,6 +80,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
    $theowner = array(
     'rclistindex' => $nextpayee,
     'value' => 100,
+    'trigger' => 0,
     'percent' => 1,
     'remainder' => 1,
     'payee' => "Paypall Email",
@@ -92,6 +93,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
    $thebegger = array(
     'rclistindex' => $nextpayee,
     'value' => 0.05,
+    'trigger' => 10,
     'percent' => 0,
     'remainder' => 0,
     'payee' => "teddottavio@yahoo.com",
@@ -116,6 +118,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
     $emptypayee = array(
      'rclistindex' => $nextpayee,
      'value' => 0,
+     'trigger' => 10,
      'percent' => 1,
      'remainder'=> 0,
      'payee' => "Paypall Email",
