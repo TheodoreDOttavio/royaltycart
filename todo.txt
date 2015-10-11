@@ -1,9 +1,7 @@
 Products:
-  delete payee
   adding payee with value 0
   delete file graphic
   remove or use  fileformats meta field
-  Deal with removal based on value=0
   
 Orders:
   Display order with css

@@ -179,6 +179,7 @@ function royaltycart_process_payouts($payoutlist, $received, $errorcheck){
   	  	if ($payout['value'] >0){
   	  	$newpayee = array(
   	  	  'amount' => $amount,
+  	  	  'reserve' => $payout['reserve'],
   	  	  'payee' => $payout['payee'],
   	  	  'payee_name' => $payout['payee_name'],
   	  	  'comment_role' => $payout['comment_role']
@@ -204,6 +205,7 @@ function royaltycart_process_payouts($payoutlist, $received, $errorcheck){
   	  	if ($payout['value'] >0){
   	  	$newpayee = array(
   	  	  'amount' => $amount,
+  	  	  'reserve' => $payout['reserve'],
   	  	  'payee' => $payout['payee'],
   	  	  'payee_name' => $payout['payee_name'],
   	  	  'comment_role' => $payout['comment_role']
@@ -223,12 +225,14 @@ function royaltycart_process_payouts($payoutlist, $received, $errorcheck){
 		
   	  	$newpayee = array(
   	  	  'amount' => $received - ($totalgoingout + $fee),
+  	  	  'reserve' => $payout['reserve'],
   	  	  'payee' => $payout['payee'],
   	  	  'payee_name' => $payout['payee_name'],
   	  	  'comment_role' => $payout['comment_role']
   	  	);
 		$newfee = array(
   	  	  'amount' => $fee,
+  	  	  'reserve' => $payout['reserve'],
   	  	  'payee' => 'Transaction Fee',
   	  	  'payee_name' => 'Paypal',
   	  	  'comment_role' => 'Transaction Fee'

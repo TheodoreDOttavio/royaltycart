@@ -64,6 +64,8 @@ function royaltycart_product_review_meta_box($royaltycart_products){
   //payout array  - determines all the people that get paid and how much.
   //  ['recipient1']=>Sub array;
   //    ['value']=>60: base amount or percentage value: 2.5 or 10 for $2.50 or 10%
+  //    ['trigger']=>dollar amount. when reserve exceeds this make a payment from Primary recipient to this payee
+  //    ['reserve']=>dollar received by primary to be paid
   //    ['percent']=>true: false for set amounts (60% vs. $60.00)
   //    ['remainder']=>false: One recipent gets the rest when values are less than total paid 
   //    ['payee']=>'teddottavio@gmail.com': Recipients account (email for paypal)
@@ -81,6 +83,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
     'rclistindex' => $nextpayee,
     'value' => 100,
     'trigger' => 0,
+    'reserve' => 0,
     'percent' => 1,
     'remainder' => 1,
     'payee' => "Paypall Email",
@@ -94,6 +97,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
     'rclistindex' => $nextpayee,
     'value' => 0.05,
     'trigger' => 10,
+    'reserve' => 0,
     'percent' => 0,
     'remainder' => 0,
     'payee' => "teddottavio@yahoo.com",
@@ -119,6 +123,7 @@ function royaltycart_product_review_meta_box($royaltycart_products){
      'rclistindex' => $nextpayee,
      'value' => 0,
      'trigger' => 10,
+     'reserve' => 0,
      'percent' => 1,
      'remainder'=> 0,
      'payee' => "Paypall Email",
@@ -197,7 +202,7 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
   }
   update_post_meta( $product_id, 'royaltycart_product_priceing', $newpriceing );
 		
-  //Payments save and update
+  //Payments (payees) save and update
     //generate $payoutlist object
   $nextpayee = 0;
 
@@ -214,22 +219,13 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
       $thisremainder = 0;
       $rcvalue = $_POST['royaltycart_product_payout_value' . $nextpayee];
     }
-    
-
-    //ok... how about a hidden field of the last index# to break?
-    //  then there would have to be a test to update so the empty on the end is not included.
-    // Basically using the radio buttons leaves value as 0 - so what? 
-
-    if ( empty($_POST['royaltycart_product_payout_value'.$nextpayee]) ) {
-      if ($rcvalue != 100){
-        break;
-      }
-    }
 
     //build this form's data object
     $formpayee = array(
      'rclistindex' => $nextpayee,
      'value' => $rcvalue,
+     'trigger' => $_POST['royaltycart_product_payout_trigger' . $nextpayee],
+     'reserve' => $_POST['royaltycart_product_payout_reserve' . $nextpayee],
      'percent' => $_POST['royaltycart_product_payout_percent' . $nextpayee],
      'remainder' => $thisremainder,
      'payee' => $_POST['royaltycart_product_payout_payee' . $nextpayee],
@@ -237,14 +233,19 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
      'comment_role' => $_POST['royaltycart_product_payout_comment_role' . $nextpayee],
      'comments' => $_POST['royaltycart_product_payout_comments' . $nextpayee]
     );
-	
-    //error checking for invalid payees
-    if (stripos($_POST['royaltycart_product_payout_payee' . $nextpayee], "@") == false){
-      $messagearray = royaltycart_messagearray_set($messagearray, "Payee_". $nextpayee, "Please enter a valid email for " . $_POST['royaltycart_product_payout_payee_name' . $nextpayee]);
-    }
 
-    $payoutlist['recipient' . $nextpayee] = $formpayee;
-  } while ($nextpayee < 100);
+    //check to see if we'll be adding a new payee
+    if ($formpayee['value'] != 0 && $formpayee['payee_name'] != "Add a Recipient"){
+        //but WAIT there's more! did the user select the delete button?
+        if ($_POST['royaltycart_product_payout_remove' . $nextpayee] == 0){
+          //error checking for invalid payees
+          if (stripos($_POST['royaltycart_product_payout_payee' . $nextpayee], "@") == false){
+            $messagearray = royaltycart_messagearray_set($messagearray, "Payee_". $nextpayee, "Please enter a valid email for " . $_POST['royaltycart_product_payout_payee_name' . $nextpayee]);
+          }
+          $payoutlist['recipient' . $nextpayee] = $formpayee;
+        }
+    }
+  } while ($nextpayee < $_POST['royaltycart_totalpayees']); //($nextpayee < 100);
 
   update_post_meta( $product_id, 'royaltycart_product_payout', $payoutlist );
   
@@ -253,7 +254,8 @@ if ( $royaltycart_products->post_type == 'royaltycart_products' ) {
   	$messagearray = royaltycart_messagearray_set($messagearray, "Payouts". $nextpayee, "Payment percentages and values exceed the product price");
   }
   }
-        
+
+
   //Downloads save and update
     //Basefile Name
   if ( isset( $_POST['royaltycart_product_basefile'] ) && $_POST['royaltycart_product_basefile'] != '' ) {
@@ -345,6 +347,7 @@ function royaltycart_delete_download($product_id, $filename){
   $mydir = trailingslashit( WP_CONTENT_DIR ) . 'uploads/royaltycart/' . $product_id . "/" . $filename;
   unlink($mydir);
 }
+
 
 
 function get_product_files($product_id){

@@ -11,21 +11,26 @@
      <input type="text" size="30" class="rctextinputsmall" name="royaltycart_product_payout_payee<?php echo $payout['rclistindex']; ?>" value="<?php echo $payout['payee']; ?>" />
     </div>
   </td><td>
-  	<div align="left">
+    <div align="left">
+     <?php if ( $payout['remainder'] != 1 ) { ?>
+      <?php if($payout['percent'] == 1){echo("%");}else{echo("$");} ?>
+      <input type="text" size="6" class="rctextinputsmall" name="royaltycart_product_payout_value<?php echo $payout['rclistindex']; ?>" value="<?php echo $payout['value']; ?>" />
+      <input type='checkbox' name = 'royaltycart_product_payout_percent<?php echo $payout['rclistindex']; ?>' 
+      id = 'royaltycart_product_payout_percent<?php echo $payout['rclistindex']; ?>' value = '1' <?php if($payout['percent'] == 1){echo(" checked = '1' "); } ?> />percent/value
+    </div>
+    <div align="left">
+        $<input type="text" size="6" class="rctextinputsmall" name="royaltycart_product_payout_trigger<?php echo $payout['rclistindex']; ?>" value="<?php echo $payout['trigger']; ?>" />
+        Transfer amount<br>
+        $ <?php echo ($payout['reserve']); ?> Currently Reserved
+        <input type="hidden" name="royaltycart_product_payout_reserve<?php echo $payout['rclistindex']; ?>" value="<?php echo ($payout['reserve']); ?>" />
+      <?php } ?>
+    </div>
+    <div align="right">
      <input type = "radio"
       name = "royaltycart_product_payout_remainder" 
       id = "royaltycart_product_payout_remainder" 
       value="<?php echo $payout['rclistindex']; ?>" 
-      <?php if ( $payout['remainder'] == 1 ) { echo 'checked'; } ?> />The Primary Recipient
-    </div>
-    <div align="left">
-      <input type="text" size="6" class="rctextinputsmall" name="royaltycart_product_payout_value<?php echo $payout['rclistindex']; ?>" value="<?php echo $payout['value']; ?>" />
-      <input type='checkbox' name = 'royaltycart_product_payout_percent<?php echo $payout['rclistindex']; ?>' 
-      id = 'royaltycart_product_payout_percent<?php echo $payout['rclistindex']; ?>' value = '1' <?php if($payout['percent'] == 1){echo(" checked = '1' "); } ?> />%
-    </div>
-    <div align="left">
-      Transfer from main recipient<br>when earnings exceed $
-      <input type="text" size="6" class="rctextinputsmall" name="royaltycart_product_payout_trigger<?php echo $payout['rclistindex']; ?>" value="<?php echo $payout['trigger']; ?>" />
+      <?php if ( $payout['remainder'] == 1 ) { echo 'checked'; } ?> />Primary Recipient
     </div>
   </td></tr>
   <tr><td colspan="2">

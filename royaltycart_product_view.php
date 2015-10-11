@@ -86,8 +86,9 @@ if (!empty($messagearray)){
 	$rccounter += 1;
     include 'royaltycart_product_edit_payee.php';
   };
+  echo ("<input type='hidden' name='royaltycart_totalpayees' value = '" . $rccounter . "' />");
   ?>
-</div>   
+</div>
 
 
 <div class="rcbox_plain">
@@ -95,11 +96,7 @@ if (!empty($messagearray)){
  <div align="center">
  <?php
   foreach($rcfilelist as $rcfile){
-    echo ("<div class='rcinfobox'>");
-    $rcfileid = "royaltycart_product_remove_file_" . substr($rcfile, 0, -4);
-    echo ("remove <input type='checkbox' name = '" . $rcfileid . "' />");
-    echo ($rcfile);
-    echo ("</div>");
+  	include 'royaltycart_product_preview_downloads.php';
   };
  ?>
  </div>
